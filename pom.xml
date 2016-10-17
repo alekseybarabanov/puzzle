@@ -22,6 +22,7 @@
     <properties>
         <java.version>1.7</java.version>
 	    <tomcat.version>7.0.59</tomcat.version>
+	    <spring.version>4.3.3.RELEASE</spring.version>
     </properties>
 
 </project>

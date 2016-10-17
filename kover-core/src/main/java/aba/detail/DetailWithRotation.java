@@ -16,4 +16,20 @@ public class DetailWithRotation {
         DetailSide detailSide = DetailSide.getRotatedDetailSide(position, rotation);
         return detail.getBallSide(detailSide);
     }
+
+	public Detail getDetail() {
+		return detail;
+	}
+
+	public void setDetail(Detail detail) {
+		this.detail = detail;
+	}
+
+	public int getRotation() {
+		return rotation;
+	}
+
+	public void setRotation(int rotation) {
+		this.rotation = rotation;
+	}
 }

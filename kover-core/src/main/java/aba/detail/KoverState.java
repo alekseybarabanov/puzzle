@@ -9,11 +9,11 @@ import java.util.Map;
  * Created by alekseybarabanov on 13.08.16.
  */
 public class KoverState {
-    private Map<KoverPositions, DetailWithRotation> positionedDetails = new HashMap<KoverPositions, DetailWithRotation>();
+    private Map<KoverPosition, DetailWithRotation> positionedDetails = new HashMap<KoverPosition, DetailWithRotation>();
     private static BallSidesMatcher ballSidesMatcher = new BallSidesMatcher();
     private static DetailMatcher detailMatcher = new DetailMatcher();
 
-    public List<Integer> getMatchingRotations(KoverPositions position, Detail detail) {
+    public List<Integer> getMatchingRotations(KoverPosition position, Detail detail) {
         List<SideWithPosition> dependentSides = getDependentSides(position);
         List<Integer> result = new ArrayList<Integer>();
         for (int rotation = 0; rotation < 4; rotation++) {
@@ -25,10 +25,10 @@ public class KoverState {
         return result;
     }
 
-    private List<SideWithPosition> getDependentSides(KoverPositions position) {
-        Map<KoverPositions, DetailSide> dependentPositions = KoverPositions.getDependentPositions(position);
+    private List<SideWithPosition> getDependentSides(KoverPosition position) {
+        Map<KoverPosition, DetailSide> dependentPositions = KoverPosition.getDependentPositions(position);
         List<SideWithPosition> result = new ArrayList<SideWithPosition>();
-        for (Map.Entry<KoverPositions, DetailSide> entry : dependentPositions.entrySet()) {
+        for (Map.Entry<KoverPosition, DetailSide> entry : dependentPositions.entrySet()) {
             DetailWithRotation detailWithRotation = positionedDetails.get(entry.getKey());
             if (detailWithRotation != null) {
                 result.add(new SideWithPosition(detailWithRotation.getBallSide(entry.getValue()), entry.getKey(), entry.getValue()));
@@ -37,7 +37,15 @@ public class KoverState {
         return result;
     }
 
-    private static class DetailMatcher {
+    public Map<KoverPosition, DetailWithRotation> getPositionedDetails() {
+		return positionedDetails;
+	}
+
+	public void setPositionedDetails(Map<KoverPosition, DetailWithRotation> positionedDetails) {
+		this.positionedDetails = positionedDetails;
+	}
+
+	private static class DetailMatcher {
         public boolean isMatch(List<SideWithPosition> restrictions, DetailWithRotation detailWithRotation) {
             for (SideWithPosition sideWithPosition : restrictions) {
                 BallSide detailWithRotationBallSide = detailWithRotation.getBallSide(DetailSide.getMatchingSide(sideWithPosition.detailSide));
@@ -61,10 +69,10 @@ public class KoverState {
 
     private static class SideWithPosition {
         private BallSide ballSide;
-        private KoverPositions positions;
+        private KoverPosition positions;
         private DetailSide detailSide;
 
-        private SideWithPosition(BallSide ballSide, KoverPositions position, DetailSide side) {
+        private SideWithPosition(BallSide ballSide, KoverPosition position, DetailSide side) {
             this.ballSide = ballSide;
             this.positions = position;
             this.detailSide = side;

@@ -3,6 +3,9 @@
 	<name>kover-app</name>
 	<comment></comment>
 	<projects>
+		<project>kover</project>
+		<project>kover-core</project>
+		<project>kover-rest</project>
 	</projects>
 	<buildSpec>
 		<buildCommand>
