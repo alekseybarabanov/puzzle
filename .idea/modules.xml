@@ -3,9 +3,9 @@
   <component name="ProjectModuleManager">
     <modules>
       <module fileurl="file://$PROJECT_DIR$/kover.iml" filepath="$PROJECT_DIR$/kover.iml" />
-      <module fileurl="file://$PROJECT_DIR$/kover-app/kover-app.iml" filepath="$PROJECT_DIR$/kover-app/kover-app.iml" />
       <module fileurl="file://$PROJECT_DIR$/kover-core/kover-core.iml" filepath="$PROJECT_DIR$/kover-core/kover-core.iml" />
-      <module fileurl="file://$PROJECT_DIR$/kover-rest/kover-rest.iml" filepath="$PROJECT_DIR$/kover-rest/kover-rest.iml" />
+      <module fileurl="file://$PROJECT_DIR$/kover-app/kover-repository.iml" filepath="$PROJECT_DIR$/kover-app/kover-repository.iml" />
+      <module fileurl="file://$PROJECT_DIR$/r2/kover-rest.iml" filepath="$PROJECT_DIR$/r2/kover-rest.iml" />
     </modules>
   </component>
 </project>

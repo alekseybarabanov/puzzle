@@ -5,11 +5,21 @@
          http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <parent>
     <artifactId>kover</artifactId>
-    <groupId>aba</groupId>
+    <groupId>aba.kover</groupId>
     <version>1.0-SNAPSHOT</version>
   </parent>
   <modelVersion>4.0.0</modelVersion>
   
   <artifactId>kover-core</artifactId>
+  <name>Kover Core</name>
+  <description>Kover Core</description>
+
+  <dependencies>
+    <dependency>
+      <groupId>org.realityforge.org.jetbrains.annotations</groupId>
+      <artifactId>org.jetbrains.annotations</artifactId>
+      <version>1.7.0</version>
+    </dependency>
+  </dependencies>
     
 </project>
