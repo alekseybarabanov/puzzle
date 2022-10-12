@@ -1,6 +1,7 @@
 package aba.kover.rest;
 
-import aba.kover.core.rest_vo.DetailVO;
+import aba.kover.domain.Detail;
+import aba.kover.persistence_vo.DetailVO;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Collection;
@@ -13,7 +14,6 @@ import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.RestController;
 
 import aba.kover.service.DetailService;
-import aba.kover.core.detail.Detail;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;

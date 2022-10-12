@@ -14,13 +14,14 @@
     </parent>
 
     <modules>
-        <module>kover-core</module>
-        <module>kover-app</module>
+        <module>kover-repository</module>
         <module>kover-rest</module>
+        <module>kover-domain</module>
     </modules>
 
     <properties>
         <java.version>17</java.version>
+        <app.version>1.0-SNAPSHOT</app.version>
     </properties>
 
 </project>

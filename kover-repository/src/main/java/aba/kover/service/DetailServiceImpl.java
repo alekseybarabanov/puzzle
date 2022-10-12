@@ -3,10 +3,10 @@ package aba.kover.service;
 import java.util.ArrayList;
 import java.util.List;
 
+import aba.kover.domain.Detail;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import aba.kover.core.detail.Detail;
 import aba.kover.repository.DetailRepository;
 import aba.kover.persistence_vo.DetailVO;
 

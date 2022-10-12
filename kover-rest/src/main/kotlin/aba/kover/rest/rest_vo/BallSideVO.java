@@ -1,20 +1,11 @@
-package aba.kover.persistence_vo;
+package aba.kover.rest.rest_vo;
 
-import javax.persistence.*;
 
 import aba.kover.domain.BallSide;
 
-@Entity(name="BALL_SIDE")
 public class BallSideVO {
 	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int id;
-	@OneToOne
-	@JoinColumn(name="COLOR")
 	private ColorVO color;
-	@OneToOne
-	@JoinColumn(name="BALL_PART")
 	private BallPartVO side;
 	
 	public static BallSideVO fromBallSide(BallSide ballSide) {

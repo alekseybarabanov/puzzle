@@ -27,9 +27,10 @@
 			<artifactId>hsqldb</artifactId>
 			<scope>runtime</scope>
 		</dependency>
+
 		<dependency>
 			<groupId>aba.kover</groupId>
-			<artifactId>kover-core</artifactId>
+			<artifactId>kover-domain</artifactId>
 			<version>1.0-SNAPSHOT</version>
 		</dependency>
 	</dependencies>

@@ -1,16 +1,9 @@
-package aba.kover.persistence_vo;
-
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
+package aba.kover.rest.rest_vo;
 
 import aba.kover.domain.Color;
 
-@Entity(name="COLOR")
 public class ColorVO {
 	
-	@Id
-	@JoinColumn(name="WORDING")
 	private String wording;
 	
 	

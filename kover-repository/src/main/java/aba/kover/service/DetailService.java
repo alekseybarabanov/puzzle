@@ -2,7 +2,7 @@ package aba.kover.service;
 
 import java.util.List;
 
-import aba.kover.core.detail.Detail;
+import aba.kover.domain.Detail;
 import aba.kover.persistence_vo.DetailVO;
 
 public interface DetailService {

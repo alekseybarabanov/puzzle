@@ -1,28 +1,15 @@
-package aba.kover.persistence_vo;
+package aba.kover.rest.rest_vo;
 
-import javax.persistence.*;
 
 import aba.kover.domain.BallSide;
 import aba.kover.domain.Detail;
 import aba.kover.domain.DetailSide;
 
-@Entity(name="DETAIL")
 public class DetailVO {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
-	@OneToOne
-	@JoinColumn(name="LEFT_SIDE")
 	private BallSideVO left;
-	@OneToOne
-	@JoinColumn(name="UPPER_SIDE")
 	private BallSideVO upper;
-	@OneToOne
-	@JoinColumn(name="RIGHT_SIDE")
 	private BallSideVO right;
-	@OneToOne
-	@JoinColumn(name="LOWER_SIDE")
 	private BallSideVO lower;
 
 	public BallSideVO getLeft() {

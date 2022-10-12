@@ -1,14 +1,9 @@
-package aba.kover.persistence_vo;
-
-import javax.persistence.*;
+package aba.kover.rest.rest_vo;
 
 import aba.kover.domain.BallPart;
 
-@Entity(name = "BALL_PART")
 public class BallPartVO {
 
-	@Id
-	@JoinColumn(name="WORDING")
 	private String wording;
 	
 	public static BallPartVO fromBallPart(BallPart ballPart) {
