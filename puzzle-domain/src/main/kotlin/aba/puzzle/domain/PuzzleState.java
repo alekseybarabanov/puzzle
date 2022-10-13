@@ -10,20 +10,20 @@ public class PuzzleState {
 
 	public PuzzleState() {
 	}
-	public PuzzleState(Map<PuzzlePosition, DetailWithRotation> positionedDetails) {
+	public PuzzleState(Map<PuzzleField, DetailWithRotation> positionedDetails) {
 		this.positionedDetails.putAll(positionedDetails);
 	}
-	public PuzzleState(PuzzleState puzzleState, PuzzlePosition position, DetailWithRotation detail) {
+	public PuzzleState(PuzzleState puzzleState, PuzzleField position, DetailWithRotation detail) {
 		this.positionedDetails.putAll(puzzleState.getPositionedDetails());
 		this.positionedDetails.put(position, detail);
 	}
-    private Map<PuzzlePosition, DetailWithRotation> positionedDetails = new HashMap<PuzzlePosition, DetailWithRotation>();
+    private Map<PuzzleField, DetailWithRotation> positionedDetails = new HashMap<PuzzleField, DetailWithRotation>();
 
-    public Map<PuzzlePosition, DetailWithRotation> getPositionedDetails() {
+    public Map<PuzzleField, DetailWithRotation> getPositionedDetails() {
 		return positionedDetails;
 	}
 
-	public void setPositionedDetails(Map<PuzzlePosition, DetailWithRotation> positionedDetails) {
+	public void setPositionedDetails(Map<PuzzleField, DetailWithRotation> positionedDetails) {
 		this.positionedDetails = positionedDetails;
 	}
 

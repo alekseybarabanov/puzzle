@@ -1,7 +1,7 @@
 package aba.puzzle.domain.dto;
 
 import aba.puzzle.domain.DetailWithRotation;
-import aba.puzzle.domain.PuzzlePosition;
+import aba.puzzle.domain.PuzzleField;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 import java.util.HashMap;
@@ -9,29 +9,29 @@ import java.util.Map;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class PuzzleStateEntryVO {
-	private PuzzlePositionVO puzzlePositionVO;
+	private PuzzleFieldVO puzzleFieldVO;
 	
 	private DetailWithRotationVO detailWithRotationVO;
 	
-	public static PuzzleStateEntryVO fromPuzzleStateEntry(Map.Entry<PuzzlePosition, DetailWithRotation> entry) {
+	public static PuzzleStateEntryVO fromPuzzleStateEntry(Map.Entry<PuzzleField, DetailWithRotation> entry) {
 		final PuzzleStateEntryVO puzzleStateEntryVO = new PuzzleStateEntryVO();
-		puzzleStateEntryVO.puzzlePositionVO = PuzzlePositionVO.fromPuzzlePosition(entry.getKey());
+		puzzleStateEntryVO.puzzleFieldVO = PuzzleFieldVO.Companion.fromPuzzleField(entry.getKey());
 		puzzleStateEntryVO.detailWithRotationVO = DetailWithRotationVO.fromDetailWithRotation(entry.getValue());
 		return puzzleStateEntryVO;
 	}
 	
-	public static Map.Entry<PuzzlePosition, DetailWithRotation> toPuzzleStateEntry(PuzzleStateEntryVO puzzleStateEntryVO) {
-		Map<PuzzlePosition, DetailWithRotation> map = new HashMap<>();
-		map.put(PuzzlePositionVO.toPuzzlePosition(puzzleStateEntryVO.puzzlePositionVO), DetailWithRotationVO.toDetailWithRotation(puzzleStateEntryVO.detailWithRotationVO));
+	public static Map.Entry<PuzzleField, DetailWithRotation> toPuzzleStateEntry(PuzzleStateEntryVO puzzleStateEntryVO) {
+		Map<PuzzleField, DetailWithRotation> map = new HashMap<>();
+		map.put(PuzzleFieldVO.Companion.toPuzzleField(puzzleStateEntryVO.puzzleFieldVO), DetailWithRotationVO.toDetailWithRotation(puzzleStateEntryVO.detailWithRotationVO));
 		return map.entrySet().iterator().next();
 	}
 
-	public PuzzlePositionVO getPuzzlePositionVO() {
-		return puzzlePositionVO;
+	public PuzzleFieldVO getPuzzleFieldVO() {
+		return puzzleFieldVO;
 	}
 
-	public void setPuzzlePositionVO(PuzzlePositionVO puzzlePositionVO) {
-		this.puzzlePositionVO = puzzlePositionVO;
+	public void setPuzzleFieldVO(PuzzleFieldVO puzzleFieldVO) {
+		this.puzzleFieldVO = puzzleFieldVO;
 	}
 
 	public DetailWithRotationVO getDetailWithRotationVO() {

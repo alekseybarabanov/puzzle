@@ -1,10 +1,9 @@
 package aba.puzzle.service
 
-import aba.puzzle.domain.Detail
-import aba.puzzle.domain.PuzzlePosition
-import aba.puzzle.domain.PuzzleState
+import aba.puzzle.domain.*
 import aba.puzzle.domain.dto.DetailVO
 import aba.puzzle.domain.dto.NewTaskVO
+import aba.puzzle.domain.dto.PuzzleConfigVO
 import aba.puzzle.domain.dto.PuzzleStateVO
 import aba.puzzle.kafka.CustomKafkaListenerRegistrar
 import mu.KotlinLogging
@@ -20,38 +19,49 @@ import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
 
 interface LaunchService {
-    fun launch(topic: String): Boolean
+    fun launch(topic: String, puzzleConfig: PuzzleConfig): Boolean
+    fun process(topic: String, currentPuzzleState: PuzzleState, puzzleConfig: PuzzleConfig)
 }
 
 @Component
 class LaunchServiceImpl(
-    @Value("\${app.repositoryUrl}") val repositoryUrl: String,
     @Value("\${app.taskTopicsTopic}") val taskTopicsTopic: String,
-    @Autowired val puzzleStateService: PuzzleStateService,
+    @Autowired val puzzleStateService: PuzzleAssembler,
     @Autowired val kafkaProducer: KafkaTemplate<String, PuzzleStateVO>,
     @Autowired val kafkaTaskTopicsProducer: KafkaTemplate<String, NewTaskVO>,
-    @Autowired val kafkaAdmin: KafkaAdmin,
-    @Autowired val listenerRegistrar: CustomKafkaListenerRegistrar,
-    @Autowired val detailsService: DetailsService
+    @Autowired val kafkaAdmin: KafkaAdmin
 ) : LaunchService {
     private val log = KotlinLogging.logger {}
 
-    override fun launch(topic: String): Boolean {
+    override fun launch(topic: String, puzzleConfig: PuzzleConfig): Boolean {
         //check that the task is not already running. Make call to repository for the answer
         if (!createTopic(topic)) {
             return false
         }
 
         //publish topic for consumers to subscribe
-        sendNewTopic(topic)
+        sendNewTopic(topic, puzzleConfig)
 
         //Take each detail and put it on the left upper corner of the puzzle with all possible rotations (4).
-        detailsService.getDetails().forEach {
-            puzzleStateService.addDetail(PuzzleState(), it, PuzzlePosition.left_upper).forEach { puzzleState ->
-                sendPuzzles(topic, puzzleState)
+        process(topic, PuzzleState(), puzzleConfig)
+        return true
+    }
+
+    override fun process(topic: String, currentPuzzleState: PuzzleState, puzzleConfig: PuzzleConfig) {
+        puzzleConfig.puzzleMap.puzzleFields.find {
+            !currentPuzzleState.positionedDetails.containsKey(it)
+        }?.let { nextPuzzleField ->
+            puzzleConfig.puzzleDetails.forEach {
+                with(puzzleStateService.addDetail(currentPuzzleState, it, nextPuzzleField, puzzleConfig)) {
+                    this.incompleted.forEach { puzzleState ->
+                        sendPuzzles(topic, puzzleState)
+                    }
+                    this.completed.forEach {
+                        log.info { "Completed puzzle: $it" }
+                    }
+                }
             }
         }
-        return true
     }
 
     private fun createTopic(topic: String): Boolean =
@@ -67,10 +77,8 @@ class LaunchServiceImpl(
         }
 
 
-    private fun sendNewTopic(topic: String) {
-        val taskVO = NewTaskVO()
-        taskVO.topic = topic
-        taskVO.allDetails = detailsService.getDetails().map { DetailVO.fromDetail(it) }
+    private fun sendNewTopic(topic: String, puzzleConfig: PuzzleConfig) {
+        val taskVO = NewTaskVO(topic,PuzzleConfigVO.fromPuzzleConfig(puzzleConfig))
         val taskTopicsFuture = kafkaTaskTopicsProducer.send(taskTopicsTopic, taskVO)
         taskTopicsFuture.addCallback({
             log.info { "message sent to $taskTopicsTopic" }

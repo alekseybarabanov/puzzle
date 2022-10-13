@@ -1,5 +1,9 @@
 package aba.puzzle.rest
 
+import aba.puzzle.domain.PuzzleConfig
+import aba.puzzle.domain.PuzzleField
+import aba.puzzle.domain.PuzzleMap
+import aba.puzzle.service.DetailsService
 import aba.puzzle.service.LaunchService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpHeaders
@@ -10,7 +14,10 @@ import org.springframework.web.bind.annotation.*
 
 
 @RestController
-class Controller(@Autowired val launchService: LaunchService) {
+class Controller(
+    @Autowired private val launchService: LaunchService,
+    @Autowired private val detailsService: DetailsService
+) {
 
     @GetMapping("/info")
     fun info(): String {
@@ -20,11 +27,24 @@ class Controller(@Autowired val launchService: LaunchService) {
     @PostMapping("/run", consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun run(@RequestBody launchRequest: LaunchRequest): LaunchResponse {
         val topicName = "puzzle-${launchRequest.testId}"
-        if (launchService.launch(topicName)) {
+        if (launchService.launch(topicName, createPuzzleConfig())) {
             return LaunchResponse(launched = true, topicName = topicName)
         } else {
-            throw AlreadyRunningException(topicName=topicName)
+            throw AlreadyRunningException(topicName = topicName)
         }
+    }
+
+    private fun createPuzzleConfig(): PuzzleConfig {
+        return PuzzleConfig(
+            puzzleMap = PuzzleMap(
+                puzzleFields = listOf(
+                    PuzzleField(0, 0),
+                    PuzzleField(0, 1),
+                    PuzzleField(1, 0),
+                    PuzzleField(1, 1),
+                )
+            ), puzzleDetails = detailsService.getDetails()
+        )
     }
 }
 
@@ -34,7 +54,10 @@ class AlreadyRunningException(val topicName: String) : RuntimeException()
 class AlreadyRunningExceptionController {
     @ExceptionHandler(value = [AlreadyRunningException::class])
     fun exception(exception: AlreadyRunningException): ResponseEntity<LaunchResponse> {
-        return ResponseEntity(LaunchResponse(launched = false, topicName = exception.topicName), HttpStatus.INTERNAL_SERVER_ERROR)
+        return ResponseEntity(
+            LaunchResponse(launched = false, topicName = exception.topicName),
+            HttpStatus.INTERNAL_SERVER_ERROR
+        )
     }
 }
 
