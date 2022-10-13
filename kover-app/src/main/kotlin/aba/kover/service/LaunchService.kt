@@ -14,7 +14,7 @@ import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
 
 interface LaunchService {
-    fun launch(): String
+    fun launch(): Boolean
 }
 
 @Component
@@ -26,7 +26,15 @@ class LaunchServiceImpl(
 ) : LaunchService, InitializingBean {
     lateinit var allDetails: Collection<Detail>
 
-    override fun launch(): String {
+    override fun launch(): Boolean {
+        //TODO: check that the task is not already running. Make call to repository for the answer
+        var isAlreayRunning = false
+
+        //TODO: Create topic if missing
+
+        //TODO: Rewind topic offsets for group.id to the end
+
+        //Take each detail and put it on the left upper corner of the puzzle with all possible rotations (4).
         allDetails.forEach {
             koverStateService.addDetail(KoverState(), it, KoverPosition.left_upper).forEach {
                 val f = kafkaProducer.send(koverStateTopic, KoverStateVO.fromKoverState(it))
@@ -39,7 +47,7 @@ class LaunchServiceImpl(
                 )
             }
         }
-        return "ok"
+        return true
     }
 
     override fun afterPropertiesSet() {
