@@ -39,7 +39,8 @@ public class DetailVO {
 	}
 	
 	public static Detail toDetail(DetailVO detailVO) {
-		Detail result = new Detail(BallSideVO.toBallSide(detailVO.getLeft()),
+		Detail result = new Detail(detailVO.id,
+				BallSideVO.toBallSide(detailVO.getLeft()),
 				BallSideVO.toBallSide(detailVO.getUpper()),
 				BallSideVO.toBallSide(detailVO.getRight()),
 				BallSideVO.toBallSide(detailVO.getLower())

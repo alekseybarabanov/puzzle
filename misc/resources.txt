@@ -1,0 +1,9 @@
+// Maven central
+https://mvnrepository.com/
+
+// Spring kafka
+https://docs.spring.io/spring-kafka/reference/html/#message-listeners
+
+// Kotlin logging
+https://www.baeldung.com/kotlin/kotlin-logging-library
+

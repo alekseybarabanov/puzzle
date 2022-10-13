@@ -4,6 +4,7 @@ import aba.puzzle.domain.Detail
 import aba.puzzle.domain.PuzzlePosition
 import aba.puzzle.domain.PuzzleState
 import aba.puzzle.domain.dto.DetailVO
+import aba.puzzle.domain.dto.NewTaskVO
 import aba.puzzle.domain.dto.PuzzleStateVO
 import aba.puzzle.kafka.CustomKafkaListenerRegistrar
 import mu.KotlinLogging
@@ -28,11 +29,11 @@ class LaunchServiceImpl(
     @Value("\${app.taskTopicsTopic}") val taskTopicsTopic: String,
     @Autowired val puzzleStateService: PuzzleStateService,
     @Autowired val kafkaProducer: KafkaTemplate<String, PuzzleStateVO>,
-    @Autowired val kafkaTaskTopicsProducer: KafkaTemplate<String, String>,
+    @Autowired val kafkaTaskTopicsProducer: KafkaTemplate<String, NewTaskVO>,
     @Autowired val kafkaAdmin: KafkaAdmin,
     @Autowired val listenerRegistrar: CustomKafkaListenerRegistrar,
-) : LaunchService, InitializingBean {
-    lateinit var allDetails: Collection<Detail>
+    @Autowired val detailsService: DetailsService
+) : LaunchService {
     private val log = KotlinLogging.logger {}
 
     override fun launch(topic: String): Boolean {
@@ -44,11 +45,8 @@ class LaunchServiceImpl(
         //publish topic for consumers to subscribe
         sendNewTopic(topic)
 
-        //subscribe on the new topic
-        listenerRegistrar.registerCustomKafkaListener(topic, topic, "defaultGroup", true)
-
         //Take each detail and put it on the left upper corner of the puzzle with all possible rotations (4).
-        allDetails.forEach {
+        detailsService.getDetails().forEach {
             puzzleStateService.addDetail(PuzzleState(), it, PuzzlePosition.left_upper).forEach { puzzleState ->
                 sendPuzzles(topic, puzzleState)
             }
@@ -70,7 +68,10 @@ class LaunchServiceImpl(
 
 
     private fun sendNewTopic(topic: String) {
-        val taskTopicsFuture = kafkaTaskTopicsProducer.send(taskTopicsTopic, topic)
+        val taskVO = NewTaskVO()
+        taskVO.topic = topic
+        taskVO.allDetails = detailsService.getDetails().map { DetailVO.fromDetail(it) }
+        val taskTopicsFuture = kafkaTaskTopicsProducer.send(taskTopicsTopic, taskVO)
         taskTopicsFuture.addCallback({
             log.info { "message sent to $taskTopicsTopic" }
         }, {
@@ -87,12 +88,4 @@ class LaunchServiceImpl(
         })
     }
 
-    override fun afterPropertiesSet() {
-        log.info { "repository url: $repositoryUrl" }
-        val detailList = WebClient.create(repositoryUrl).get().uri("/details")
-            .accept(MediaType.APPLICATION_JSON).retrieve().bodyToFlux(DetailVO::class.java)
-            .map { DetailVO.toDetail(it) }.collectList().block()
-        allDetails = detailList!!.toList()
-        log.info { "rs: $allDetails" }
-    }
 }
