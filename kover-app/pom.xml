@@ -8,10 +8,10 @@
     </parent>
 
     <modelVersion>4.0.0</modelVersion>
-    <artifactId>kover-rest</artifactId>
+    <artifactId>kover-app</artifactId>
     <groupId>aba.kover</groupId>
-    <name>RESTful API for Kover 2</name>
-    <description>RESTful API for Kover 2</description>
+    <name>Application</name>
+    <description>Application</description>
 
     <properties>
         <java.version>17</java.version>

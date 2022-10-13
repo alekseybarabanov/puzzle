@@ -15,7 +15,7 @@
 
     <modules>
         <module>kover-repository</module>
-        <module>kover-rest</module>
+        <module>kover-app</module>
         <module>kover-domain</module>
     </modules>
 

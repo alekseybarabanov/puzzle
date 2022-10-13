@@ -5,11 +5,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 
 @SpringBootApplication
-public class Application {
+public class RepositoryApplication {
 
 	public static void main(String[] args) {
-		// TODO Auto-generated method stub
-		SpringApplication.run(Application.class, args);
+		SpringApplication.run(RepositoryApplication.class, args);
 	}
 
 }
