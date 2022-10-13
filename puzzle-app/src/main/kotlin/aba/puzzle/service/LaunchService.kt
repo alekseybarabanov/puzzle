@@ -5,11 +5,13 @@ import aba.puzzle.domain.PuzzlePosition
 import aba.puzzle.domain.PuzzleState
 import aba.puzzle.domain.dto.DetailVO
 import aba.puzzle.domain.dto.PuzzleStateVO
-import aba.puzzle.rest.LaunchRequest
+import org.apache.kafka.clients.admin.AdminClient
 import org.springframework.beans.factory.InitializingBean
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType
+import org.springframework.kafka.config.TopicBuilder
+import org.springframework.kafka.core.KafkaAdmin
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
@@ -21,33 +23,61 @@ interface LaunchService {
 @Component
 class LaunchServiceImpl(
     @Value("\${app.repositoryUrl}") val repositoryUrl: String,
+    @Value("\${app.taskTopicsTopic}") val taskTopicsTopic: String,
     @Autowired val puzzleStateService: PuzzleStateService,
-    @Autowired val kafkaProducer: KafkaTemplate<String, PuzzleStateVO>
+    @Autowired val kafkaProducer: KafkaTemplate<String, PuzzleStateVO>,
+    @Autowired val kafkaTaskTopicsProducer: KafkaTemplate<String, String>,
+    @Autowired val kafkaAdmin: KafkaAdmin,
 ) : LaunchService, InitializingBean {
     lateinit var allDetails: Collection<Detail>
 
     override fun launch(topic: String): Boolean {
-        //TODO: check that the task is not already running. Make call to repository for the answer
-        var isAlreayRunning = false
+        //check that the task is not already running. Make call to repository for the answer
+        if (!createTopic(topic)) {
+            return false
+        }
 
-        //TODO: Create topic if missing
-
-        //TODO: Rewind topic offsets for group.id to the end
+        //publish topic for consumers to subscribe
+        sendNewTopic(topic)
 
         //Take each detail and put it on the left upper corner of the puzzle with all possible rotations (4).
         allDetails.forEach {
-            puzzleStateService.addDetail(PuzzleState(), it, PuzzlePosition.left_upper).forEach {
-                val f = kafkaProducer.send(topic, PuzzleStateVO.fromPuzzleState(it))
-                f.addCallback({rs -> {
-                    println("message sent")
-                }},{
-                    println("Exception in sending to kafka $it")
-                }
-
-                )
+            puzzleStateService.addDetail(PuzzleState(), it, PuzzlePosition.left_upper).forEach { puzzleState ->
+                sendPuzzles(topic, puzzleState)
             }
         }
         return true
+    }
+
+    private fun createTopic(topic: String): Boolean =
+        kotlin.runCatching {
+            val topicDescription = kafkaAdmin.describeTopics(topic)
+            topicDescription[topic] == null
+        }.getOrElse {
+            val client = AdminClient.create(kafkaAdmin.configurationProperties)
+            client.use {
+                it.createTopics(listOf(TopicBuilder.name(topic).replicas(1).build()))
+            }
+            true
+        }
+
+
+    private fun sendNewTopic(topic: String) {
+        val taskTopicsFuture = kafkaTaskTopicsProducer.send(taskTopicsTopic, topic)
+        taskTopicsFuture.addCallback({
+            println("message sent to $taskTopicsTopic")
+        }, {
+            println("Exception in sending to kafka topic $taskTopicsTopic $it")
+        })
+    }
+
+    private fun sendPuzzles(topic: String, puzzleState: PuzzleState) {
+        val puzzleFuture = kafkaProducer.send(topic, PuzzleStateVO.fromPuzzleState(puzzleState))
+        puzzleFuture.addCallback({
+            println("message sent to $topic")
+        }, {
+            println("Exception in sending to kafka $it")
+        })
     }
 
     override fun afterPropertiesSet() {
