@@ -1,10 +1,12 @@
-package aba.kover.rest.rest_vo;
+package aba.kover.domain.dto;
 
 
 import aba.kover.domain.BallSide;
 import aba.kover.domain.Detail;
 import aba.kover.domain.DetailSide;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class DetailVO {
 
 	private BallSideVO left;
@@ -19,7 +21,7 @@ public class DetailVO {
 	public static DetailVO fromDetail(Detail detail) {
 		DetailVO result = new DetailVO();
 		for (DetailSide side : DetailSide.values()) {
-			BallSide ballSide = detail.getBallSide(DetailSide.left);
+			BallSide ballSide = detail.getBallSide(side);
 			result.setSide(BallSideVO.fromBallSide(ballSide), side);
 		}
 		return result;

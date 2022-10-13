@@ -1,6 +1,6 @@
 package aba.kover.kafka
 
-import aba.kover.rest.rest_vo.KoverStateVO
+import aba.kover.domain.dto.KoverStateVO
 import io.confluent.kafka.serializers.KafkaJsonSerializer
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.serialization.StringSerializer

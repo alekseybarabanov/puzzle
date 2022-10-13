@@ -32,7 +32,7 @@ public class DetailVO {
 	public static DetailVO fromDetail(Detail detail) {
 		DetailVO result = new DetailVO();
 		for (DetailSide side : DetailSide.values()) {
-			BallSide ballSide = detail.getBallSide(DetailSide.left);
+			BallSide ballSide = detail.getBallSide(side);
 			result.setSide(BallSideVO.fromBallSide(ballSide), side);
 		}
 		return result;

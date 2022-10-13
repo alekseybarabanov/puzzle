@@ -1,12 +1,13 @@
-package aba.kover.rest.rest_vo;
+package aba.kover.domain.dto;
 
 import aba.kover.domain.DetailWithRotation;
 import aba.kover.domain.KoverPosition;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 import java.util.HashMap;
 import java.util.Map;
 
-
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class KoverStateEntryVO {
 	private KoverPositionVO koverPositionVO;
 	

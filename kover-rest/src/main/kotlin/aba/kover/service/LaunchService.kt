@@ -1,10 +1,10 @@
 package aba.kover.service
 
-import aba.kover.rest.rest_vo.DetailVO
 import aba.kover.domain.Detail
 import aba.kover.domain.KoverPosition
 import aba.kover.domain.KoverState
-import aba.kover.rest.rest_vo.KoverStateVO
+import aba.kover.domain.dto.DetailVO
+import aba.kover.domain.dto.KoverStateVO
 import org.springframework.beans.factory.InitializingBean
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value

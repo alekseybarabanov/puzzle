@@ -1,4 +1,4 @@
-package aba.kover.rest.rest_vo;
+package aba.kover.domain.dto;
 
 
 import aba.kover.domain.BallSide;

@@ -1,7 +1,9 @@
-package aba.kover.rest.rest_vo;
+package aba.kover.domain.dto;
 
 import aba.kover.domain.KoverPosition;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class KoverPositionVO {
 	private int shiftX;
 	private int shiftY;

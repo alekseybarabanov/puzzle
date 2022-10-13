@@ -1,7 +1,7 @@
 package aba.kover.rest;
 
 import aba.kover.domain.Detail;
-import aba.kover.persistence_vo.DetailVO;
+import aba.kover.domain.dto.DetailVO;
 import org.springframework.http.ResponseEntity;
 
 import java.util.Collection;

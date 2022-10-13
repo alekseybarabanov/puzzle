@@ -1,14 +1,16 @@
-package aba.kover.rest.rest_vo;
+package aba.kover.domain.dto;
+
+import aba.kover.domain.DetailWithRotation;
+import aba.kover.domain.KoverPosition;
+import aba.kover.domain.KoverState;
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import aba.kover.domain.DetailWithRotation;
-import aba.kover.domain.KoverPosition;
-import aba.kover.domain.KoverState;
-
+@JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class KoverStateVO {
 	private List<KoverStateEntryVO> coverage = new ArrayList<>();
 	
