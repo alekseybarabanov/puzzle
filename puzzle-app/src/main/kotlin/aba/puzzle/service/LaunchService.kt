@@ -5,6 +5,8 @@ import aba.puzzle.domain.PuzzlePosition
 import aba.puzzle.domain.PuzzleState
 import aba.puzzle.domain.dto.DetailVO
 import aba.puzzle.domain.dto.PuzzleStateVO
+import aba.puzzle.kafka.CustomKafkaListenerRegistrar
+import mu.KotlinLogging
 import org.apache.kafka.clients.admin.AdminClient
 import org.springframework.beans.factory.InitializingBean
 import org.springframework.beans.factory.annotation.Autowired
@@ -28,8 +30,10 @@ class LaunchServiceImpl(
     @Autowired val kafkaProducer: KafkaTemplate<String, PuzzleStateVO>,
     @Autowired val kafkaTaskTopicsProducer: KafkaTemplate<String, String>,
     @Autowired val kafkaAdmin: KafkaAdmin,
+    @Autowired val listenerRegistrar: CustomKafkaListenerRegistrar,
 ) : LaunchService, InitializingBean {
     lateinit var allDetails: Collection<Detail>
+    private val log = KotlinLogging.logger {}
 
     override fun launch(topic: String): Boolean {
         //check that the task is not already running. Make call to repository for the answer
@@ -39,6 +43,9 @@ class LaunchServiceImpl(
 
         //publish topic for consumers to subscribe
         sendNewTopic(topic)
+
+        //subscribe on the new topic
+        listenerRegistrar.registerCustomKafkaListener(topic, topic, "defaultGroup", true)
 
         //Take each detail and put it on the left upper corner of the puzzle with all possible rotations (4).
         allDetails.forEach {
@@ -65,27 +72,27 @@ class LaunchServiceImpl(
     private fun sendNewTopic(topic: String) {
         val taskTopicsFuture = kafkaTaskTopicsProducer.send(taskTopicsTopic, topic)
         taskTopicsFuture.addCallback({
-            println("message sent to $taskTopicsTopic")
+            log.info { "message sent to $taskTopicsTopic" }
         }, {
-            println("Exception in sending to kafka topic $taskTopicsTopic $it")
+            log.info { "Exception in sending to kafka topic $taskTopicsTopic $it" }
         })
     }
 
     private fun sendPuzzles(topic: String, puzzleState: PuzzleState) {
         val puzzleFuture = kafkaProducer.send(topic, PuzzleStateVO.fromPuzzleState(puzzleState))
         puzzleFuture.addCallback({
-            println("message sent to $topic")
+            log.info {"message sent to $topic"}
         }, {
-            println("Exception in sending to kafka $it")
+            log.info {"Exception in sending to kafka $it"}
         })
     }
 
     override fun afterPropertiesSet() {
-        println("repository url: $repositoryUrl")
+        log.info { "repository url: $repositoryUrl" }
         val detailList = WebClient.create(repositoryUrl).get().uri("/details")
             .accept(MediaType.APPLICATION_JSON).retrieve().bodyToFlux(DetailVO::class.java)
             .map { DetailVO.toDetail(it) }.collectList().block()
         allDetails = detailList!!.toList()
-        println("rs: $allDetails")
+        log.info { "rs: $allDetails" }
     }
 }
