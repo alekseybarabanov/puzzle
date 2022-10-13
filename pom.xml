@@ -2,8 +2,8 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>aba.kover</groupId>
-    <artifactId>kover</artifactId>
+    <groupId>aba.puzzle</groupId>
+    <artifactId>puzzle</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>pom</packaging>
 
@@ -14,9 +14,9 @@
     </parent>
 
     <modules>
-        <module>kover-repository</module>
-        <module>kover-app</module>
-        <module>kover-domain</module>
+        <module>puzzle-repository</module>
+        <module>puzzle-app</module>
+        <module>puzzle-domain</module>
     </modules>
 
     <properties>

@@ -1,0 +1,47 @@
+{
+  "coverage": [
+    {
+      "puzzlePositionVO": {
+        "shiftX": 0,
+        "shiftY": 2
+      },
+      "detailWithRotationVO": {
+        "detail": {
+          "left": {
+            "color": {
+              "color": "red"
+            },
+            "side": {
+              "side": "one_third"
+            }
+          },
+          "upper": {
+            "color": {
+              "color": "green"
+            },
+            "side": {
+              "side": "one_third"
+            }
+          },
+          "right": {
+            "color": {
+              "color": "yellow"
+            },
+            "side": {
+              "side": "two_thirds"
+            }
+          },
+          "lower": {
+            "color": {
+              "color": "white"
+            },
+            "side": {
+              "side": "two_thirds"
+            }
+          }
+        },
+        "rotation": 3
+      }
+    }
+  ]
+}
