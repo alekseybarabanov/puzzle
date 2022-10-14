@@ -19,14 +19,9 @@ class Controller(
     @Autowired private val detailsService: DetailsService
 ) {
 
-    @GetMapping("/info")
-    fun info(): String {
-        return "test"
-    }
-
     @PostMapping("/run", consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun run(@RequestBody launchRequest: LaunchRequest): LaunchResponse {
-        val topicName = "puzzle-${launchRequest.testId}"
+    fun run(@RequestBody launchRequest: LaunchRequest, @RequestHeader("Idempotency-Key") idempotenceKey: String): LaunchResponse {
+        val topicName = "puzzle-$idempotenceKey"
         val puzzleConfig = launchRequest.puzzleConfig?.let { PuzzleConfigVO.toPuzzleConfig(it)} ?: createPuzzleConfig()
         if (launchService.launch(topicName, puzzleConfig)) {
             return LaunchResponse(launched = true, topicName = topicName)
@@ -63,7 +58,6 @@ class AlreadyRunningExceptionController {
 }
 
 class LaunchRequest {
-    val testId: String = "defaultTest"
     val puzzleConfig: PuzzleConfigVO? = null
 }
 

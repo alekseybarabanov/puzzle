@@ -25,7 +25,7 @@ class KafkaConfiguration {
     lateinit var bootstrapAddress: String
 
     @Bean("puzzleStateProducerFactory")
-    fun producerFactory(): ProducerFactory<String, PuzzleStateVO> {
+    fun producerFactory(): ProducerFactory<String, Any> {
         log.info { "kafka bootstrap $bootstrapAddress" }
         val configProps: MutableMap<String, Any> = HashMap()
         configProps[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapAddress
@@ -35,7 +35,7 @@ class KafkaConfiguration {
     }
 
     @Bean
-    fun kafkaTemplate(@Autowired factory: ProducerFactory<String, PuzzleStateVO>): KafkaTemplate<String, PuzzleStateVO> {
+    fun kafkaTemplate(@Autowired factory: ProducerFactory<String, Any>): KafkaTemplate<String, Any> {
         return KafkaTemplate(factory)
     }
 }

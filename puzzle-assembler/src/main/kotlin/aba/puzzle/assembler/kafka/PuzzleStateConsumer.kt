@@ -22,6 +22,19 @@ import org.springframework.messaging.handler.annotation.support.DefaultMessageHa
 import org.springframework.stereotype.Component
 import java.util.*
 
+private class PuzzleStateListener(
+    val puzzleProcessor: PuzzleProcessor,
+    val topic: String,
+    val puzzleConfig: PuzzleConfig
+) :
+    MessageListener<String, PuzzleStateVO> {
+    private val log = KotlinLogging.logger {}
+    override fun onMessage(record: ConsumerRecord<String, PuzzleStateVO>) {
+        log.debug { "read ${record.value()} record, launch new task" }
+        val puzzleState = PuzzleStateVO.toPuzzleState(record.value())
+        puzzleProcessor.process(topic, puzzleState, puzzleConfig)
+    }
+}
 @Component
 class CustomKafkaListenerRegistrar {
     private val log = KotlinLogging.logger {}
@@ -109,20 +122,6 @@ class PuzzleTopicListener(
 
     private fun isBlank(string: String?): Boolean {
         return string.isNullOrBlank()
-    }
-
-    private class PuzzleStateListener(
-        val puzzleProcessor: PuzzleProcessor,
-        val topic: String,
-        val puzzleConfig: PuzzleConfig
-    ) :
-        MessageListener<String, PuzzleStateVO> {
-        private val log = KotlinLogging.logger {}
-        override fun onMessage(record: ConsumerRecord<String, PuzzleStateVO>) {
-            log.debug { "read ${record.value()} record, launch new task" }
-            val puzzleState = PuzzleStateVO.toPuzzleState(record.value())
-            puzzleProcessor.process(topic, puzzleState, puzzleConfig)
-        }
     }
 
     companion object {

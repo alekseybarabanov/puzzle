@@ -2,6 +2,7 @@ package aba.puzzle.assembler
 
 import aba.puzzle.domain.PuzzleConfig
 import aba.puzzle.domain.PuzzleState
+import aba.puzzle.domain.dto.PuzzleConfigVO
 import aba.puzzle.domain.dto.PuzzleStateVO
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,7 +16,7 @@ interface PuzzleProcessor {
 @Component
 class PuzzleProcessorImpl(
     @Autowired val puzzleAssembler: PuzzleAssembler,
-    @Autowired val kafkaProducer: KafkaTemplate<String, PuzzleStateVO>,
+    @Autowired val kafkaProducer: KafkaTemplate<String, Any>,
 ) : PuzzleProcessor {
     private val log = KotlinLogging.logger {}
 
@@ -30,7 +31,7 @@ class PuzzleProcessorImpl(
                         sendPuzzles(topic, puzzleState)
                     }
                     this.completed.forEach {puzzleState->
-                        sendPuzzles("$topic-assembled", puzzleState)
+                        sendCompletedPuzzle("$topic-assembled", puzzleState, puzzleConfig)
                         log.info { "Completed puzzle: $it" }
                     }
                 }
@@ -46,4 +47,18 @@ class PuzzleProcessorImpl(
             log.info {"Exception in sending to kafka $it"}
         })
     }
+    private fun sendCompletedPuzzle(topic: String, puzzleState: PuzzleState, config: PuzzleConfig) {
+        val puzzleFuture = kafkaProducer.send(topic, PuzzleCompleted(puzzleState = PuzzleStateVO.fromPuzzleState(puzzleState),
+            puzzleConfigVO = PuzzleConfigVO.fromPuzzleConfig(config)))
+        puzzleFuture.addCallback({
+            log.info {"message sent to $topic"}
+        }, {
+            log.info {"Exception in sending to kafka $it"}
+        })
+    }
 }
+
+data class PuzzleCompleted(
+    val puzzleState: PuzzleStateVO,
+    val puzzleConfigVO: PuzzleConfigVO
+)
