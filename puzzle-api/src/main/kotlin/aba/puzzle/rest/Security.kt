@@ -16,7 +16,7 @@ import org.springframework.security.web.SecurityFilterChain
 class SecSecurityConfig {
 
     @Bean
-    fun userDetailsService(passwordEncoder: PasswordEncoder): InMemoryUserDetailsManager? {
+    fun userDetailsService(passwordEncoder: PasswordEncoder): InMemoryUserDetailsManager {
         val user = User.withUsername("user")
             .password(passwordEncoder.encode("password"))
             .roles("USER")
@@ -26,7 +26,7 @@ class SecSecurityConfig {
 
     @Bean
     @Throws(Exception::class)
-    fun filterChain(http: HttpSecurity): SecurityFilterChain? {
+    fun filterChain(http: HttpSecurity): SecurityFilterChain {
         http.csrf()
             .disable()
             .authorizeRequests()
@@ -40,7 +40,7 @@ class SecSecurityConfig {
     }
 
     @Bean
-    fun passwordEncoder(): PasswordEncoder? {
+    fun passwordEncoder(): PasswordEncoder {
         return PasswordEncoderFactories.createDelegatingPasswordEncoder()
     }
 }
