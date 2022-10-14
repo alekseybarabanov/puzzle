@@ -1,7 +1,5 @@
 # Launch new task
-curl -XPOST localhost:9500/run -vs -H "Content-Type: application/json" -d '{"testId":"2"}'
-
-curl -XPOST localhost:9500/run -vs -d @puzzle3x3.json \
+curl -XPOST localhost:9500/run -vs -u user:password -d @puzzle3x3.json \
 -H "Content-Type: application/json" \
 -H "Idempotency-Key: 9"
 

@@ -27,14 +27,15 @@ class SecSecurityConfig {
     @Bean
     @Throws(Exception::class)
     fun filterChain(http: HttpSecurity): SecurityFilterChain? {
-        http.authorizeRequests()
-            .antMatchers("/run")
-            .permitAll()
+        http.csrf()
+            .disable()
+            .authorizeRequests()
             .antMatchers("/actuator/**")
             .permitAll()
-            .antMatchers("/**")
-            .denyAll()
-            .and().csrf().disable()
+            .antMatchers("/run*")
+            .hasRole("USER")
+            .and()
+            .httpBasic()
         return http.build()
     }
 
