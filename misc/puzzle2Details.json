@@ -1,5 +1,5 @@
 {
-  "testId": "5",
+  "testId": "6",
   "puzzleConfig": {
     "puzzleMap": {
       "puzzleFields": [
@@ -64,7 +64,7 @@
             "color": "red"
           },
           "side": {
-            "side": "two_thirds"
+            "side": "one_third"
           }
         },
         "right": {
@@ -72,7 +72,7 @@
             "color": "green"
           },
           "side": {
-            "side": "two_thirds"
+            "side": "one_third"
           }
         },
         "lower": {
@@ -80,7 +80,7 @@
             "color": "yellow"
           },
           "side": {
-            "side": "two_thirds"
+            "side": "one_third"
           }
         }
       }

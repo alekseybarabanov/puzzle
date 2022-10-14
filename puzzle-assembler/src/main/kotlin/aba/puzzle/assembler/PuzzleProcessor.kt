@@ -28,7 +28,8 @@ class PuzzleProcessorImpl(
                     this.incompleted.forEach { puzzleState ->
                         sendPuzzles(topic, puzzleState)
                     }
-                    this.completed.forEach {
+                    this.completed.forEach {puzzleState->
+                        sendPuzzles("$topic-assembled", puzzleState)
                         log.info { "Completed puzzle: $it" }
                     }
                 }
