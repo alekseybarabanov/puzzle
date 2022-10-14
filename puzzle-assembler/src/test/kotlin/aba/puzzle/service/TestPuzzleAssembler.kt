@@ -1,5 +1,6 @@
 package aba.puzzle.service
 
+import aba.puzzle.assembler.PuzzleAssemblerImpl
 import aba.puzzle.domain.*
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test

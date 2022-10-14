@@ -1,32 +1,26 @@
 package aba.puzzle.service
 
-import aba.puzzle.domain.*
-import aba.puzzle.domain.dto.DetailVO
+import aba.puzzle.domain.PuzzleConfig
+import aba.puzzle.domain.PuzzleState
 import aba.puzzle.domain.dto.NewTaskVO
 import aba.puzzle.domain.dto.PuzzleConfigVO
 import aba.puzzle.domain.dto.PuzzleStateVO
-import aba.puzzle.kafka.CustomKafkaListenerRegistrar
 import mu.KotlinLogging
 import org.apache.kafka.clients.admin.AdminClient
-import org.springframework.beans.factory.InitializingBean
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
-import org.springframework.http.MediaType
 import org.springframework.kafka.config.TopicBuilder
 import org.springframework.kafka.core.KafkaAdmin
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Component
-import org.springframework.web.reactive.function.client.WebClient
 
 interface LaunchService {
     fun launch(topic: String, puzzleConfig: PuzzleConfig): Boolean
-    fun process(topic: String, currentPuzzleState: PuzzleState, puzzleConfig: PuzzleConfig)
 }
 
 @Component
 class LaunchServiceImpl(
     @Value("\${app.taskTopicsTopic}") val taskTopicsTopic: String,
-    @Autowired val puzzleStateService: PuzzleAssembler,
     @Autowired val kafkaProducer: KafkaTemplate<String, PuzzleStateVO>,
     @Autowired val kafkaTaskTopicsProducer: KafkaTemplate<String, NewTaskVO>,
     @Autowired val kafkaAdmin: KafkaAdmin
@@ -42,26 +36,9 @@ class LaunchServiceImpl(
         //publish topic for consumers to subscribe
         sendNewTopic(topic, puzzleConfig)
 
-        //Take each detail and put it on the left upper corner of the puzzle with all possible rotations (4).
-        process(topic, PuzzleState(), puzzleConfig)
+        //initiate puzzle assembling
+        sendPuzzles(topic, PuzzleState())
         return true
-    }
-
-    override fun process(topic: String, currentPuzzleState: PuzzleState, puzzleConfig: PuzzleConfig) {
-        puzzleConfig.puzzleMap.puzzleFields.find {
-            !currentPuzzleState.positionedDetails.containsKey(it)
-        }?.let { nextPuzzleField ->
-            puzzleConfig.puzzleDetails.forEach {
-                with(puzzleStateService.addDetail(currentPuzzleState, it, nextPuzzleField, puzzleConfig)) {
-                    this.incompleted.forEach { puzzleState ->
-                        sendPuzzles(topic, puzzleState)
-                    }
-                    this.completed.forEach {
-                        log.info { "Completed puzzle: $it" }
-                    }
-                }
-            }
-        }
     }
 
     private fun createTopic(topic: String): Boolean =

@@ -15,8 +15,9 @@
 
     <modules>
         <module>puzzle-repository</module>
-        <module>puzzle-app</module>
+        <module>puzzle-api</module>
         <module>puzzle-domain</module>
+        <module>puzzle-assembler</module>
     </modules>
 
     <properties>

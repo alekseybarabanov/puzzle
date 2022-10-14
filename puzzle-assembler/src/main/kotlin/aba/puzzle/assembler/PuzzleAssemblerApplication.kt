@@ -1,11 +1,11 @@
-package aba.puzzle
+package aba.puzzle.assembler
 
 import org.springframework.boot.autoconfigure.SpringBootApplication
 import org.springframework.boot.runApplication
 
 @SpringBootApplication
-class PuzzleRestApplication
+class PuzzleAssemblerApplication
 
 fun main(args: Array<String>) {
-	runApplication<PuzzleRestApplication>(*args)
+	runApplication<PuzzleAssemblerApplication>(*args)
 }

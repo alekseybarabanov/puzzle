@@ -1,22 +1,45 @@
-package aba.puzzle.kafka
+package aba.puzzle.assembler.kafka
+
 
 import aba.puzzle.domain.dto.NewTaskVO
+import aba.puzzle.domain.dto.PuzzleConfigVO
 import com.fasterxml.jackson.databind.ObjectMapper
-import io.confluent.kafka.serializers.KafkaJsonDeserializer
 import mu.KotlinLogging
 import org.apache.kafka.clients.consumer.ConsumerConfig
+import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.common.errors.SerializationException
 import org.apache.kafka.common.serialization.Deserializer
 import org.apache.kafka.common.serialization.StringDeserializer
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.PropertySource
 import org.springframework.kafka.annotation.EnableKafka
+import org.springframework.kafka.annotation.KafkaListener
 import org.springframework.kafka.config.ConcurrentKafkaListenerContainerFactory
 import org.springframework.kafka.config.KafkaListenerContainerFactory
 import org.springframework.kafka.core.ConsumerFactory
 import org.springframework.kafka.core.DefaultKafkaConsumerFactory
 import org.springframework.kafka.listener.ConcurrentMessageListenerContainer
+import org.springframework.stereotype.Component
+
+
+@PropertySource("classpath:application.yaml")
+@Component
+class NewTopicListener(
+    @Autowired val listenerRegistrar: CustomKafkaListenerRegistrar,
+) {
+    private val log = KotlinLogging.logger {}
+
+    @KafkaListener(id = "#{ systemProperties['POD_NAME'] }", topics = ["\${app.kafka.newTopicsTopic}"], clientIdPrefix = "topicsClient")
+    fun listen(data: ConsumerRecord<String, NewTaskVO>) {
+        log.info { "Read from new topic: $data" }
+        val (topic, puzzleConfigVO) = data.value()
+        val puzzleConfig = PuzzleConfigVO.toPuzzleConfig(puzzleConfigVO)
+        listenerRegistrar.registerCustomKafkaListener(topic, topic, "defaultGroup", puzzleConfig, true)
+    }
+}
 
 @Configuration
 @EnableKafka
@@ -51,7 +74,6 @@ class KafkaConfig {
         )
     }
 }
-
 
 class CustomNewTopicDeserializer : Deserializer<NewTaskVO?> {
     private val objectMapper = ObjectMapper()
