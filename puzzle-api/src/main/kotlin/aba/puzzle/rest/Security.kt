@@ -13,7 +13,7 @@ import org.springframework.security.web.SecurityFilterChain
 
 @Configuration
 @EnableWebSecurity
-class SecSecurityConfig {
+class SpringSecurityConfig {
 
     @Bean
     fun userDetailsService(passwordEncoder: PasswordEncoder): InMemoryUserDetailsManager {
