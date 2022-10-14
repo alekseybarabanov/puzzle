@@ -25,4 +25,12 @@ public class Detail {
     public int getId() {
         return id;
     }
+
+    @Override
+    public String toString() {
+        return "Detail{" +
+                "id=" + id +
+                ", sides=" + sides +
+                '}';
+    }
 }

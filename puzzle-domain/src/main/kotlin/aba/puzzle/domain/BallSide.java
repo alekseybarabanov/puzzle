@@ -19,4 +19,12 @@ public class BallSide {
     public Color getColor() {
         return color;
     }
+
+    @Override
+    public String toString() {
+        return "BallSide{" +
+                "color=" + color +
+                ", ballPart=" + ballPart +
+                '}';
+    }
 }

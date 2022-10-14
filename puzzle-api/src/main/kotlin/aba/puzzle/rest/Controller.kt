@@ -3,10 +3,10 @@ package aba.puzzle.rest
 import aba.puzzle.domain.PuzzleConfig
 import aba.puzzle.domain.PuzzleField
 import aba.puzzle.domain.PuzzleMap
+import aba.puzzle.domain.dto.PuzzleConfigVO
 import aba.puzzle.service.DetailsService
 import aba.puzzle.service.LaunchService
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.http.HttpHeaders
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
@@ -27,7 +27,8 @@ class Controller(
     @PostMapping("/run", consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun run(@RequestBody launchRequest: LaunchRequest): LaunchResponse {
         val topicName = "puzzle-${launchRequest.testId}"
-        if (launchService.launch(topicName, createPuzzleConfig())) {
+        val puzzleConfig = launchRequest.puzzleConfig?.let { PuzzleConfigVO.toPuzzleConfig(it)} ?: createPuzzleConfig()
+        if (launchService.launch(topicName, puzzleConfig)) {
             return LaunchResponse(launched = true, topicName = topicName)
         } else {
             throw AlreadyRunningException(topicName = topicName)
@@ -63,6 +64,7 @@ class AlreadyRunningExceptionController {
 
 class LaunchRequest {
     val testId: String = "defaultTest"
+    val puzzleConfig: PuzzleConfigVO? = null
 }
 
 data class LaunchResponse(

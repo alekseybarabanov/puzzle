@@ -32,4 +32,12 @@ public class DetailWithRotation {
 	public void setRotation(int rotation) {
 		this.rotation = rotation;
 	}
+
+	@Override
+	public String toString() {
+		return "DetailWithRotation{" +
+				"detail=" + detail +
+				", rotation=" + rotation +
+				'}';
+	}
 }

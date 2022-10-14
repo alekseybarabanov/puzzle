@@ -27,4 +27,10 @@ public class PuzzleState {
 		this.positionedDetails = positionedDetails;
 	}
 
+	@Override
+	public String toString() {
+		return "PuzzleState{" +
+				"positionedDetails=" + positionedDetails +
+				'}';
+	}
 }
