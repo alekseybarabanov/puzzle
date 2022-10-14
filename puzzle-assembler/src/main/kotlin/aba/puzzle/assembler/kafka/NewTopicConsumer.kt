@@ -32,7 +32,7 @@ class NewTopicListener(
 ) {
     private val log = KotlinLogging.logger {}
 
-    @KafkaListener(id = "#{ systemProperties['POD_NAME'] }", topics = ["\${app.kafka.newTopicsTopic}"], clientIdPrefix = "topicsClient")
+    @KafkaListener(id = "#{ systemProperties['POD_NAME'] }", topics = ["\${app.kafka.newTaskTopic}"], clientIdPrefix = "topicsClient")
     fun listen(data: ConsumerRecord<String, NewTaskVO>) {
         log.info { "Read from new topic: $data" }
         val (topic, puzzleConfigVO) = data.value()
