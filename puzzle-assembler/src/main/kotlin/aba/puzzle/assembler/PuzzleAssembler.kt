@@ -49,9 +49,9 @@ class PuzzleAssemblerImpl : PuzzleAssembler {
         puzzleField: PuzzleField,
         detailWithRotation: DetailWithRotation
     ): Boolean {
-        return candidatePuzzleState.positionedDetails.any {
+        return candidatePuzzleState.positionedDetails.all {
             val that = it.key
-            return if (getPuzzleFieldDistance(that, puzzleField) == 1) {
+            if (getPuzzleFieldDistance(that, puzzleField) == 1) {
                 if (that.shiftX < puzzleField.shiftX) {
                     //check right side for puzzle from "it" and left side of detailWithRotation
                     isMatch(it.value.getBallSide(DetailSide.right), detailWithRotation.getBallSide(DetailSide.left))
@@ -60,10 +60,10 @@ class PuzzleAssemblerImpl : PuzzleAssembler {
                     isMatch(it.value.getBallSide(DetailSide.left), detailWithRotation.getBallSide(DetailSide.right))
                 } else if (that.shiftY < puzzleField.shiftY) {
                     //check upper side for puzzle from "it" and bottom side of detailWithRotation
-                    isMatch(it.value.getBallSide(DetailSide.up), detailWithRotation.getBallSide(DetailSide.down))
+                    isMatch(it.value.getBallSide(DetailSide.down), detailWithRotation.getBallSide(DetailSide.up))
                 } else {
                     //check bottom side for puzzle from "it" and upper side of detailWithRotation
-                    isMatch(it.value.getBallSide(DetailSide.down), detailWithRotation.getBallSide(DetailSide.up))
+                    isMatch(it.value.getBallSide(DetailSide.up), detailWithRotation.getBallSide(DetailSide.down))
                 }
             } else {
                 true

@@ -119,10 +119,10 @@ class TestPuzzleAssembler {
             val detail01 = DetailWithRotation(
                 Detail(
                     0,
-                    BallSide(Color.green, BallPart.two_thirds),
+                    BallSide(Color.yellow, BallPart.two_thirds),
                     BallSide(Color.yellow, BallPart.two_thirds),
                     BallSide(Color.green, BallPart.two_thirds),
-                    BallSide(Color.green, BallPart.one_third)
+                    BallSide(Color.red, BallPart.two_thirds)
                 ), rotation
             )
             val candidate1 = PuzzleState(
@@ -139,7 +139,123 @@ class TestPuzzleAssembler {
         assertTrue(check(2))
         assertFalse(check(3))
     }
+    @Test
+    fun testCheckPuzzleState2() {
+        val checkPuzzleStateMethod: Method = PuzzleAssemblerImpl::class.java.getDeclaredMethod(
+            "checkPuzzleState",
+            PuzzleState::class.java,
+            PuzzleField::class.java,
+            DetailWithRotation::class.java
+        )
+        checkPuzzleStateMethod.isAccessible = true
 
+        val detail00 = DetailWithRotation(
+            Detail(
+                3,
+                BallSide(Color.white, BallPart.one_third),
+                BallSide(Color.red, BallPart.one_third),
+                BallSide(Color.green, BallPart.two_thirds),
+                BallSide(Color.yellow, BallPart.one_third)
+            ), 3
+        )
+        val detail11 = DetailWithRotation(
+            Detail(
+                0,
+                BallSide(Color.white, BallPart.one_third),
+                BallSide(Color.red, BallPart.one_third),
+                BallSide(Color.green, BallPart.one_third),
+                BallSide(Color.yellow, BallPart.one_third)
+            ), 3
+        )
+        val detail01 = DetailWithRotation(
+            Detail(
+                2,
+                BallSide(Color.white, BallPart.two_thirds),
+                BallSide(Color.red, BallPart.two_thirds),
+                BallSide(Color.green, BallPart.two_thirds),
+                BallSide(Color.yellow, BallPart.two_thirds)
+            ), 1
+        )
+        val detail10 = DetailWithRotation(
+            Detail(
+                1,
+                BallSide(Color.white, BallPart.one_third),
+                BallSide(Color.red, BallPart.two_thirds),
+                BallSide(Color.green, BallPart.one_third),
+                BallSide(Color.yellow, BallPart.one_third)
+            ), 1
+        )
+        val candidate1 = PuzzleState(
+            mapOf(
+                PuzzleField(0, 0) to detail00,
+                PuzzleField(0, 1) to detail01,
+                PuzzleField(1, 1) to detail11,
+                PuzzleField(1, 0) to detail10
+            )
+        )
+        val check = checkPuzzleStateMethod.invoke(PuzzleAssemblerImpl(), candidate1, PuzzleField(1, 0), detail10) as Boolean
+
+        assertFalse(check)
+    }
+
+    @Test
+    fun testCheckPuzzleState3() {
+        val checkPuzzleStateMethod: Method = PuzzleAssemblerImpl::class.java.getDeclaredMethod(
+            "checkPuzzleState",
+            PuzzleState::class.java,
+            PuzzleField::class.java,
+            DetailWithRotation::class.java
+        )
+        checkPuzzleStateMethod.isAccessible = true
+
+        val detail00 = DetailWithRotation(
+            Detail(
+                3,
+                BallSide(Color.white, BallPart.one_third),
+                BallSide(Color.red, BallPart.one_third),
+                BallSide(Color.green, BallPart.two_thirds),
+                BallSide(Color.yellow, BallPart.one_third)
+            ), 1
+        )
+        val detail11 = DetailWithRotation(
+            Detail(
+                0,
+                BallSide(Color.white, BallPart.one_third),
+                BallSide(Color.red, BallPart.one_third),
+                BallSide(Color.green, BallPart.one_third),
+                BallSide(Color.yellow, BallPart.one_third)
+            ), 1
+        )
+        val detail10 = DetailWithRotation(
+            Detail(
+                2,
+                BallSide(Color.white, BallPart.two_thirds),
+                BallSide(Color.red, BallPart.two_thirds),
+                BallSide(Color.green, BallPart.two_thirds),
+                BallSide(Color.yellow, BallPart.two_thirds)
+            ), 3
+        )
+        val detail01 = DetailWithRotation(
+            Detail(
+                1,
+                BallSide(Color.white, BallPart.one_third),
+                BallSide(Color.red, BallPart.two_thirds),
+                BallSide(Color.green, BallPart.one_third),
+                BallSide(Color.yellow, BallPart.one_third)
+            ), 3
+        )
+        val candidate1 = PuzzleState(
+            mapOf(
+                PuzzleField(0, 0) to detail00,
+                PuzzleField(0, 1) to detail01,
+                PuzzleField(1, 1) to detail11,
+                PuzzleField(1, 0) to detail10
+            )
+        )
+        val check = checkPuzzleStateMethod.invoke(PuzzleAssemblerImpl(), candidate1, PuzzleField(0, 1), detail01) as Boolean
+
+        assertFalse(check)
+    }
     @Test
     fun testAddDetailToPuzzle() {
         val addDetailToPuzzleMethod: Method = PuzzleAssemblerImpl::class.java.getDeclaredMethod(

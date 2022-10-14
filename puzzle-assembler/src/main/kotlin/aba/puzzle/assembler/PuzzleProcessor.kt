@@ -23,7 +23,8 @@ class PuzzleProcessorImpl(
         puzzleConfig.puzzleMap.puzzleFields.find {
             !currentPuzzleState.positionedDetails.containsKey(it)
         }?.let { nextPuzzleField ->
-            puzzleConfig.puzzleDetails.forEach {
+            val usedIds = currentPuzzleState.positionedDetails.map { it.value.detail.id }
+            puzzleConfig.puzzleDetails.filter { !usedIds.contains(it.id) }.forEach {
                 with(puzzleAssembler.addDetail(currentPuzzleState, it, nextPuzzleField, puzzleConfig)) {
                     this.incompleted.forEach { puzzleState ->
                         sendPuzzles(topic, puzzleState)
