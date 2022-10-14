@@ -1,0 +1,362 @@
+{
+  "testId": "8",
+  "puzzleConfig": {
+    "puzzleMap": {
+      "puzzleFields": [
+        {
+          "shiftX": 0,
+          "shiftY": 0
+        },
+        {
+          "shiftX": 0,
+          "shiftY": 1
+        },
+        {
+          "shiftX": 0,
+          "shiftY": 2
+        },
+        {
+          "shiftX": 1,
+          "shiftY": 0
+        },
+        {
+          "shiftX": 1,
+          "shiftY": 1
+        },
+        {
+          "shiftX": 1,
+          "shiftY": 2
+        },
+        {
+          "shiftX": 2,
+          "shiftY": 0
+        },
+        {
+          "shiftX": 2,
+          "shiftY": 1
+        },
+        {
+          "shiftX": 2,
+          "shiftY": 2
+        }
+      ]
+    },
+    "puzzleDetails": [
+      {
+        "id": 0,
+        "left": {
+          "color": {
+            "color": "white"
+          },
+          "side": {
+            "side": "two_thirds"
+          }
+        },
+        "upper": {
+          "color": {
+            "color": "red"
+          },
+          "side": {
+            "side": "one_third"
+          }
+        },
+        "right": {
+          "color": {
+            "color": "green"
+          },
+          "side": {
+            "side": "one_third"
+          }
+        },
+        "lower": {
+          "color": {
+            "color": "red"
+          },
+          "side": {
+            "side": "one_third"
+          }
+        }
+      },
+      {
+        "id": 1,
+        "left": {
+          "color": {
+            "color": "green"
+          },
+          "side": {
+            "side": "two_thirds"
+          }
+        },
+        "upper": {
+          "color": {
+            "color": "red"
+          },
+          "side": {
+            "side": "two_thirds"
+          }
+        },
+        "right": {
+          "color": {
+            "color": "white"
+          },
+          "side": {
+            "side": "one_third"
+          }
+        },
+        "lower": {
+          "color": {
+            "color": "yellow"
+          },
+          "side": {
+            "side": "one_third"
+          }
+        }
+      },
+      {
+        "id": 2,
+        "left": {
+          "color": {
+            "color": "white"
+          },
+          "side": {
+            "side": "two_thirds"
+          }
+        },
+        "upper": {
+          "color": {
+            "color": "green"
+          },
+          "side": {
+            "side": "two_thirds"
+          }
+        },
+        "right": {
+          "color": {
+            "color": "yellow"
+          },
+          "side": {
+            "side": "one_third"
+          }
+        },
+        "lower": {
+          "color": {
+            "color": "yellow"
+          },
+          "side": {
+            "side": "two_thirds"
+          }
+        }
+      },
+      {
+        "id": 3,
+        "left": {
+          "color": {
+            "color": "green"
+          },
+          "side": {
+            "side": "one_third"
+          }
+        },
+        "upper": {
+          "color": {
+            "color": "red"
+          },
+          "side": {
+            "side": "two_thirds"
+          }
+        },
+        "right": {
+          "color": {
+            "color": "white"
+          },
+          "side": {
+            "side": "two_thirds"
+          }
+        },
+        "lower": {
+          "color": {
+            "color": "yellow"
+          },
+          "side": {
+            "side": "two_thirds"
+          }
+        }
+      },
+      {
+        "id": 4,
+        "left": {
+          "color": {
+            "color": "white"
+          },
+          "side": {
+            "side": "one_third"
+          }
+        },
+        "upper": {
+          "color": {
+            "color": "yellow"
+          },
+          "side": {
+            "side": "two_thirds"
+          }
+        },
+        "right": {
+          "color": {
+            "color": "white"
+          },
+          "side": {
+            "side": "two_thirds"
+          }
+        },
+        "lower": {
+          "color": {
+            "color": "yellow"
+          },
+          "side": {
+            "side": "two_thirds"
+          }
+        }
+      },
+      {
+        "id": 5,
+        "left": {
+          "color": {
+            "color": "white"
+          },
+          "side": {
+            "side": "one_third"
+          }
+        },
+        "upper": {
+          "color": {
+            "color": "yellow"
+          },
+          "side": {
+            "side": "one_third"
+          }
+        },
+        "right": {
+          "color": {
+            "color": "green"
+          },
+          "side": {
+            "side": "two_thirds"
+          }
+        },
+        "lower": {
+          "color": {
+            "color": "red"
+          },
+          "side": {
+            "side": "two_thirds"
+          }
+        }
+      },
+      {
+        "id": 6,
+        "left": {
+          "color": {
+            "color": "green"
+          },
+          "side": {
+            "side": "two_thirds"
+          }
+        },
+        "upper": {
+          "color": {
+            "color": "yellow"
+          },
+          "side": {
+            "side": "one_third"
+          }
+        },
+        "right": {
+          "color": {
+            "color": "white"
+          },
+          "side": {
+            "side": "two_thirds"
+          }
+        },
+        "lower": {
+          "color": {
+            "color": "red"
+          },
+          "side": {
+            "side": "two_thirds"
+          }
+        }
+      },
+      {
+        "id": 7,
+        "left": {
+          "color": {
+            "color": "white"
+          },
+          "side": {
+            "side": "one_third"
+          }
+        },
+        "upper": {
+          "color": {
+            "color": "yellow"
+          },
+          "side": {
+            "side": "one_third"
+          }
+        },
+        "right": {
+          "color": {
+            "color": "green"
+          },
+          "side": {
+            "side": "one_third"
+          }
+        },
+        "lower": {
+          "color": {
+            "color": "yellow"
+          },
+          "side": {
+            "side": "one_third"
+          }
+        }
+      },
+      {
+        "id": 8,
+        "left": {
+          "color": {
+            "color": "green"
+          },
+          "side": {
+            "side": "two_thirds"
+          }
+        },
+        "upper": {
+          "color": {
+            "color": "red"
+          },
+          "side": {
+            "side": "one_third"
+          }
+        },
+        "right": {
+          "color": {
+            "color": "white"
+          },
+          "side": {
+            "side": "one_third"
+          }
+        },
+        "lower": {
+          "color": {
+            "color": "red"
+          },
+          "side": {
+            "side": "two_thirds"
+          }
+        }
+      }
+    ]
+  }
+}
