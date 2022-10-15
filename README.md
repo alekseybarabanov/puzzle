@@ -5,6 +5,7 @@ is intended to play in some future a role of the reference book of
 technologies the author has dealt with.
 
 Puzzle consists of square puzzle pieces. Each piece has got a colored circle part (either 1/3 or 2/3) on each side.
+
 ![PuzzlePiece1](https://user-images.githubusercontent.com/12249892/195968243-19db6d33-4daa-4ad0-a9d9-f4da2917eac8.jpg)
 ![PuzzlePiece2](https://user-images.githubusercontent.com/12249892/195968248-582b0c88-7045-4140-b86c-128b1e8ddac5.jpg)
 
