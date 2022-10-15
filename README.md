@@ -12,4 +12,5 @@ Puzzle consists of square puzzle pieces. Each piece has got a colored circle par
 The aim of the puzzle is to assemble a map (N pieces in a row, K pieces in a column) where all balls are consistent. 
 
 See the assembled example below with 3x3 puzzle map.
+
 ![PuzzleMap](https://user-images.githubusercontent.com/12249892/195967697-3277d89c-16a6-4e50-813a-059b9c4ac4b0.jpg)
