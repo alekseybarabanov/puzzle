@@ -56,7 +56,7 @@ sh puzzle3x3.sh
 ## Next steps
 ### Coming in the near future
 * improve puzzle-repository to store run configurations and the result puzzle.
-* puzzle-result module [#1]
+* puzzle-result module [#1](https://github.com/alekseybarabanov/puzzle/issues/1)
 * cassandra as datasource
 
 ### After that
