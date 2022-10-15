@@ -4,6 +4,7 @@ This is a pet project for the author to demonstrate developer skills and
 is intended to play in some future a role of the reference book of 
 technologies the author has dealt with.
 
+### Puzzle rules
 Puzzle consists of square puzzle pieces. Each piece has got a colored circle part (either 1/3 or 2/3) on each side.
 
 ![PuzzlePiece1](https://user-images.githubusercontent.com/12249892/195968243-19db6d33-4daa-4ad0-a9d9-f4da2917eac8.jpg)
@@ -14,3 +15,15 @@ The aim of the puzzle is to assemble a map (N pieces in a row, K pieces in a col
 See the assembled example below with 3x3 puzzle map.
 
 ![PuzzleMap](https://user-images.githubusercontent.com/12249892/195967697-3277d89c-16a6-4e50-813a-059b9c4ac4b0.jpg)
+
+### Project description
+Project consists of the modules
+* puzzle-api - spring boot application, user interacts with via RESTful interface.
+* puzzle-assembler - spring boot application where puzzle is actually assembled in.
+* puzzle-domain - library, that holds the domain objects
+* puzzle-repository - spring boot application that holds some pre-defined puzzle configurations, stores run tasks and the assembling results.
+* puzzle-result(missing at the moment) - spring application that reads assembled puzzles and calls puzzle-repository to store the result
+
+Here is the schema of the data workflow
+![PuzzleArchitecture (1)](https://user-images.githubusercontent.com/12249892/195969342-6e5a274c-6bc2-48b7-b25b-95116e737f53.jpg)
+
