@@ -45,11 +45,13 @@ mvn clean install
 
 ### Deploy all applications on default ports
 * run kafka. You may use misc/kafka.sh script to run it within kafka folder.
-* cd ${project.dir}/misc
-* deploy_all_local.sh
+* ```cd ${project.dir}/misc```
+* ```deploy_all_local.sh```
 
 ### Run test sample
+```
 sh puzzle3x3.sh 
+```
 
 ## Next steps
 ### Coming in the near future
