@@ -27,6 +27,12 @@ Project consists of the modules
 Here is the schema of the data workflow
 ![PuzzleArchitecture (1)](https://user-images.githubusercontent.com/12249892/195969342-6e5a274c-6bc2-48b7-b25b-95116e737f53.jpg)
 
+Some notes about the solution
+* evey app has to be scaled horizontally
+* every app can be (and will be in some time) deployed to a cloud
+* the implementation should embrace variety transport (HTTP1.1,HTTP2.0,GRPC,KAFKA) 
+* the implementation should be in different programming languages (Java,Kotlin,Go)
+
 ### Deploy on a local machine
 #### Requirements
 Must have been installed
@@ -44,4 +50,23 @@ mvn clean install
 
 ### Run test sample
 sh puzzle3x3.sh 
+
+## Next steps
+### Coming in the near future
+* improve puzzle-repository to store run configurations and the result puzzle.
+* puzzle-result module [#1]
+* cassandra as datasource
+
+### After that
+* simple web GUI to run tasks, show results, apply spring security, 
+
+### Coming later
+* the ability to deploy to k8s
+* add istio support
+* add monitoring dashboards for the project (prometheus, grafana)
+* enriched dynamic web GUI with possibility to create puzzles, show history etc. (Angular, Typescript, web sockets)
+
+## Known shortcomings
+* the implementation finds 4 equivalent assemblies of the puzzle that differ in rotation. I know how to fix it carefully.
+* puzzle-repository is just an example of working with JPA. The database structure is not tuned from the point of view of productivity.
 
