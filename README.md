@@ -27,3 +27,21 @@ Project consists of the modules
 Here is the schema of the data workflow
 ![PuzzleArchitecture (1)](https://user-images.githubusercontent.com/12249892/195969342-6e5a274c-6bc2-48b7-b25b-95116e737f53.jpg)
 
+### Deploy on a local machine
+#### Requirements
+Must have been installed
+* Java (I run with Java 19, but other version should work as well)
+* Apache Maven (Is needed for building the project. My version is 3.8.5)
+* Apache Kafka (I have kafka_2.13-3.3.1 installed)
+
+### Building the project
+mvn clean install
+
+### Deploy all applications on default ports
+* run kafka. You may use misc/kafka.sh script to run it within kafka folder.
+* cd ${project.dir}/misc
+* deploy_all_local.sh
+
+### Run test sample
+sh puzzle3x3.sh 
+
