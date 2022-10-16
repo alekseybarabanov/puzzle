@@ -2,7 +2,8 @@ package aba.puzzle.persistence_vo;
 
 import javax.persistence.*;
 
-@Entity(name="PUZZLE_FIELD")
+@Entity
+@Table(name="PUZZLE_FIELD")
 public class PuzzleFieldVO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,11 +35,11 @@ public class PuzzleFieldVO {
         this.shiftY = shiftY;
     }
 
-    public PuzzleConfigVO getTaskVO() {
+    public PuzzleConfigVO getPuzzleConfigVO() {
         return puzzleConfigVO;
     }
 
-    public void setTaskVO(PuzzleConfigVO puzzleConfigVO) {
+    public void setPuzzleConfigVO(PuzzleConfigVO puzzleConfigVO) {
         this.puzzleConfigVO = puzzleConfigVO;
     }
 }

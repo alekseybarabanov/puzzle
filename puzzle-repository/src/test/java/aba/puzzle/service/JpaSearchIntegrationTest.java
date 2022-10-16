@@ -6,13 +6,19 @@ import aba.puzzle.persistence_vo.PuzzleConfigVO;
 import aba.puzzle.persistence_vo.PuzzleDetailVO;
 import aba.puzzle.persistence_vo.PuzzleFieldVO;
 import aba.puzzle.repository.PuzzleRepository;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.Assertions.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
 import java.util.ArrayList;
@@ -23,10 +29,10 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @ExtendWith(SpringExtension.class)
-@DataJpaTest
+@ContextConfiguration
 public class JpaSearchIntegrationTest {
     @Autowired
-    private PuzzleRepository repository;
+    private RepositoryService repositoryService;
 
     private PuzzleConfig puzzle1;
 
@@ -52,35 +58,25 @@ public class JpaSearchIntegrationTest {
                 new PuzzleMap(puzzleFields),
                 puzzleDetail
         );
-        PuzzleConfigVO puzzleConfigVO = PuzzleConfigVO.fromPuzzleConfig(puzzle1, "test");
-        repository.save(puzzleConfigVO);
+        repositoryService.storePuzzleConfig(puzzle1, "test");
     }
 
     @Test
     public void givenLast_whenGettingListOfUsers_thenCorrect() {
-        RepositoryServiceImpl.PuzzleConfigSpecification spec =
-                new RepositoryServiceImpl.PuzzleConfigSpecification("test");
+        PuzzleConfig pc = repositoryService.getPuzzleConfig("test");
 
-        List<PuzzleConfigVO> results = repository.findAll(spec);
-
-        assertEquals(results.size(), 1);
-        PuzzleConfigVO rs = results.get(0);
-        assertEquals("test", rs.getExtPuzzleConfigId());
-        assertEquals(2, rs.getPuzzleFieldVOS().size());
-        Iterator<PuzzleFieldVO> iterator = rs.getPuzzleFieldVOS().iterator();
-        PuzzleFieldVO p1 = iterator.next();
-        PuzzleFieldVO p2 = iterator.next();
+        assertEquals(2, pc.getPuzzleMap().getPuzzleFields().size());
+        Iterator<PuzzleField> iterator = pc.getPuzzleMap().getPuzzleFields().iterator();
+        PuzzleField p1 = iterator.next();
+        PuzzleField p2 = iterator.next();
         assertEquals(0, p1.getShiftX() + p2.getShiftX());
         assertEquals(1, p1.getShiftY() + p2.getShiftY());
 
-        assertEquals(2, rs.getPuzzleDetailVOS().size());
-//        Iterator<PuzzleDetailVO> iteratorDetails = rs.getPuzzleDetailVOS().iterator();
-//        PuzzleDetailVO d1 = iteratorDetails.next();
-//        PuzzleDetailVO d2 = iteratorDetails.next();
-//        HashMap<Integer, PuzzleDetailVO> detailsMap = new HashMap<>();
-//        detailsMap.put(d1.getId(), d1);
-//        detailsMap.put(d2.getId(), d2);
-//        assertEquals(detailsMap.get(0).getColorLeftSide(), Color.green.name());
-//        assertThat(userJohn, isIn(results));
+        assertEquals(2, pc.getPuzzleDetails().size());
+    }
+
+    @Configuration
+    @ComponentScan(basePackages = "aba.puzzle")
+    static class AppConfig {
     }
 }

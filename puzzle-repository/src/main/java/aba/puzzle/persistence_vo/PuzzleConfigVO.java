@@ -8,7 +8,8 @@ import java.time.ZonedDateTime;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Entity(name = "PUZZLE_CONFIG")
+@Entity
+@Table(name = "PUZZLE_CONFIG")
 public class PuzzleConfigVO {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -34,10 +35,12 @@ public class PuzzleConfigVO {
             PuzzleFieldVO puzzleFieldVO = new PuzzleFieldVO();
             puzzleFieldVO.setShiftX(puzzleField.getShiftX());
             puzzleFieldVO.setShiftY(puzzleField.getShiftY());
+            puzzleFieldVO.setPuzzleConfigVO(puzzleConfigVO);
             return puzzleFieldVO;
         }).collect(Collectors.toSet()));
         puzzleConfigVO.setPuzzleDetailVOS(config.getPuzzleDetails().stream().map(puzzleDetail -> {
             PuzzleDetailVO puzzleDetailVO = new PuzzleDetailVO();
+            puzzleDetailVO.setPuzzleConfigVO(puzzleConfigVO);
             BallSide leftBallSide = puzzleDetail.getBallSide(DetailSide.left);
             puzzleDetailVO.setColorLeftSide(leftBallSide.getColor().name());
             puzzleDetailVO.setPartLeftSide(leftBallSide.getBallPart().name());

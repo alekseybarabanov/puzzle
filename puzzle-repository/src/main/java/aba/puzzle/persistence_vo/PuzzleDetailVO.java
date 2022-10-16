@@ -1,8 +1,12 @@
 package aba.puzzle.persistence_vo;
 
+import org.hibernate.annotations.OnDelete;
+import org.hibernate.annotations.OnDeleteAction;
+
 import javax.persistence.*;
 
-@Entity(name="PUZZLE_DETAIL")
+@Entity
+@Table(name="PUZZLE_DETAIL")
 public class PuzzleDetailVO {
 
     @Id
@@ -33,8 +37,9 @@ public class PuzzleDetailVO {
     @Column(name="PART_LOWER_SIDE")
     private String partLowerSide;
 
-    @ManyToOne
-    @JoinColumn(name="PUZZLE_CONFIG_ID")
+    @ManyToOne(fetch = FetchType.EAGER, optional = false)
+    @JoinColumn(name="PUZZLE_CONFIG_ID", nullable = false)
+    @OnDelete(action = OnDeleteAction.CASCADE)
     private PuzzleConfigVO puzzleConfigVO;
 
     public String getColorLeftSide() {
@@ -101,11 +106,11 @@ public class PuzzleDetailVO {
         this.partLowerSide = partLowerSide;
     }
 
-    public PuzzleConfigVO getTaskVO() {
+    public PuzzleConfigVO getPuzzleConfigVO() {
         return puzzleConfigVO;
     }
 
-    public void setTaskVO(PuzzleConfigVO puzzleConfigVO) {
+    public void setPuzzleConfigVO(PuzzleConfigVO puzzleConfigVO) {
         this.puzzleConfigVO = puzzleConfigVO;
     }
 
