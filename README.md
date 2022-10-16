@@ -21,11 +21,12 @@ Project consists of the modules
 * puzzle-api - spring boot application, user interacts with via RESTful interface.
 * puzzle-assembler - spring boot application where puzzle is actually assembled in.
 * puzzle-domain - library, that holds the domain objects
-* puzzle-repository - spring boot application that holds some pre-defined puzzle configurations, stores run tasks and the assembling results.
-* puzzle-result(missing at the moment) - spring application that reads assembled puzzles and calls puzzle-repository to store the result
+* puzzle-repository-hsqldb - spring boot application that holds some pre-defined puzzle configurations, stores run tasks and the assembling results.
+* puzzle-repository-cassandra(missing at the moment) - store in cassandra db
+* puzzle-storage-manager(missing at the moment) - spring application that reads puzzleConfigs/assembled puzzles and calls appropriate repository
 
 Here is the schema of the data workflow
-![PuzzleArchitecture (1)](https://user-images.githubusercontent.com/12249892/195969342-6e5a274c-6bc2-48b7-b25b-95116e737f53.jpg)
+![PuzzleArchitecture (2)](https://user-images.githubusercontent.com/12249892/196051900-e623c498-1805-4843-b8ce-64ee9b385bf5.jpg)
 
 Some notes about the solution
 * evey app has to be scaled horizontally
