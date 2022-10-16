@@ -14,7 +14,7 @@
     </parent>
 
     <modules>
-        <module>puzzle-repository</module>
+        <module>puzzle-repository-hsqldb</module>
         <module>puzzle-api</module>
         <module>puzzle-domain</module>
         <module>puzzle-assembler</module>

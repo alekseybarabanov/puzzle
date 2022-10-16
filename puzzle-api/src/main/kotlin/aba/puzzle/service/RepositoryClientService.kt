@@ -9,12 +9,12 @@ import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
 import org.springframework.web.reactive.function.client.WebClient
 
-interface DetailsService {
+interface RepositoryClientService {
     fun getDetails(): Collection<Detail>
 }
 
 @Component
-class DetailsServiceImpl(@Value("\${app.repositoryUrl}") val repositoryUrl: String) : DetailsService, InitializingBean {
+class RepositoryClientServiceImpl(@Value("\${app.repositoryUrl}") val repositoryUrl: String) : RepositoryClientService, InitializingBean {
     private val log = KotlinLogging.logger {}
 
     lateinit var allDetails: Collection<Detail>

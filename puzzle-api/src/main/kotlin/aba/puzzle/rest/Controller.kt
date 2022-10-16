@@ -4,7 +4,6 @@ import aba.puzzle.domain.PuzzleConfig
 import aba.puzzle.domain.PuzzleField
 import aba.puzzle.domain.PuzzleMap
 import aba.puzzle.domain.dto.PuzzleConfigVO
-import aba.puzzle.service.DetailsService
 import aba.puzzle.service.LaunchService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
@@ -15,14 +14,13 @@ import org.springframework.web.bind.annotation.*
 
 @RestController
 class Controller(
-    @Autowired private val launchService: LaunchService,
-    @Autowired private val detailsService: DetailsService
+    @Autowired private val launchService: LaunchService
 ) {
 
     @PostMapping("/run", consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun run(@RequestBody launchRequest: LaunchRequest, @RequestHeader("Idempotency-Key") idempotenceKey: String): LaunchResponse {
         val topicName = "puzzle-$idempotenceKey"
-        val puzzleConfig = launchRequest.puzzleConfig?.let { PuzzleConfigVO.toPuzzleConfig(it)} ?: createPuzzleConfig()
+        val puzzleConfig = launchRequest.puzzleConfig!!.let { PuzzleConfigVO.toPuzzleConfig(it)}
         if (launchService.launch(topicName, puzzleConfig)) {
             return LaunchResponse(launched = true, topicName = topicName)
         } else {
@@ -30,18 +28,6 @@ class Controller(
         }
     }
 
-    private fun createPuzzleConfig(): PuzzleConfig {
-        return PuzzleConfig(
-            puzzleMap = PuzzleMap(
-                puzzleFields = listOf(
-                    PuzzleField(0, 0),
-                    PuzzleField(0, 1),
-                    PuzzleField(1, 0),
-                    PuzzleField(1, 1),
-                )
-            ), puzzleDetails = detailsService.getDetails()
-        )
-    }
 }
 
 class AlreadyRunningException(val topicName: String) : RuntimeException()
