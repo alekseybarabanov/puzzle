@@ -71,6 +71,5 @@ sh puzzle3x3.sh
 * enriched dynamic web GUI with possibility to create puzzles, show history etc. (Angular, Typescript, web sockets)
 
 ## Known shortcomings
-* the implementation finds 4 equivalent assemblies of the puzzle that differ in rotation.
 * puzzle-repository is just an example of working with JPA. The database structure is not tuned from the point of view of productivity.
 
