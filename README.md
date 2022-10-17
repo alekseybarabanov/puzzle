@@ -55,9 +55,9 @@ sh puzzle3x3.sh
 ```
 
 ## Next steps
-### Coming in the near future
+### Coming soon
 * improve puzzle-repository to store run configurations and the result puzzle. [#1](https://github.com/alekseybarabanov/puzzle/issues/1)
-* puzzle-result module [#8](https://github.com/alekseybarabanov/puzzle/issues/8)
+* puzzle-storage-manager module [#8](https://github.com/alekseybarabanov/puzzle/issues/8)
 * cassandra as datasource [#12](https://github.com/alekseybarabanov/puzzle/issues/12)
 * create puzzle config generator for an arbitrary puzzle field size [#6](https://github.com/alekseybarabanov/puzzle/issues/6)
 
