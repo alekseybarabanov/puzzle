@@ -1,5 +1,6 @@
 package aba.puzzle.service
 
+import aba.puzzle.domain.DetailWithRotation
 import aba.puzzle.domain.PuzzleConfig
 import aba.puzzle.domain.PuzzleState
 import aba.puzzle.domain.dto.NewTaskVO
@@ -13,6 +14,10 @@ import org.springframework.kafka.config.TopicBuilder
 import org.springframework.kafka.core.KafkaAdmin
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Component
+import java.util.*
+import java.util.stream.Collectors
+import java.util.stream.IntStream
+import kotlin.math.max
 
 interface LaunchService {
     fun launch(topic: String, puzzleConfig: PuzzleConfig): Boolean
@@ -33,12 +38,28 @@ class LaunchServiceImpl(
             return false
         }
 
+        //restrict puzzle rotations
+        restrictPuzzleRotations(puzzleConfig)
+
         //publish topic for consumers to subscribe
         sendNewTopic(topic, puzzleConfig)
 
         //initiate puzzle assembling
         sendPuzzles(topic, PuzzleState())
         return true
+    }
+
+    private fun restrictPuzzleRotations(puzzleConfig: PuzzleConfig) {
+        // if detail looks identically with two different rotations, consider rotations equivalent.
+        puzzleConfig.puzzleDetails.forEach { detail ->
+            IntStream.range(0, 4)
+                .mapToObj { rotation -> DetailWithRotation(detail, rotation) }
+                .forEach { detailWithRotation -> detail.allowedRotations.add(detailWithRotation.rotation) }
+        }
+
+        //take the most diverse detail and fix it
+        val mostDiverseDetail = puzzleConfig.puzzleDetails.stream().max { d1, d2 -> max(d1.detailDiversity, d2.detailDiversity) }.get()
+        mostDiverseDetail.allowedRotations = Collections.singletonList(0)
     }
 
     private fun createTopic(topic: String): Boolean =
@@ -55,7 +76,7 @@ class LaunchServiceImpl(
 
 
     private fun sendNewTopic(topic: String, puzzleConfig: PuzzleConfig) {
-        val taskVO = NewTaskVO(topic,PuzzleConfigVO.fromPuzzleConfig(puzzleConfig))
+        val taskVO = NewTaskVO(topic, PuzzleConfigVO.fromPuzzleConfig(puzzleConfig))
         val taskTopicsFuture = kafkaTaskTopicsProducer.send(taskTopicsTopic, taskVO)
         taskTopicsFuture.addCallback({
             log.info { "message sent to $taskTopicsTopic" }
@@ -67,9 +88,9 @@ class LaunchServiceImpl(
     private fun sendPuzzles(topic: String, puzzleState: PuzzleState) {
         val puzzleFuture = kafkaProducer.send(topic, PuzzleStateVO.fromPuzzleState(puzzleState))
         puzzleFuture.addCallback({
-            log.info {"message sent to $topic"}
+            log.info { "message sent to $topic" }
         }, {
-            log.info {"Exception in sending to kafka $it"}
+            log.info { "Exception in sending to kafka $it" }
         })
     }
 

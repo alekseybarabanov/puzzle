@@ -22,7 +22,7 @@ class PuzzleAssemblerImpl : PuzzleAssembler {
     ): PuzzleStatus {
         val completed = mutableListOf<PuzzleState>()
         val incomplete = mutableListOf<PuzzleState>()
-        for (rotation in 0..3) {
+        for (rotation in detail.allowedRotations) {
             val detailWithRotation = DetailWithRotation(detail, rotation)
             val candidateState = addDetailToPuzzle(currentState, puzzleField, detailWithRotation)
             if (checkPuzzleState(candidateState, puzzleField, detailWithRotation)) {

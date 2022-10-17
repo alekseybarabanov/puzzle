@@ -6,6 +6,9 @@ import aba.puzzle.domain.Detail;
 import aba.puzzle.domain.DetailSide;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class DetailVO {
 
@@ -14,6 +17,8 @@ public class DetailVO {
 	private BallSideVO upper;
 	private BallSideVO right;
 	private BallSideVO lower;
+
+	private List<Integer> allowedRotations;
 
 	public BallSideVO getLeft() {
 		return left;
@@ -26,6 +31,7 @@ public class DetailVO {
 			BallSide ballSide = detail.getBallSide(side);
 			result.setSide(BallSideVO.fromBallSide(ballSide), side);
 		}
+		result.allowedRotations = new ArrayList<>(detail.getAllowedRotations());
 		return result;
 	}
 	
@@ -36,6 +42,9 @@ public class DetailVO {
 				BallSideVO.toBallSide(detailVO.getRight()),
 				BallSideVO.toBallSide(detailVO.getLower())
 				);
+		if (detailVO.allowedRotations != null) {
+			result.setAllowedRotations(detailVO.allowedRotations);
+		}
 		return result;
 	}
 	
