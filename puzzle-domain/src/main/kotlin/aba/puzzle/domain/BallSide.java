@@ -22,6 +22,14 @@ public class BallSide {
         return color;
     }
 
+    public BallSide getComplement() {
+        if (ballPart == BallPart.one_third) {
+            return new BallSide(color, BallPart.two_thirds);
+        } else {
+            return new BallSide(color, BallPart.one_third);
+        }
+    }
+
     @Override
     public String toString() {
         return "BallSide{" +

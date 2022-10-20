@@ -23,6 +23,26 @@ public class Detail {
         sides.put(DetailSide.down, lowerSide);
     }
 
+    private Detail(int id) {
+        this.id = id;
+    }
+
+    public static Detail newDraftDetail(@NotNull int id) {
+        return new Detail(id);
+    }
+
+    public boolean isDraft() {
+        return sides.size() != 4;
+    }
+
+    public void setSide(DetailSide detailSide, BallSide ballSide) {
+        sides.put(detailSide, ballSide);
+    }
+
+    public Collection<DetailSide> getFilledSides() {
+        return sides.keySet();
+    }
+
     public BallSide getBallSide(DetailSide side) {
         return sides.get(side);
     }

@@ -5,16 +5,19 @@ import aba.puzzle.domain.PuzzleField
 import aba.puzzle.domain.PuzzleMap
 import aba.puzzle.domain.dto.PuzzleConfigVO
 import aba.puzzle.service.LaunchService
+import aba.puzzle.service.PuzzleGenerator
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.http.HttpStatus
 import org.springframework.http.MediaType
 import org.springframework.http.ResponseEntity
 import org.springframework.web.bind.annotation.*
+import reactor.core.publisher.Mono
 
 
 @RestController
 class Controller(
-    @Autowired private val launchService: LaunchService
+    @Autowired private val launchService: LaunchService,
+    @Autowired private val puzzleGenerator: PuzzleGenerator
 ) {
 
     @PostMapping("/run", consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -26,6 +29,11 @@ class Controller(
         } else {
             throw AlreadyRunningException(topicName = topicName)
         }
+    }
+
+    @GetMapping("/generate", produces = [MediaType.APPLICATION_JSON_VALUE])
+    fun generate(@RequestParam("sizeX") sizeX: Int, @RequestParam("sizeY") sizeY: Int): Mono<PuzzleConfigVO> {
+        return puzzleGenerator.generatePuzzleConfig(sizeX, sizeY).map { PuzzleConfigVO.fromPuzzleConfig(it) }
     }
 
 }

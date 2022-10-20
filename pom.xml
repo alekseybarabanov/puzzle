@@ -18,6 +18,7 @@
         <module>puzzle-api</module>
         <module>puzzle-domain</module>
         <module>puzzle-assembler</module>
+        <module>puzzle-generator</module>
     </modules>
 
     <properties>

@@ -1,0 +1,20 @@
+{
+  "puzzleFields": [
+    {
+      "shiftX": 0,
+      "shiftY": 0
+    },
+    {
+      "shiftX": 0,
+      "shiftY": 1
+    },
+    {
+      "shiftX": 1,
+      "shiftY": 0
+    },
+    {
+      "shiftX": 1,
+      "shiftY": 1
+    }
+  ]
+}
