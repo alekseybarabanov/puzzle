@@ -11,23 +11,23 @@ import java.util.List;
 import java.util.Map;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
-public class PuzzleStateVO {
-	private List<PuzzleStateEntryVO> coverage = new ArrayList<>();
+public class PuzzleStateDto {
+	private List<PuzzleStateEntryDto> coverage = new ArrayList<>();
 	
-	public static PuzzleStateVO fromPuzzleState(PuzzleState puzzleState) {
-		final PuzzleStateVO result = new PuzzleStateVO();
+	public static PuzzleStateDto fromPuzzleState(PuzzleState puzzleState) {
+		final PuzzleStateDto result = new PuzzleStateDto();
 		for (Map.Entry<PuzzleField, DetailWithRotation> entry : puzzleState.getPositionedDetails().entrySet()) {
-			result.coverage.add(PuzzleStateEntryVO.fromPuzzleStateEntry(entry));
+			result.coverage.add(PuzzleStateEntryDto.fromPuzzleStateEntry(entry));
 		}
 		return result;		
 	}
 	
-	public static PuzzleState toPuzzleState(PuzzleStateVO puzzleStateVO) {
+	public static PuzzleState toPuzzleState(PuzzleStateDto puzzleStateDto) {
 		final PuzzleState puzzleState = new PuzzleState();
 		final Map<PuzzleField, DetailWithRotation> resultMap = new HashMap<>();
-		for (PuzzleStateEntryVO entry : puzzleStateVO.coverage) {
+		for (PuzzleStateEntryDto entry : puzzleStateDto.coverage) {
 			resultMap.put(PuzzleFieldVO.Companion.toPuzzleField(entry.getPuzzleFieldVO()),
-					DetailWithRotationVO.toDetailWithRotation(entry.getDetailWithRotationVO()));
+					PuzzleDetailWithRotationDto.toDetailWithRotation(entry.getDetailWithRotationVO()));
 		}
 		puzzleState.setPositionedDetails(resultMap);
 		return puzzleState;

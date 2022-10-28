@@ -3,9 +3,9 @@ package aba.puzzle.service
 import aba.puzzle.domain.DetailWithRotation
 import aba.puzzle.domain.PuzzleConfig
 import aba.puzzle.domain.PuzzleState
-import aba.puzzle.domain.dto.NewTaskVO
-import aba.puzzle.domain.dto.PuzzleConfigVO
-import aba.puzzle.domain.dto.PuzzleStateVO
+import aba.puzzle.domain.dto.NewTaskDto
+import aba.puzzle.domain.dto.PuzzleConfigDto
+import aba.puzzle.domain.dto.PuzzleStateDto
 import mu.KotlinLogging
 import org.apache.kafka.clients.admin.AdminClient
 import org.springframework.beans.factory.annotation.Autowired
@@ -15,7 +15,6 @@ import org.springframework.kafka.core.KafkaAdmin
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Component
 import java.util.*
-import java.util.stream.Collectors
 import java.util.stream.IntStream
 import kotlin.math.max
 
@@ -26,8 +25,8 @@ interface LaunchService {
 @Component
 class LaunchServiceImpl(
     @Value("\${app.taskTopicsTopic}") val taskTopicsTopic: String,
-    @Autowired val kafkaProducer: KafkaTemplate<String, PuzzleStateVO>,
-    @Autowired val kafkaTaskTopicsProducer: KafkaTemplate<String, NewTaskVO>,
+    @Autowired val kafkaProducer: KafkaTemplate<String, PuzzleStateDto>,
+    @Autowired val kafkaTaskTopicsProducer: KafkaTemplate<String, NewTaskDto>,
     @Autowired val kafkaAdmin: KafkaAdmin
 ) : LaunchService {
     private val log = KotlinLogging.logger {}
@@ -76,7 +75,7 @@ class LaunchServiceImpl(
 
 
     private fun sendNewTopic(topic: String, puzzleConfig: PuzzleConfig) {
-        val taskVO = NewTaskVO(topic, PuzzleConfigVO.fromPuzzleConfig(puzzleConfig))
+        val taskVO = NewTaskDto(topic, PuzzleConfigDto.fromPuzzleConfig(puzzleConfig))
         val taskTopicsFuture = kafkaTaskTopicsProducer.send(taskTopicsTopic, taskVO)
         taskTopicsFuture.addCallback({
             log.info { "message sent to $taskTopicsTopic" }
@@ -86,7 +85,7 @@ class LaunchServiceImpl(
     }
 
     private fun sendPuzzles(topic: String, puzzleState: PuzzleState) {
-        val puzzleFuture = kafkaProducer.send(topic, PuzzleStateVO.fromPuzzleState(puzzleState))
+        val puzzleFuture = kafkaProducer.send(topic, PuzzleStateDto.fromPuzzleState(puzzleState))
         puzzleFuture.addCallback({
             log.info { "message sent to $topic" }
         }, {

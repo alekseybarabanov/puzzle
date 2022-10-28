@@ -1,9 +1,8 @@
 package aba.puzzle.rest;
 
 import aba.puzzle.domain.PuzzleConfig;
-import aba.puzzle.domain.dto.NewTaskVO;
-import aba.puzzle.domain.dto.PuzzleConfigVO;
-import aba.puzzle.repository.PuzzleDetailRepository;
+import aba.puzzle.domain.dto.NewTaskDto;
+import aba.puzzle.domain.dto.PuzzleConfigDto;
 import aba.puzzle.service.RepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -20,17 +19,17 @@ public class PuzzleRestServiceImpl implements PuzzleRestService {
 
     @Override
     @PostMapping(value = "/newPuzzleConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public void newPuzzleConfig(@RequestBody NewTaskVO newPuzzleConfig) {
-        PuzzleConfig puzzleConfig = PuzzleConfigVO.Companion.toPuzzleConfig(newPuzzleConfig.getPuzzleConfig());
+    public void newPuzzleConfig(@RequestBody NewTaskDto newPuzzleConfig) {
+        PuzzleConfig puzzleConfig = PuzzleConfigDto.Companion.toPuzzleConfig(newPuzzleConfig.getPuzzleConfig());
         repositoryService.storePuzzleConfig(puzzleConfig, newPuzzleConfig.getTopic());
     }
 
     @Override
     @GetMapping(value = "/puzzleConfig/{configId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public NewTaskVO getPuzzleConfig(@PathVariable("configId") String configId) {
+    public NewTaskDto getPuzzleConfig(@PathVariable("configId") String configId) {
         PuzzleConfig puzzleConfig = repositoryService.getPuzzleConfig(configId);
         if (puzzleConfig != null) {
-            return new NewTaskVO(configId, PuzzleConfigVO.Companion.fromPuzzleConfig(puzzleConfig));
+            return new NewTaskDto(configId, PuzzleConfigDto.Companion.fromPuzzleConfig(puzzleConfig));
         } else {
             return null;
         }

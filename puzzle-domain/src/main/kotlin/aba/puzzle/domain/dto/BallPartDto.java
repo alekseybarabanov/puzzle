@@ -2,17 +2,17 @@ package aba.puzzle.domain.dto;
 
 import aba.puzzle.domain.BallPart;
 
-public class BallPartVO {
+public class BallPartDto {
 
 	private String wording;
 	
-	public static BallPartVO fromBallPart(BallPart ballPart) {
-		BallPartVO result = new BallPartVO();
+	public static BallPartDto fromBallPart(BallPart ballPart) {
+		BallPartDto result = new BallPartDto();
 		result.setSide(ballPart.name());
 		return result;
 	}
 	
-	public static BallPart toBallPart(BallPartVO sideVO) {
+	public static BallPart toBallPart(BallPartDto sideVO) {
 		return BallPart.valueOf(sideVO.getSide());
 	}
 

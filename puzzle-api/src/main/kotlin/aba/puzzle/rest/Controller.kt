@@ -1,9 +1,6 @@
 package aba.puzzle.rest
 
-import aba.puzzle.domain.PuzzleConfig
-import aba.puzzle.domain.PuzzleField
-import aba.puzzle.domain.PuzzleMap
-import aba.puzzle.domain.dto.PuzzleConfigVO
+import aba.puzzle.domain.dto.PuzzleConfigDto
 import aba.puzzle.service.LaunchService
 import aba.puzzle.service.PuzzleGenerator
 import org.springframework.beans.factory.annotation.Autowired
@@ -23,7 +20,7 @@ class Controller(
     @PostMapping("/run", consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun run(@RequestBody launchRequest: LaunchRequest, @RequestHeader("Idempotency-Key") idempotenceKey: String): LaunchResponse {
         val topicName = "puzzle-$idempotenceKey"
-        val puzzleConfig = launchRequest.puzzleConfig!!.let { PuzzleConfigVO.toPuzzleConfig(it)}
+        val puzzleConfig = launchRequest.puzzleConfig!!.let { PuzzleConfigDto.toPuzzleConfig(it)}
         if (launchService.launch(topicName, puzzleConfig)) {
             return LaunchResponse(launched = true, topicName = topicName)
         } else {
@@ -32,8 +29,8 @@ class Controller(
     }
 
     @GetMapping("/generate", produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun generate(@RequestParam("sizeX") sizeX: Int, @RequestParam("sizeY") sizeY: Int): Mono<PuzzleConfigVO> {
-        return puzzleGenerator.generatePuzzleConfig(sizeX, sizeY).map { PuzzleConfigVO.fromPuzzleConfig(it) }
+    fun generate(@RequestParam("sizeX") sizeX: Int, @RequestParam("sizeY") sizeY: Int): Mono<PuzzleConfigDto> {
+        return puzzleGenerator.generatePuzzleConfig(sizeX, sizeY).map { PuzzleConfigDto.fromPuzzleConfig(it) }
     }
 
 }
@@ -52,7 +49,7 @@ class AlreadyRunningExceptionController {
 }
 
 class LaunchRequest {
-    val puzzleConfig: PuzzleConfigVO? = null
+    val puzzleConfig: PuzzleConfigDto? = null
 }
 
 data class LaunchResponse(

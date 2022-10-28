@@ -2,7 +2,7 @@ package aba.puzzle.assembler.kafka
 
 import aba.puzzle.assembler.PuzzleProcessor
 import aba.puzzle.domain.PuzzleConfig
-import aba.puzzle.domain.dto.PuzzleStateVO
+import aba.puzzle.domain.dto.PuzzleStateDto
 import com.fasterxml.jackson.databind.ObjectMapper
 import mu.KotlinLogging
 import org.apache.kafka.clients.consumer.ConsumerConfig
@@ -27,11 +27,11 @@ private class PuzzleStateListener(
     val topic: String,
     val puzzleConfig: PuzzleConfig
 ) :
-    MessageListener<String, PuzzleStateVO> {
+    MessageListener<String, PuzzleStateDto> {
     private val log = KotlinLogging.logger {}
-    override fun onMessage(record: ConsumerRecord<String, PuzzleStateVO>) {
+    override fun onMessage(record: ConsumerRecord<String, PuzzleStateDto>) {
         log.debug { "read ${record.value()} record, launch new task" }
-        val puzzleState = PuzzleStateVO.toPuzzleState(record.value())
+        val puzzleState = PuzzleStateDto.toPuzzleState(record.value())
         puzzleProcessor.process(topic, puzzleState, puzzleConfig)
     }
 }
@@ -129,19 +129,19 @@ class PuzzleTopicListener(
     }
 }
 
-class CustomPuzzleStateDeserializer : Deserializer<PuzzleStateVO?> {
+class CustomPuzzleStateDeserializer : Deserializer<PuzzleStateDto?> {
     private val objectMapper = ObjectMapper()
     private val log = KotlinLogging.logger {}
 
     override fun configure(configs: Map<String?, *>?, isKey: Boolean) {}
-    override fun deserialize(topic: String?, data: ByteArray?): PuzzleStateVO? {
+    override fun deserialize(topic: String?, data: ByteArray?): PuzzleStateDto? {
         return try {
             if (data == null) {
                 log.warn { "Null received at deserializing" }
                 return null
             }
             log.debug { "Deserializing..." }
-            objectMapper.readValue(String(data), PuzzleStateVO::class.java)
+            objectMapper.readValue(String(data), PuzzleStateDto::class.java)
         } catch (e: Exception) {
             throw SerializationException("Error when deserializing byte[] to PuzzleStateVO")
         }

@@ -1,8 +1,8 @@
 package aba.puzzle.assembler.kafka
 
 
-import aba.puzzle.domain.dto.NewTaskVO
-import aba.puzzle.domain.dto.PuzzleConfigVO
+import aba.puzzle.domain.dto.NewTaskDto
+import aba.puzzle.domain.dto.PuzzleConfigDto
 import com.fasterxml.jackson.databind.ObjectMapper
 import mu.KotlinLogging
 import org.apache.kafka.clients.consumer.ConsumerConfig
@@ -33,10 +33,10 @@ class NewTopicListener(
     private val log = KotlinLogging.logger {}
 
     @KafkaListener(id = "#{ systemProperties['POD_NAME'] }", topics = ["\${app.kafka.newTaskTopic}"], clientIdPrefix = "topicsClient")
-    fun listen(data: ConsumerRecord<String, NewTaskVO>) {
+    fun listen(data: ConsumerRecord<String, NewTaskDto>) {
         log.info { "Read from new topic: $data" }
         val (topic, puzzleConfigVO) = data.value()
-        val puzzleConfig = PuzzleConfigVO.toPuzzleConfig(puzzleConfigVO)
+        val puzzleConfig = PuzzleConfigDto.toPuzzleConfig(puzzleConfigVO)
         listenerRegistrar.registerCustomKafkaListener(topic, topic, "defaultGroup", puzzleConfig, true)
     }
 }
@@ -75,19 +75,19 @@ class KafkaConfig {
     }
 }
 
-class CustomNewTopicDeserializer : Deserializer<NewTaskVO?> {
+class CustomNewTopicDeserializer : Deserializer<NewTaskDto?> {
     private val objectMapper = ObjectMapper()
     private val log = KotlinLogging.logger {}
 
     override fun configure(configs: Map<String?, *>?, isKey: Boolean) {}
-    override fun deserialize(topic: String?, data: ByteArray?): NewTaskVO? {
+    override fun deserialize(topic: String?, data: ByteArray?): NewTaskDto? {
         return try {
             if (data == null) {
                 log.warn { "Null received at deserializing" }
                 return null
             }
             log.debug {"Deserializing..."}
-            objectMapper.readValue(String(data), NewTaskVO::class.java)
+            objectMapper.readValue(String(data), NewTaskDto::class.java)
         } catch (e: Exception) {
             throw SerializationException("Error when deserializing byte[] to NewTaskVO")
         }

@@ -2,7 +2,7 @@ package aba.puzzle.domain.dto;
 
 import aba.puzzle.domain.Color;
 
-public class ColorVO {
+public class ColorDto {
 	
 	private String wording;
 	
@@ -15,13 +15,13 @@ public class ColorVO {
 		this.wording = color;
 	}
 
-	public static ColorVO fromColor(Color color) {
-		ColorVO result = new ColorVO();
+	public static ColorDto fromColor(Color color) {
+		ColorDto result = new ColorDto();
 		result.setColor(color.toString());
 		return result;
 	}
 	
-	public static Color toColor(ColorVO colorVO) {
-		return Color.valueOf(colorVO.getColor());
+	public static Color toColor(ColorDto colorDto) {
+		return Color.valueOf(colorDto.getColor());
 	}
 }

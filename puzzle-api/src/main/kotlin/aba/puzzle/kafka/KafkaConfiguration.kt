@@ -1,7 +1,7 @@
 package aba.puzzle.kafka
 
-import aba.puzzle.domain.dto.NewTaskVO
-import aba.puzzle.domain.dto.PuzzleStateVO
+import aba.puzzle.domain.dto.NewTaskDto
+import aba.puzzle.domain.dto.PuzzleStateDto
 import io.confluent.kafka.serializers.KafkaJsonSerializer
 import mu.KotlinLogging
 import org.apache.kafka.clients.admin.AdminClientConfig
@@ -29,7 +29,7 @@ class KafkaConfiguration {
     fun kafkaAdmin() = KafkaAdmin(mapOf(AdminClientConfig.BOOTSTRAP_SERVERS_CONFIG to bootstrapAddress))
 
     @Bean("producerFactory")
-    fun producerFactory(): ProducerFactory<String, PuzzleStateVO> {
+    fun producerFactory(): ProducerFactory<String, PuzzleStateDto> {
         log.info { "kafka bootstrap $bootstrapAddress" }
         val configProps: MutableMap<String, Any> = HashMap()
         configProps[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapAddress
@@ -39,12 +39,12 @@ class KafkaConfiguration {
     }
 
     @Bean
-    fun kafkaTemplate(@Autowired @Qualifier("producerFactory") factory: ProducerFactory<String, PuzzleStateVO>): KafkaTemplate<String, PuzzleStateVO> {
+    fun kafkaTemplate(@Autowired @Qualifier("producerFactory") factory: ProducerFactory<String, PuzzleStateDto>): KafkaTemplate<String, PuzzleStateDto> {
         return KafkaTemplate(factory)
     }
 
     @Bean("producerFactoryNewTopic")
-    fun producerFactoryNewTopic(): ProducerFactory<String, NewTaskVO> {
+    fun producerFactoryNewTopic(): ProducerFactory<String, NewTaskDto> {
         log.info { "kafka bootstrap $bootstrapAddress" }
         val configProps: MutableMap<String, Any> = HashMap()
         configProps[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapAddress
@@ -54,7 +54,7 @@ class KafkaConfiguration {
     }
 
     @Bean
-    fun kafkaTemplateNewTopic(@Autowired @Qualifier("producerFactoryNewTopic") factory: ProducerFactory<String, NewTaskVO>): KafkaTemplate<String, NewTaskVO> {
+    fun kafkaTemplateNewTopic(@Autowired @Qualifier("producerFactoryNewTopic") factory: ProducerFactory<String, NewTaskDto>): KafkaTemplate<String, NewTaskDto> {
         return KafkaTemplate(factory)
     }
 }
