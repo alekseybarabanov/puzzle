@@ -9,29 +9,29 @@ import java.util.Map;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class PuzzleStateEntryDto {
-	private PuzzleFieldVO puzzleFieldVO;
+	private PuzzleFieldDto puzzleFieldDto;
 	
 	private PuzzleDetailWithRotationDto puzzleDetailWithRotationDto;
 	
 	public static PuzzleStateEntryDto fromPuzzleStateEntry(Map.Entry<PuzzleField, DetailWithRotation> entry) {
 		final PuzzleStateEntryDto puzzleStateEntryDto = new PuzzleStateEntryDto();
-		puzzleStateEntryDto.puzzleFieldVO = PuzzleFieldVO.Companion.fromPuzzleField(entry.getKey());
+		puzzleStateEntryDto.puzzleFieldDto = PuzzleFieldDto.Companion.fromPuzzleField(entry.getKey());
 		puzzleStateEntryDto.puzzleDetailWithRotationDto = PuzzleDetailWithRotationDto.fromDetailWithRotation(entry.getValue());
 		return puzzleStateEntryDto;
 	}
 	
 	public static Map.Entry<PuzzleField, DetailWithRotation> toPuzzleStateEntry(PuzzleStateEntryDto puzzleStateEntryDto) {
 		Map<PuzzleField, DetailWithRotation> map = new HashMap<>();
-		map.put(PuzzleFieldVO.Companion.toPuzzleField(puzzleStateEntryDto.puzzleFieldVO), PuzzleDetailWithRotationDto.toDetailWithRotation(puzzleStateEntryDto.puzzleDetailWithRotationDto));
+		map.put(PuzzleFieldDto.Companion.toPuzzleField(puzzleStateEntryDto.puzzleFieldDto), PuzzleDetailWithRotationDto.toDetailWithRotation(puzzleStateEntryDto.puzzleDetailWithRotationDto));
 		return map.entrySet().iterator().next();
 	}
 
-	public PuzzleFieldVO getPuzzleFieldVO() {
-		return puzzleFieldVO;
+	public PuzzleFieldDto getPuzzleFieldVO() {
+		return puzzleFieldDto;
 	}
 
-	public void setPuzzleFieldVO(PuzzleFieldVO puzzleFieldVO) {
-		this.puzzleFieldVO = puzzleFieldVO;
+	public void setPuzzleFieldVO(PuzzleFieldDto puzzleFieldDto) {
+		this.puzzleFieldDto = puzzleFieldDto;
 	}
 
 	public PuzzleDetailWithRotationDto getDetailWithRotationVO() {

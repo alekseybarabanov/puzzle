@@ -3,29 +3,29 @@ package aba.puzzle.domain.dto
 import aba.puzzle.domain.PuzzleField
 import aba.puzzle.domain.PuzzleMap
 
-data class PuzzleMapVO(
-    val puzzleFields: List<PuzzleFieldVO> = listOf()
+data class PuzzleMapDto(
+    val puzzleFields: List<PuzzleFieldDto> = listOf()
 ) {
     companion object {
-        fun fromPuzzleMap(puzzleMap: PuzzleMap): PuzzleMapVO {
-            return PuzzleMapVO(puzzleFields = puzzleMap.puzzleFields.map { PuzzleFieldVO.fromPuzzleField(it) })
+        fun fromPuzzleMap(puzzleMap: PuzzleMap): PuzzleMapDto {
+            return PuzzleMapDto(puzzleFields = puzzleMap.puzzleFields.map { PuzzleFieldDto.fromPuzzleField(it) })
         }
-        fun toPuzzleMap(puzzleMapVO: PuzzleMapVO): PuzzleMap {
-            return PuzzleMap(puzzleFields = puzzleMapVO.puzzleFields.map { PuzzleFieldVO.toPuzzleField(it) })
+        fun toPuzzleMap(puzzleMapDto: PuzzleMapDto): PuzzleMap {
+            return PuzzleMap(puzzleFields = puzzleMapDto.puzzleFields.map { PuzzleFieldDto.toPuzzleField(it) })
         }
     }
 }
 
-data class PuzzleFieldVO(
+data class PuzzleFieldDto(
     val shiftX: Int = 0,
     val shiftY: Int = 0
 ) {
     companion object {
-        fun fromPuzzleField(puzzleField: PuzzleField): PuzzleFieldVO {
-            return PuzzleFieldVO(shiftX = puzzleField.shiftX, shiftY = puzzleField.shiftY)
+        fun fromPuzzleField(puzzleField: PuzzleField): PuzzleFieldDto {
+            return PuzzleFieldDto(shiftX = puzzleField.shiftX, shiftY = puzzleField.shiftY)
         }
-        fun toPuzzleField(puzzleFieldVO: PuzzleFieldVO): PuzzleField {
-            return PuzzleField(shiftX=puzzleFieldVO.shiftX, shiftY = puzzleFieldVO.shiftY)
+        fun toPuzzleField(puzzleFieldDto: PuzzleFieldDto): PuzzleField {
+            return PuzzleField(shiftX=puzzleFieldDto.shiftX, shiftY = puzzleFieldDto.shiftY)
         }
     }
 }

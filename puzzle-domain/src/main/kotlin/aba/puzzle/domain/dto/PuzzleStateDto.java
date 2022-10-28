@@ -26,7 +26,7 @@ public class PuzzleStateDto {
 		final PuzzleState puzzleState = new PuzzleState();
 		final Map<PuzzleField, DetailWithRotation> resultMap = new HashMap<>();
 		for (PuzzleStateEntryDto entry : puzzleStateDto.coverage) {
-			resultMap.put(PuzzleFieldVO.Companion.toPuzzleField(entry.getPuzzleFieldVO()),
+			resultMap.put(PuzzleFieldDto.Companion.toPuzzleField(entry.getPuzzleFieldVO()),
 					PuzzleDetailWithRotationDto.toDetailWithRotation(entry.getDetailWithRotationVO()));
 		}
 		puzzleState.setPositionedDetails(resultMap);

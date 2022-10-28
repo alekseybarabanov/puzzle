@@ -4,7 +4,7 @@ import aba.puzzle.domain.PuzzleConfig
 import aba.puzzle.domain.PuzzleField
 import aba.puzzle.domain.PuzzleMap
 import aba.puzzle.domain.dto.PuzzleConfigDto
-import aba.puzzle.domain.dto.PuzzleMapVO
+import aba.puzzle.domain.dto.PuzzleMapDto
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
@@ -28,7 +28,7 @@ class PuzzleGeneratorImpl(@Value("\${app.puzzleGeneratorUrl}") val puzzleGenerat
 
     private fun generatePuzzleDetails(puzzleMap: PuzzleMap): Mono<PuzzleConfig> {
         return WebClient.create(puzzleGeneratorUrl).post().uri("/generate")
-            .body(BodyInserters.fromValue(PuzzleMapVO.fromPuzzleMap(puzzleMap)))
+            .body(BodyInserters.fromValue(PuzzleMapDto.fromPuzzleMap(puzzleMap)))
             .accept(MediaType.APPLICATION_JSON).retrieve().bodyToMono(PuzzleConfigDto::class.java)
             .map { PuzzleConfigDto.toPuzzleConfig(it) }
     }
