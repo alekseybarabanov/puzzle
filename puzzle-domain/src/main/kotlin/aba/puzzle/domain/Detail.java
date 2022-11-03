@@ -9,14 +9,17 @@ import java.util.stream.Collectors;
  * Created by alekseybarabanov on 13.08.16.
  */
 public class Detail {
-    private int id;
+
+    private Integer id = null;
+    private int extId;
     private Map<DetailSide, BallSide> sides = new HashMap<DetailSide, BallSide>(4);
 
     @NotNull
     private List<Integer> allowedRotations = new ArrayList<>();
 
-    public Detail(int id, BallSide leftSide, BallSide upperSide, BallSide rightSide, BallSide lowerSide) {
+    public Detail(Integer id, int extId, BallSide leftSide, BallSide upperSide, BallSide rightSide, BallSide lowerSide) {
         this.id = id;
+        this.extId = extId;
         sides.put(DetailSide.left, leftSide);
         sides.put(DetailSide.up, upperSide);
         sides.put(DetailSide.right, rightSide);
@@ -47,7 +50,7 @@ public class Detail {
         return sides.get(side);
     }
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
@@ -68,8 +71,17 @@ public class Detail {
     public String toString() {
         return "Detail{" +
                 "id=" + id +
+                "extId=" + extId +
                 ", sides=" + sides +
                 ", allowed rotations=" + allowedRotations +
                 '}';
+    }
+
+    public int getExtId() {
+        return extId;
+    }
+
+    public void setExtId(int extId) {
+        this.extId = extId;
     }
 }

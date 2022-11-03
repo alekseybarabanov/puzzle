@@ -1,17 +1,13 @@
 package aba.puzzle.domain.rest.mapstruct.dto;
 
-import aba.puzzle.domain.DetailWithRotation;
-import aba.puzzle.domain.PuzzleField;
-import aba.puzzle.domain.PuzzleState;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class PuzzleStateDto {
+	private Integer id = null;
 	private List<PuzzleStateEntryDto> coverage = new ArrayList<>();
 
 	public List<PuzzleStateEntryDto> getCoverage() {
@@ -22,4 +18,11 @@ public class PuzzleStateDto {
 		this.coverage = coverage;
 	}
 
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 }

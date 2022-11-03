@@ -63,12 +63,16 @@ public class PuzzleConfigVO {
 
     public static PuzzleConfig toPuzzleConfig(PuzzleConfigVO puzzleConfigVO) {
         return new PuzzleConfig(
+                puzzleConfigVO.id,
+                puzzleConfigVO.getExtPuzzleConfigId(),
                 new PuzzleMap(
                         puzzleConfigVO.getPuzzleFieldVOS().stream().map(puzzleFieldVO -> new PuzzleField(
+                                puzzleFieldVO.getId(),
                                 puzzleFieldVO.getShiftX(),
                                 puzzleFieldVO.getShiftY()
                         )).collect(Collectors.toList())),
-                puzzleConfigVO.getPuzzleDetailVOS().stream().map(puzzleDetailVO -> new Detail(puzzleDetailVO.getId(),
+                puzzleConfigVO.getPuzzleDetailVOS().stream().map(puzzleDetailVO -> new Detail(
+                        puzzleDetailVO.getId(), puzzleDetailVO.getExtId(),
                         new BallSide(Color.valueOf(puzzleDetailVO.getColorLeftSide()), BallPart.valueOf(puzzleDetailVO.getPartLeftSide())),
                         new BallSide(Color.valueOf(puzzleDetailVO.getColorUpperSide()), BallPart.valueOf(puzzleDetailVO.getPartUpperSide())),
                         new BallSide(Color.valueOf(puzzleDetailVO.getColorRightSide()), BallPart.valueOf(puzzleDetailVO.getPartRightSide())),

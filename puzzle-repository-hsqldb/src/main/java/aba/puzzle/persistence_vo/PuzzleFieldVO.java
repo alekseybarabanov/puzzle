@@ -42,4 +42,8 @@ public class PuzzleFieldVO {
     public void setPuzzleConfigVO(PuzzleConfigVO puzzleConfigVO) {
         this.puzzleConfigVO = puzzleConfigVO;
     }
+
+    public Integer getId() {
+        return id;
+    }
 }

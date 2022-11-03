@@ -68,6 +68,7 @@ public interface MapStructMapper {
 
     default Detail puzzleDetailDtoToDetail(PuzzleDetailDto puzzleDetailDto) {
         Detail result = new Detail(puzzleDetailDto.getId(),
+                puzzleDetailDto.getExtId(),
                 ballSideDtoToBallSide(puzzleDetailDto.getLeft()),
                 ballSideDtoToBallSide(puzzleDetailDto.getUpper()),
                 ballSideDtoToBallSide(puzzleDetailDto.getRight()),

@@ -13,6 +13,9 @@ public class PuzzleDetailVO {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
+    @Column(name="EXT_ID")
+    private Integer extId;
+
     @Column(name="COLOR_LEFT_SIDE")
     private String colorLeftSide;
 
@@ -116,5 +119,13 @@ public class PuzzleDetailVO {
 
     public Integer getId() {
         return id;
+    }
+
+    public Integer getExtId() {
+        return extId;
+    }
+
+    public void setExtId(Integer extId) {
+        this.extId = extId;
     }
 }

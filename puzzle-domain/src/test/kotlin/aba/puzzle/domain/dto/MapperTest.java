@@ -63,7 +63,7 @@ public class MapperTest {
 
     @Test
     public void testDetailToPuzzleDetailDto() {
-        Detail detail = getDetail(2, Color.white, BallPart.two_thirds,
+        Detail detail = getDetail(null, 2, Color.white, BallPart.two_thirds,
                 Color.green, BallPart.two_thirds,
                 Color.red, BallPart.one_third,
                 Color.yellow, BallPart.two_thirds);
@@ -100,7 +100,7 @@ public class MapperTest {
 
     @Test
     public void testDetailWithRotationToPuzzleDetailWithRotationDto() {
-        DetailWithRotation detail = getDetailWithRotation(1, 2,
+        DetailWithRotation detail = getDetailWithRotation(1, null, 2,
                 Color.white, BallPart.two_thirds,
                 Color.green, BallPart.two_thirds,
                 Color.red, BallPart.one_third,
@@ -143,9 +143,9 @@ public class MapperTest {
     @Test
     public void testPuzzleMapToPuzzleMapDto() {
         PuzzleMap puzzleMap = new PuzzleMap(Arrays.asList(
-                new PuzzleField(0,0),
-                new PuzzleField(0,1),
-                new PuzzleField(1, 0)));
+                new PuzzleField(null, 0,0),
+                new PuzzleField(null, 0,1),
+                new PuzzleField(2, 1, 0)));
         PuzzleMapDto puzzleMapDto = mapper.puzzleMapToPuzzleMapDto(puzzleMap);
         assertEquals(0, puzzleMapDto.getPuzzleFields().get(0).getShiftX());
         assertEquals(0, puzzleMapDto.getPuzzleFields().get(0).getShiftY());
@@ -159,9 +159,9 @@ public class MapperTest {
     public void testPuzzleMapDtoToPuzzleMap() {
         PuzzleMapDto puzzleMapDto = new PuzzleMapDto();
         puzzleMapDto.getPuzzleFields().addAll(Arrays.asList(
-                new PuzzleFieldDto(0, 0),
-                new PuzzleFieldDto(0, 1),
-                new PuzzleFieldDto(1, 0)
+                new PuzzleFieldDto(null, 0, 0),
+                new PuzzleFieldDto(null, 0, 1),
+                new PuzzleFieldDto(2, 1, 0)
         ));
         PuzzleMap puzzleMap = mapper.puzzleMapDtoToPuzzleMap(puzzleMapDto);
         assertEquals(0, puzzleMap.getPuzzleFields().get(0).getShiftX());
@@ -176,11 +176,11 @@ public class MapperTest {
     public void testPuzzleConfigDtoToPuzzleConfig() {
         PuzzleMapDto puzzleMapDto = new PuzzleMapDto();
         puzzleMapDto.getPuzzleFields().addAll(Arrays.asList(
-                new PuzzleFieldDto(0, 0),
-                new PuzzleFieldDto(0, 1),
-                new PuzzleFieldDto(1, 0)
+                new PuzzleFieldDto(null,0, 0),
+                new PuzzleFieldDto(null, 0, 1),
+                new PuzzleFieldDto(2, 1, 0)
         ));
-        PuzzleConfigDto puzzleConfigDto = new PuzzleConfigDto(
+        PuzzleConfigDto puzzleConfigDto = new PuzzleConfigDto(0, "test",
                 puzzleMapDto,
                 Arrays.asList(
                         getPuzzleDetailDto(0,
@@ -240,23 +240,23 @@ public class MapperTest {
     @Test
     public void testPuzzleConfigToPuzzleConfigDto() {
 
-        PuzzleConfig puzzleConfig = new PuzzleConfig(
+        PuzzleConfig puzzleConfig = new PuzzleConfig(null, "test",
                 new PuzzleMap(Arrays.asList(
-                        new PuzzleField(0,0),
-                        new PuzzleField(0,1),
-                        new PuzzleField(1, 0))),
+                        new PuzzleField(null, 0,0),
+                        new PuzzleField(null, 0,1),
+                        new PuzzleField(1, 1, 0))),
                 Arrays.asList(
-                        getDetail(0,
+                        getDetail(null, 0,
                                 Color.white, BallPart.two_thirds,
                                 Color.green, BallPart.two_thirds,
                                 Color.red, BallPart.one_third,
                                 Color.yellow, BallPart.two_thirds),
-                        getDetail(1,
+                        getDetail(null, 1,
                                 Color.green, BallPart.two_thirds,
                                 Color.yellow, BallPart.two_thirds,
                                 Color.red, BallPart.one_third,
                                 Color.red, BallPart.two_thirds),
-                        getDetail(2,
+                        getDetail(22, 2,
                                 Color.white, BallPart.two_thirds,
                                 Color.red, BallPart.two_thirds,
                                 Color.white, BallPart.one_third,
@@ -313,13 +313,13 @@ public class MapperTest {
         return result;
     }
 
-    private DetailWithRotation getDetailWithRotation(int rotation, int id,
+    private DetailWithRotation getDetailWithRotation(int rotation, Integer id, int extId,
                                                      Color color1, BallPart ballPart1,
                                                      Color color2, BallPart ballPart2,
                                                      Color color3, BallPart ballPart3,
                                                      Color color4, BallPart ballPart4) {
 
-        return new DetailWithRotation(getDetail(id,
+        return new DetailWithRotation(getDetail(id, extId,
                 color1, ballPart1,
                 color2, ballPart2,
                 color3, ballPart3,
@@ -360,7 +360,7 @@ public class MapperTest {
 
 
     @NotNull
-    private Detail getDetail(int id,
+    private Detail getDetail(Integer id, int extId,
                              Color color1, BallPart ballPart1,
                              Color color2, BallPart ballPart2,
                              Color color3, BallPart ballPart3,
@@ -369,7 +369,7 @@ public class MapperTest {
         BallSide ballSide2 = new BallSide(color2, ballPart2);
         BallSide ballSide3 = new BallSide(color3, ballPart3);
         BallSide ballSide4 = new BallSide(color4, ballPart4);
-        Detail detail = new Detail(id, ballSide1, ballSide2, ballSide3, ballSide4);
+        Detail detail = new Detail(id, extId, ballSide1, ballSide2, ballSide3, ballSide4);
         return detail;
     }
 }

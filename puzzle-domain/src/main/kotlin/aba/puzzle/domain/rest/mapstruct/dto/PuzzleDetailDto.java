@@ -11,7 +11,8 @@ import java.util.List;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class PuzzleDetailDto {
-	private int id;
+	private Integer id;
+	private int extId;
 	private BallSideDto left;
 	private BallSideDto upper;
 	private BallSideDto right;
@@ -84,5 +85,12 @@ public class PuzzleDetailDto {
 		return allowedRotations;
 	}
 
+	public int getExtId() {
+		return extId;
+	}
+
+	public void setExtId(int extId) {
+		this.extId = extId;
+	}
 }
 

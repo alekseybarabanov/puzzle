@@ -8,17 +8,21 @@ import java.util.Map;
  */
 public class PuzzleState {
 
+	private Integer id = null;
+
+	private Map<PuzzleField, DetailWithRotation> positionedDetails = new HashMap<PuzzleField, DetailWithRotation>();
+
+
 	public PuzzleState() {
 	}
 	public PuzzleState(Map<PuzzleField, DetailWithRotation> positionedDetails) {
 		this.positionedDetails.putAll(positionedDetails);
 	}
-	public PuzzleState(PuzzleState puzzleState, PuzzleField position, DetailWithRotation detail) {
+	public PuzzleState(Integer id, PuzzleState puzzleState, PuzzleField position, DetailWithRotation detail) {
+		this.id = id;
 		this.positionedDetails.putAll(puzzleState.getPositionedDetails());
 		this.positionedDetails.put(position, detail);
 	}
-    private Map<PuzzleField, DetailWithRotation> positionedDetails = new HashMap<PuzzleField, DetailWithRotation>();
-
     public Map<PuzzleField, DetailWithRotation> getPositionedDetails() {
 		return positionedDetails;
 	}
@@ -32,5 +36,13 @@ public class PuzzleState {
 		return "PuzzleState{" +
 				"positionedDetails=" + positionedDetails +
 				'}';
+	}
+
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 }

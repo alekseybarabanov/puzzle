@@ -18,7 +18,7 @@ class PuzzleGeneratorServiceImpl : PuzzleGeneratorService {
         puzzleMap.puzzleFields.forEach {
             fillSomeDetail(it, draftPuzzle)
         }
-        return PuzzleConfig(puzzleMap, draftPuzzle.positionedDetails.values.map { it.detail })
+        return PuzzleConfig(null, null, puzzleMap, draftPuzzle.positionedDetails.values.map { it.detail })
     }
 
     private fun fillSomeDetail(nextPuzzleField: PuzzleField, draftPuzzle: PuzzleState) {
