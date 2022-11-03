@@ -5,6 +5,6 @@ data class PuzzleMap(
 )
 
 data class PuzzleField(
-    val shiftX: Int = 0,
-    val shiftY: Int = 0
+    var shiftX: Int = 0,
+    var shiftY: Int = 0
 )

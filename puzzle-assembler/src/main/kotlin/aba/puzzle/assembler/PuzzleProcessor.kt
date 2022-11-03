@@ -2,8 +2,9 @@ package aba.puzzle.assembler
 
 import aba.puzzle.domain.PuzzleConfig
 import aba.puzzle.domain.PuzzleState
-import aba.puzzle.domain.dto.PuzzleConfigDto
-import aba.puzzle.domain.dto.PuzzleStateDto
+import aba.puzzle.domain.rest.mapstruct.dto.PuzzleConfigDto
+import aba.puzzle.domain.rest.mapstruct.dto.PuzzleStateDto
+import aba.puzzle.domain.rest.mapstruct.mapper.MapStructMapper
 import mu.KotlinLogging
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.kafka.core.KafkaTemplate
@@ -17,6 +18,7 @@ interface PuzzleProcessor {
 class PuzzleProcessorImpl(
     @Autowired val puzzleAssembler: PuzzleAssembler,
     @Autowired val kafkaProducer: KafkaTemplate<String, Any>,
+    @Autowired private val mapper: MapStructMapper
 ) : PuzzleProcessor {
     private val log = KotlinLogging.logger {}
 
@@ -40,7 +42,7 @@ class PuzzleProcessorImpl(
     }
 
     private fun sendPuzzles(topic: String, puzzleState: PuzzleState) {
-        val puzzleFuture = kafkaProducer.send(topic, PuzzleStateDto.fromPuzzleState(puzzleState))
+        val puzzleFuture = kafkaProducer.send(topic, mapper.puzzleStateToPuzzleStateDto(puzzleState))
         puzzleFuture.addCallback({
             log.info {"message sent to $topic"}
         }, {
@@ -48,8 +50,8 @@ class PuzzleProcessorImpl(
         })
     }
     private fun sendCompletedPuzzle(topic: String, puzzleState: PuzzleState, config: PuzzleConfig) {
-        val puzzleFuture = kafkaProducer.send(topic, PuzzleCompleted(puzzleState = PuzzleStateDto.fromPuzzleState(puzzleState),
-            puzzleConfigDto = PuzzleConfigDto.fromPuzzleConfig(config)))
+        val puzzleFuture = kafkaProducer.send(topic, PuzzleCompleted(puzzleState = mapper.puzzleStateToPuzzleStateDto(puzzleState),
+            puzzleConfigDto = mapper.puzzleConfigToPuzzleConfigDto(config)))
         puzzleFuture.addCallback({
             log.info {"message sent to $topic"}
         }, {

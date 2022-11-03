@@ -2,7 +2,8 @@ package aba.puzzle.assembler.kafka
 
 import aba.puzzle.assembler.PuzzleProcessor
 import aba.puzzle.domain.PuzzleConfig
-import aba.puzzle.domain.dto.PuzzleStateDto
+import aba.puzzle.domain.rest.mapstruct.dto.PuzzleStateDto
+import aba.puzzle.domain.rest.mapstruct.mapper.MapStructMapper
 import com.fasterxml.jackson.databind.ObjectMapper
 import mu.KotlinLogging
 import org.apache.kafka.clients.consumer.ConsumerConfig
@@ -25,13 +26,14 @@ import java.util.*
 private class PuzzleStateListener(
     val puzzleProcessor: PuzzleProcessor,
     val topic: String,
-    val puzzleConfig: PuzzleConfig
+    val puzzleConfig: PuzzleConfig,
+    private val mapper: MapStructMapper
 ) :
     MessageListener<String, PuzzleStateDto> {
     private val log = KotlinLogging.logger {}
     override fun onMessage(record: ConsumerRecord<String, PuzzleStateDto>) {
         log.debug { "read ${record.value()} record, launch new task" }
-        val puzzleState = PuzzleStateDto.toPuzzleState(record.value())
+        val puzzleState = mapper.puzzleStateDtoToPuzzleState(record.value())
         puzzleProcessor.process(topic, puzzleState, puzzleConfig)
     }
 }
@@ -51,6 +53,10 @@ class CustomKafkaListenerRegistrar {
     @Autowired
     private lateinit var puzzleProcessor: PuzzleProcessor
 
+    @Autowired
+    private lateinit var mapper: MapStructMapper
+
+
     fun registerCustomKafkaListener(
         name: String,
         topic: String,
@@ -64,7 +70,8 @@ class CustomKafkaListenerRegistrar {
                 beanFactory.getBean(
                     Class.forName(listenerClass.canonicalName),
                     puzzleProcessor,
-                    puzzleConfig
+                    puzzleConfig,
+                    mapper
                 ) as PuzzleTopicListener
             kafkaListenerEndpointRegistry.registerListenerContainer(
                 puzzleTopicListener.createKafkaListenerEndpoint(name, topic, groupId),
@@ -81,12 +88,13 @@ class CustomKafkaListenerRegistrar {
 @Scope(value = ConfigurableBeanFactory.SCOPE_PROTOTYPE)
 class PuzzleTopicListener(
     val puzzleProcessor: PuzzleProcessor,
-    val puzzleConfig: PuzzleConfig
+    val puzzleConfig: PuzzleConfig,
+    val mapper: MapStructMapper
 ) {
 
     fun createKafkaListenerEndpoint(name: String, topic: String, groupId: String): KafkaListenerEndpoint {
         val kafkaListenerEndpoint = createDefaultMethodKafkaListenerEndpoint(name, topic, groupId)
-        kafkaListenerEndpoint.bean = PuzzleStateListener(puzzleProcessor, topic, puzzleConfig)
+        kafkaListenerEndpoint.bean = PuzzleStateListener(puzzleProcessor, topic, puzzleConfig, mapper)
         kafkaListenerEndpoint.method = PuzzleStateListener::class.java.getMethod(
             "onMessage", ConsumerRecord::class.java
         )

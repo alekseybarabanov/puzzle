@@ -1,7 +1,7 @@
 package aba.puzzle.kafka
 
-import aba.puzzle.domain.dto.NewTaskDto
-import aba.puzzle.domain.dto.PuzzleStateDto
+import aba.puzzle.domain.rest.mapstruct.dto.NewTaskDto
+import aba.puzzle.domain.rest.mapstruct.dto.PuzzleStateDto
 import io.confluent.kafka.serializers.KafkaJsonSerializer
 import mu.KotlinLogging
 import org.apache.kafka.clients.admin.AdminClientConfig

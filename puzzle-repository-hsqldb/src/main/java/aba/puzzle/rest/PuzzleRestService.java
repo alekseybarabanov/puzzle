@@ -1,6 +1,6 @@
 package aba.puzzle.rest;
 
-import aba.puzzle.domain.dto.NewTaskDto;
+import aba.puzzle.domain.rest.mapstruct.dto.NewTaskDto;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;

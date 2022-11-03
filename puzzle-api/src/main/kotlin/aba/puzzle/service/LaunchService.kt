@@ -3,9 +3,10 @@ package aba.puzzle.service
 import aba.puzzle.domain.DetailWithRotation
 import aba.puzzle.domain.PuzzleConfig
 import aba.puzzle.domain.PuzzleState
-import aba.puzzle.domain.dto.NewTaskDto
-import aba.puzzle.domain.dto.PuzzleConfigDto
-import aba.puzzle.domain.dto.PuzzleStateDto
+import aba.puzzle.domain.rest.mapstruct.dto.NewTaskDto
+import aba.puzzle.domain.rest.mapstruct.dto.PuzzleConfigDto
+import aba.puzzle.domain.rest.mapstruct.dto.PuzzleStateDto
+import aba.puzzle.domain.rest.mapstruct.mapper.MapStructMapper
 import mu.KotlinLogging
 import org.apache.kafka.clients.admin.AdminClient
 import org.springframework.beans.factory.annotation.Autowired
@@ -27,7 +28,8 @@ class LaunchServiceImpl(
     @Value("\${app.taskTopicsTopic}") val taskTopicsTopic: String,
     @Autowired val kafkaProducer: KafkaTemplate<String, PuzzleStateDto>,
     @Autowired val kafkaTaskTopicsProducer: KafkaTemplate<String, NewTaskDto>,
-    @Autowired val kafkaAdmin: KafkaAdmin
+    @Autowired val kafkaAdmin: KafkaAdmin,
+    @Autowired private val mapper: MapStructMapper
 ) : LaunchService {
     private val log = KotlinLogging.logger {}
 
@@ -75,7 +77,7 @@ class LaunchServiceImpl(
 
 
     private fun sendNewTopic(topic: String, puzzleConfig: PuzzleConfig) {
-        val taskVO = NewTaskDto(topic, PuzzleConfigDto.fromPuzzleConfig(puzzleConfig))
+        val taskVO = NewTaskDto(topic, mapper.puzzleConfigToPuzzleConfigDto(puzzleConfig))
         val taskTopicsFuture = kafkaTaskTopicsProducer.send(taskTopicsTopic, taskVO)
         taskTopicsFuture.addCallback({
             log.info { "message sent to $taskTopicsTopic" }
@@ -85,7 +87,7 @@ class LaunchServiceImpl(
     }
 
     private fun sendPuzzles(topic: String, puzzleState: PuzzleState) {
-        val puzzleFuture = kafkaProducer.send(topic, PuzzleStateDto.fromPuzzleState(puzzleState))
+        val puzzleFuture = kafkaProducer.send(topic, mapper.puzzleStateToPuzzleStateDto(puzzleState))
         puzzleFuture.addCallback({
             log.info { "message sent to $topic" }
         }, {

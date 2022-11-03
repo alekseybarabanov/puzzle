@@ -1,6 +1,7 @@
 package aba.puzzle.rest
 
-import aba.puzzle.domain.dto.PuzzleConfigDto
+import aba.puzzle.domain.rest.mapstruct.dto.PuzzleConfigDto
+import aba.puzzle.domain.rest.mapstruct.mapper.MapStructMapper
 import aba.puzzle.service.LaunchService
 import aba.puzzle.service.PuzzleGenerator
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,13 +15,14 @@ import reactor.core.publisher.Mono
 @RestController
 class Controller(
     @Autowired private val launchService: LaunchService,
-    @Autowired private val puzzleGenerator: PuzzleGenerator
+    @Autowired private val puzzleGenerator: PuzzleGenerator,
+    @Autowired private val mapper: MapStructMapper
 ) {
 
     @PostMapping("/run", consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
     fun run(@RequestBody launchRequest: LaunchRequest, @RequestHeader("Idempotency-Key") idempotenceKey: String): LaunchResponse {
         val topicName = "puzzle-$idempotenceKey"
-        val puzzleConfig = launchRequest.puzzleConfig!!.let { PuzzleConfigDto.toPuzzleConfig(it)}
+        val puzzleConfig = launchRequest.puzzleConfig!!.let { mapper.puzzleConfigDtoToPuzzleConfig(it)}
         if (launchService.launch(topicName, puzzleConfig)) {
             return LaunchResponse(launched = true, topicName = topicName)
         } else {
@@ -30,7 +32,7 @@ class Controller(
 
     @GetMapping("/generate", produces = [MediaType.APPLICATION_JSON_VALUE])
     fun generate(@RequestParam("sizeX") sizeX: Int, @RequestParam("sizeY") sizeY: Int): Mono<PuzzleConfigDto> {
-        return puzzleGenerator.generatePuzzleConfig(sizeX, sizeY).map { PuzzleConfigDto.fromPuzzleConfig(it) }
+        return puzzleGenerator.generatePuzzleConfig(sizeX, sizeY).map { mapper.puzzleConfigToPuzzleConfigDto(it) }
     }
 
 }

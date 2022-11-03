@@ -3,8 +3,10 @@ package aba.puzzle.service
 import aba.puzzle.domain.PuzzleConfig
 import aba.puzzle.domain.PuzzleField
 import aba.puzzle.domain.PuzzleMap
-import aba.puzzle.domain.dto.PuzzleConfigDto
-import aba.puzzle.domain.dto.PuzzleMapDto
+import aba.puzzle.domain.rest.mapstruct.dto.PuzzleConfigDto
+import aba.puzzle.domain.rest.mapstruct.dto.PuzzleMapDto
+import aba.puzzle.domain.rest.mapstruct.mapper.MapStructMapper
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.http.MediaType
 import org.springframework.stereotype.Component
@@ -17,7 +19,8 @@ interface PuzzleGenerator {
 }
 
 @Component
-class PuzzleGeneratorImpl(@Value("\${app.puzzleGeneratorUrl}") val puzzleGeneratorUrl: String) : PuzzleGenerator {
+class PuzzleGeneratorImpl(@Value("\${app.puzzleGeneratorUrl}") val puzzleGeneratorUrl: String,
+@Autowired private val mapper: MapStructMapper) : PuzzleGenerator {
 
     override fun generatePuzzleConfig(sizeX: Int, sizeY: Int): Mono<PuzzleConfig> {
         validateParams(sizeX, sizeY)
@@ -28,9 +31,9 @@ class PuzzleGeneratorImpl(@Value("\${app.puzzleGeneratorUrl}") val puzzleGenerat
 
     private fun generatePuzzleDetails(puzzleMap: PuzzleMap): Mono<PuzzleConfig> {
         return WebClient.create(puzzleGeneratorUrl).post().uri("/generate")
-            .body(BodyInserters.fromValue(PuzzleMapDto.fromPuzzleMap(puzzleMap)))
+            .body(BodyInserters.fromValue(mapper.puzzleMapToPuzzleMapDto(puzzleMap)))
             .accept(MediaType.APPLICATION_JSON).retrieve().bodyToMono(PuzzleConfigDto::class.java)
-            .map { PuzzleConfigDto.toPuzzleConfig(it) }
+            .map { mapper.puzzleConfigDtoToPuzzleConfig(it) }
     }
 
     private fun generatePuzzleMap(sizeX: Int, sizeY: Int) : PuzzleMap{

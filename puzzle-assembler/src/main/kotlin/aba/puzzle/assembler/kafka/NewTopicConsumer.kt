@@ -1,8 +1,9 @@
 package aba.puzzle.assembler.kafka
 
 
-import aba.puzzle.domain.dto.NewTaskDto
-import aba.puzzle.domain.dto.PuzzleConfigDto
+import aba.puzzle.domain.rest.mapstruct.dto.NewTaskDto
+import aba.puzzle.domain.rest.mapstruct.dto.PuzzleConfigDto
+import aba.puzzle.domain.rest.mapstruct.mapper.MapStructMapper
 import com.fasterxml.jackson.databind.ObjectMapper
 import mu.KotlinLogging
 import org.apache.kafka.clients.consumer.ConsumerConfig
@@ -29,6 +30,7 @@ import org.springframework.stereotype.Component
 @Component
 class NewTopicListener(
     @Autowired val listenerRegistrar: CustomKafkaListenerRegistrar,
+    @Autowired private val mapper: MapStructMapper
 ) {
     private val log = KotlinLogging.logger {}
 
@@ -36,7 +38,7 @@ class NewTopicListener(
     fun listen(data: ConsumerRecord<String, NewTaskDto>) {
         log.info { "Read from new topic: $data" }
         val (topic, puzzleConfigVO) = data.value()
-        val puzzleConfig = PuzzleConfigDto.toPuzzleConfig(puzzleConfigVO)
+        val puzzleConfig = mapper.puzzleConfigDtoToPuzzleConfig(puzzleConfigVO)
         listenerRegistrar.registerCustomKafkaListener(topic, topic, "defaultGroup", puzzleConfig, true)
     }
 }

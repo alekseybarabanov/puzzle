@@ -1,4 +1,4 @@
-package aba.puzzle.domain.dto
+package aba.puzzle.domain.rest.mapstruct.dto
 
 data class NewTaskDto (
     var topic: String = "",
