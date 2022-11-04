@@ -4,7 +4,6 @@ package aba.puzzle.service;
 import aba.puzzle.domain.*;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -21,21 +20,36 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-//@ExtendWith(SpringExtension.class)
-//@ContextConfiguration
 @RunWith(SpringRunner.class)
 @SpringBootTest
 public class JpaSearchIntegrationTest {
     @Autowired
     private RepositoryService repositoryService;
 
-    @Value("${spring.jpa.properties.hibernate.show_sql}")
-    private String showSql;
+    @Test
+    public void testSearchConfig() {
+        PuzzleConfig initialPuzzleConfig = createPuzzleConfig();
+        repositoryService.storePuzzleConfig(initialPuzzleConfig);
+        PuzzleConfig pc = repositoryService.getPuzzleConfig(initialPuzzleConfig.getExtId());
 
-    private PuzzleConfig puzzle1;
+        assertEquals(2, pc.getPuzzleMap().getPuzzleFields().size());
+        Iterator<PuzzleField> iterator = pc.getPuzzleMap().getPuzzleFields().iterator();
+        PuzzleField p1 = iterator.next();
+        PuzzleField p2 = iterator.next();
+        assertEquals(0, p1.getShiftX() + p2.getShiftX());
+        assertEquals(1, p1.getShiftY() + p2.getShiftY());
+        assertEquals(2, pc.getPuzzleDetails().size());
+        pc.getPuzzleDetails().forEach(detail -> {
+            if (detail.getExtId() == 1) {
+                assertEquals(3, detail.getAllowedRotations().size());
+                assertTrue(detail.getAllowedRotations().contains(0));
+                assertTrue(detail.getAllowedRotations().contains(1));
+                assertTrue(detail.getAllowedRotations().contains(2));
+            }
+        });
+    }
 
-    @Before
-    public void init() {
+    public PuzzleConfig createPuzzleConfig() {
         List<PuzzleField> puzzleFields = new ArrayList<>(2);
         puzzleFields.add(new PuzzleField(null, 0, 0));
         puzzleFields.add(new PuzzleField(null, 0, 1));
@@ -54,35 +68,14 @@ public class JpaSearchIntegrationTest {
         );
         detail.setAllowedRotations(Arrays.asList(0,1,2));
         puzzleDetail.add(detail);
-        puzzle1 = new PuzzleConfig(
+        return new PuzzleConfig(
                 null,
                 "test",
                 new PuzzleMap(puzzleFields),
                 puzzleDetail
         );
-        repositoryService.storePuzzleConfig(puzzle1);
     }
 
-    @Test
-    public void givenLast_whenGettingListOfUsers_thenCorrect() {
-        PuzzleConfig pc = repositoryService.getPuzzleConfig("test");
-
-        assertEquals(2, pc.getPuzzleMap().getPuzzleFields().size());
-        Iterator<PuzzleField> iterator = pc.getPuzzleMap().getPuzzleFields().iterator();
-        PuzzleField p1 = iterator.next();
-        PuzzleField p2 = iterator.next();
-        assertEquals(0, p1.getShiftX() + p2.getShiftX());
-        assertEquals(1, p1.getShiftY() + p2.getShiftY());
-        assertEquals(2, pc.getPuzzleDetails().size());
-        pc.getPuzzleDetails().forEach(detail -> {
-            if (detail.getExtId() == 1) {
-                assertEquals(3, detail.getAllowedRotations().size());
-                assertTrue(detail.getAllowedRotations().contains(0));
-                assertTrue(detail.getAllowedRotations().contains(1));
-                assertTrue(detail.getAllowedRotations().contains(2));
-            }
-        });
-    }
 
     @Configuration
     @ComponentScan(basePackages = "aba.puzzle")
