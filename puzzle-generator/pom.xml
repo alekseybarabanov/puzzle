@@ -14,8 +14,8 @@
     <description>Module generates puzzle config</description>
 
     <properties>
-        <maven.compiler.source>19</maven.compiler.source>
-        <maven.compiler.target>19</maven.compiler.target>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     </properties>
 
@@ -90,13 +90,13 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.7.4</version>
-                <executions>
-                    <execution>
-                        <configuration>
-                            <mainClass>aba.puzzle.assembler.PuzzleAssemblerApplicationKt</mainClass>
-                        </configuration>
-                    </execution>
-                </executions>
+                <configuration>
+                    <fork>true</fork>
+                    <skip>false</skip>
+                    <systemPropertyVariables>
+                        <POD_NAME>local-generator</POD_NAME>
+                    </systemPropertyVariables>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>

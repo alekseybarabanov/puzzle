@@ -108,13 +108,13 @@
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
                 <version>2.7.4</version>
-                <executions>
-                    <execution>
-                        <configuration>
-                            <mainClass>aba.puzzle.PuzzleApiKt</mainClass>
-                        </configuration>
-                    </execution>
-                </executions>
+                <configuration>
+                    <fork>true</fork>
+                    <skip>false</skip>
+                    <systemPropertyVariables>
+                        <POD_NAME>local-api</POD_NAME>
+                    </systemPropertyVariables>
+                </configuration>
             </plugin>
             <plugin>
                 <groupId>org.jetbrains.kotlin</groupId>
