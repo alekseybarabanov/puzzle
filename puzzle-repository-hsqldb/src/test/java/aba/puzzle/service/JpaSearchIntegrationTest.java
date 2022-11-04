@@ -14,10 +14,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 //@ExtendWith(SpringExtension.class)
 //@ContextConfiguration
@@ -44,12 +46,14 @@ public class JpaSearchIntegrationTest {
                 new BallSide(Color.green, BallPart.one_third),
                 new BallSide(Color.green, BallPart.one_third)
         ));
-        puzzleDetail.add(new Detail(null, 1,
+        Detail detail = new Detail(null, 1,
                 new BallSide(Color.white, BallPart.one_third),
                 new BallSide(Color.red, BallPart.two_thirds),
                 new BallSide(Color.green, BallPart.one_third),
                 new BallSide(Color.green, BallPart.one_third)
-        ));
+        );
+        detail.setAllowedRotations(Arrays.asList(0,1,2));
+        puzzleDetail.add(detail);
         puzzle1 = new PuzzleConfig(
                 null,
                 "test",
@@ -69,8 +73,15 @@ public class JpaSearchIntegrationTest {
         PuzzleField p2 = iterator.next();
         assertEquals(0, p1.getShiftX() + p2.getShiftX());
         assertEquals(1, p1.getShiftY() + p2.getShiftY());
-
         assertEquals(2, pc.getPuzzleDetails().size());
+        pc.getPuzzleDetails().forEach(detail -> {
+            if (detail.getExtId() == 1) {
+                assertEquals(3, detail.getAllowedRotations().size());
+                assertTrue(detail.getAllowedRotations().contains(0));
+                assertTrue(detail.getAllowedRotations().contains(1));
+                assertTrue(detail.getAllowedRotations().contains(2));
+            }
+        });
     }
 
     @Configuration

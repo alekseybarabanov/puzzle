@@ -24,13 +24,17 @@ public interface PersistenceMapper {
                                 puzzleFieldDto.getShiftX(),
                                 puzzleFieldDto.getShiftY()
                         )).collect(Collectors.toList())),
-                puzzleConfigDto.getPuzzleDetailDtos().stream().map(puzzleDetailDto -> new Detail(
-                        puzzleDetailDto.getId(), puzzleDetailDto.getExtId(),
-                        new BallSide(Color.valueOf(puzzleDetailDto.getColorLeftSide()), BallPart.valueOf(puzzleDetailDto.getPartLeftSide())),
-                        new BallSide(Color.valueOf(puzzleDetailDto.getColorUpperSide()), BallPart.valueOf(puzzleDetailDto.getPartUpperSide())),
-                        new BallSide(Color.valueOf(puzzleDetailDto.getColorRightSide()), BallPart.valueOf(puzzleDetailDto.getPartRightSide())),
-                        new BallSide(Color.valueOf(puzzleDetailDto.getColorLowerSide()), BallPart.valueOf(puzzleDetailDto.getPartLowerSide()))
-                )).collect(Collectors.toSet()));
+                puzzleConfigDto.getPuzzleDetailDtos().stream().map(puzzleDetailDto -> {
+                    Detail detail = new Detail(
+                            puzzleDetailDto.getId(), puzzleDetailDto.getExtId(),
+                            new BallSide(Color.valueOf(puzzleDetailDto.getColorLeftSide()), BallPart.valueOf(puzzleDetailDto.getPartLeftSide())),
+                            new BallSide(Color.valueOf(puzzleDetailDto.getColorUpperSide()), BallPart.valueOf(puzzleDetailDto.getPartUpperSide())),
+                            new BallSide(Color.valueOf(puzzleDetailDto.getColorRightSide()), BallPart.valueOf(puzzleDetailDto.getPartRightSide())),
+                            new BallSide(Color.valueOf(puzzleDetailDto.getColorLowerSide()), BallPart.valueOf(puzzleDetailDto.getPartLowerSide()))
+                    );
+                    detail.setAllowedRotations(puzzleDetailDto.getAllowedRotations().stream().map(PuzzleDetailRotationDto::getRotation).collect(Collectors.toList()));
+                    return detail;
+                }).collect(Collectors.toSet()));
     }
 
     default PuzzleConfigDto puzzleConfigToPuzzleConfigDto(PuzzleConfig puzzleConfig) {
@@ -56,6 +60,12 @@ public interface PersistenceMapper {
             rs.setPartRightSide(it.getBallSide(DetailSide.right).getBallPart().name());
             rs.setPartLowerSide(it.getBallSide(DetailSide.down).getBallPart().name());
             rs.setPuzzleConfigDto(res);
+            rs.setAllowedRotations(it.getAllowedRotations().stream().map(rotation -> {
+                PuzzleDetailRotationDto rotationDto = new PuzzleDetailRotationDto();
+                rotationDto.setPuzzleDetailDto(rs);
+                rotationDto.setRotation(rotation);
+                return rotationDto;
+            }).collect(Collectors.toSet()));
             return rs;
         }).collect(Collectors.toSet()));
         return res;

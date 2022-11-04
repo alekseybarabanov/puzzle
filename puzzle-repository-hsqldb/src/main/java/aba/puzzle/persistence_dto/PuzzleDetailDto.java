@@ -4,6 +4,7 @@ import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "PUZZLE_DETAIL")
@@ -44,6 +45,12 @@ public class PuzzleDetailDto {
     @JoinColumn(name = "PUZZLE_CONFIG_ID", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     private PuzzleConfigDto puzzleConfigDto;
+
+    @OneToMany(mappedBy = "puzzleDetailDto",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
+    private Set<PuzzleDetailRotationDto> allowedRotations;
+
 
     public String getColorLeftSide() {
         return colorLeftSide;
@@ -127,5 +134,13 @@ public class PuzzleDetailDto {
 
     public void setExtId(Integer extId) {
         this.extId = extId;
+    }
+
+    public Set<PuzzleDetailRotationDto> getAllowedRotations() {
+        return allowedRotations;
+    }
+
+    public void setAllowedRotations(Set<PuzzleDetailRotationDto> allowedRotations) {
+        this.allowedRotations = allowedRotations;
     }
 }
