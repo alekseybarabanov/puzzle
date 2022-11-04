@@ -17,10 +17,14 @@ public class PuzzleConfigDto {
     @Column(name = "START_TIME")
     private java.sql.Timestamp startTime;
 
-    @OneToMany(mappedBy = "puzzleConfigDto")
+    @OneToMany(mappedBy = "puzzleConfigDto",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private Set<PuzzleDetailDto> puzzleDetailDtos;
 
-    @OneToMany(mappedBy = "puzzleConfigDto")
+    @OneToMany(mappedBy = "puzzleConfigDto",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true)
     private Set<PuzzleFieldDto> puzzleFieldDtos;
 
 
