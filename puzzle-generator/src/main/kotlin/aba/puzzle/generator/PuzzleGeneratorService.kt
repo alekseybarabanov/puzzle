@@ -59,10 +59,14 @@ class PuzzleGeneratorServiceImpl : PuzzleGeneratorService {
                 log.info { "PuzzleField: $puzzleField, id: ${it.id}" }
             }
         }.collect({
-            PuzzleState()
+            PuzzleState(PuzzleConfig(null, null, puzzleMap, mutableListOf()))
         }, { state, pair ->
+            val puzzleConfigDetails = state.puzzleConfig.puzzleDetails as ArrayList<Detail>
+            puzzleConfigDetails.add(pair.second)
             state.positionedDetails[pair.first] = DetailWithRotation(pair.second, 0)
         }, { state1, state2 ->
+            (state1.puzzleConfig.puzzleDetails as ArrayList<Detail>).addAll(
+                state2.puzzleConfig.puzzleDetails)
             state1.positionedDetails.putAll(state2.positionedDetails)
         })
     }

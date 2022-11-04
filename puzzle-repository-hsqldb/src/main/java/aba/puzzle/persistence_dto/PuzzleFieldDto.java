@@ -1,23 +1,23 @@
-package aba.puzzle.persistence_vo;
+package aba.puzzle.persistence_dto;
 
 import javax.persistence.*;
 
 @Entity
-@Table(name="PUZZLE_FIELD")
-public class PuzzleFieldVO {
+@Table(name = "PUZZLE_FIELD")
+public class PuzzleFieldDto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name="SHIFT_X")
+    @Column(name = "SHIFT_X")
     private Integer shiftX;
 
-    @Column(name="SHIFT_Y")
+    @Column(name = "SHIFT_Y")
     private Integer shiftY;
 
     @ManyToOne
-    @JoinColumn(name="PUZZLE_CONFIG_ID")
-    private PuzzleConfigVO puzzleConfigVO;
+    @JoinColumn(name = "PUZZLE_CONFIG_ID")
+    private PuzzleConfigDto puzzleConfigDto;
 
     public Integer getShiftX() {
         return shiftX;
@@ -35,12 +35,12 @@ public class PuzzleFieldVO {
         this.shiftY = shiftY;
     }
 
-    public PuzzleConfigVO getPuzzleConfigVO() {
-        return puzzleConfigVO;
+    public PuzzleConfigDto getPuzzleConfigDto() {
+        return puzzleConfigDto;
     }
 
-    public void setPuzzleConfigVO(PuzzleConfigVO puzzleConfigVO) {
-        this.puzzleConfigVO = puzzleConfigVO;
+    public void setPuzzleConfigDto(PuzzleConfigDto puzzleConfigDto) {
+        this.puzzleConfigDto = puzzleConfigDto;
     }
 
     public Integer getId() {

@@ -41,7 +41,7 @@ class PuzzleAssemblerImpl : PuzzleAssembler {
         puzzleField: PuzzleField,
         detailWithRotation: DetailWithRotation
     ): PuzzleState {
-        return PuzzleState(currentState.id, currentState, puzzleField, detailWithRotation)
+        return PuzzleState(currentState.id, currentState.puzzleConfig, currentState, puzzleField, detailWithRotation)
     }
 
     private fun checkPuzzleState(

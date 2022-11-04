@@ -10,16 +10,21 @@ public class PuzzleState {
 
 	private Integer id = null;
 
+	private PuzzleConfig puzzleConfig = null;
+
 	private Map<PuzzleField, DetailWithRotation> positionedDetails = new HashMap<PuzzleField, DetailWithRotation>();
 
 
-	public PuzzleState() {
+	public PuzzleState(PuzzleConfig puzzleConfig) {
+		this.puzzleConfig = puzzleConfig;
 	}
-	public PuzzleState(Map<PuzzleField, DetailWithRotation> positionedDetails) {
+	public PuzzleState(PuzzleConfig puzzleConfig, Map<PuzzleField, DetailWithRotation> positionedDetails) {
+		this.puzzleConfig = puzzleConfig;
 		this.positionedDetails.putAll(positionedDetails);
 	}
-	public PuzzleState(Integer id, PuzzleState puzzleState, PuzzleField position, DetailWithRotation detail) {
+	public PuzzleState(Integer id, PuzzleConfig puzzleConfig, PuzzleState puzzleState, PuzzleField position, DetailWithRotation detail) {
 		this.id = id;
+		this.puzzleConfig = puzzleConfig;
 		this.positionedDetails.putAll(puzzleState.getPositionedDetails());
 		this.positionedDetails.put(position, detail);
 	}
@@ -44,5 +49,9 @@ public class PuzzleState {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public PuzzleConfig getPuzzleConfig() {
+		return puzzleConfig;
 	}
 }

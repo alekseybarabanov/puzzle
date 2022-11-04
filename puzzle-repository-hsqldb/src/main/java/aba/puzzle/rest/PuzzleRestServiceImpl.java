@@ -1,8 +1,9 @@
 package aba.puzzle.rest;
 
 import aba.puzzle.domain.PuzzleConfig;
-import aba.puzzle.domain.rest.mapstruct.dto.NewTaskDto;
+import aba.puzzle.domain.PuzzleState;
 import aba.puzzle.domain.rest.mapstruct.dto.PuzzleConfigDto;
+import aba.puzzle.domain.rest.mapstruct.dto.PuzzleStateDto;
 import aba.puzzle.domain.rest.mapstruct.mapper.MapStructMapper;
 import aba.puzzle.service.RepositoryService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,24 +23,28 @@ public class PuzzleRestServiceImpl implements PuzzleRestService {
 
     @Override
     @PostMapping(value = "/newPuzzleConfig", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public void newPuzzleConfig(@RequestBody NewTaskDto newPuzzleConfig) {
-        PuzzleConfig puzzleConfig = mapper.puzzleConfigDtoToPuzzleConfig(newPuzzleConfig.getPuzzleConfig());
-        repositoryService.storePuzzleConfig(puzzleConfig, newPuzzleConfig.getTopic());
+    public void newPuzzleConfig(@RequestBody PuzzleConfigDto newPuzzleConfig) {
+        PuzzleConfig puzzleConfig = mapper.puzzleConfigDtoToPuzzleConfig(newPuzzleConfig);
+        repositoryService.storePuzzleConfig(puzzleConfig);
+    }
+
+    @Override
+    @PostMapping(value = "/newCompletedPuzzle", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public void newCompletedPuzzle(@RequestBody PuzzleStateDto puzzleStateDto) {
+        PuzzleState puzzleState = mapper.puzzleStateDtoToPuzzleState(puzzleStateDto);
+        repositoryService.storePuzzleConfig(puzzleState.getPuzzleConfig());
+        repositoryService.storePuzzleState(puzzleState);
     }
 
     @Override
     @GetMapping(value = "/puzzleConfig/{configId}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public NewTaskDto getPuzzleConfig(@PathVariable("configId") String configId) {
+    public PuzzleConfigDto getPuzzleConfig(@PathVariable("configId") String configId) {
         PuzzleConfig puzzleConfig = repositoryService.getPuzzleConfig(configId);
         if (puzzleConfig != null) {
-            return new NewTaskDto(configId, mapper.puzzleConfigToPuzzleConfigDto(puzzleConfig));
+            return mapper.puzzleConfigToPuzzleConfigDto(puzzleConfig);
         } else {
             return null;
         }
     }
 
-    @GetMapping("/test")
-    public String test() {
-        return "ok";
-    }
 }

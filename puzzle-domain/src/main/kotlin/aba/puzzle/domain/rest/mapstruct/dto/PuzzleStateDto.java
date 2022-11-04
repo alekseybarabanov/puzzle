@@ -8,6 +8,8 @@ import java.util.List;
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class PuzzleStateDto {
 	private Integer id = null;
+
+	private PuzzleConfigDto puzzleConfigDto = null;
 	private List<PuzzleStateEntryDto> coverage = new ArrayList<>();
 
 	public List<PuzzleStateEntryDto> getCoverage() {
@@ -24,5 +26,13 @@ public class PuzzleStateDto {
 
 	public void setId(Integer id) {
 		this.id = id;
+	}
+
+	public PuzzleConfigDto getPuzzleConfigDto() {
+		return puzzleConfigDto;
+	}
+
+	public void setPuzzleConfigDto(PuzzleConfigDto puzzleConfigDto) {
+		this.puzzleConfigDto = puzzleConfigDto;
 	}
 }

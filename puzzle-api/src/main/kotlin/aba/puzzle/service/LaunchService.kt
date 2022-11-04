@@ -46,7 +46,7 @@ class LaunchServiceImpl(
         sendNewTopic(topic, puzzleConfig)
 
         //initiate puzzle assembling
-        sendPuzzles(topic, PuzzleState())
+        sendPuzzles(topic, PuzzleState(puzzleConfig))
         return true
     }
 

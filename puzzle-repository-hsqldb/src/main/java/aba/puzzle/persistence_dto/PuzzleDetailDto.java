@@ -1,4 +1,4 @@
-package aba.puzzle.persistence_vo;
+package aba.puzzle.persistence_dto;
 
 import org.hibernate.annotations.OnDelete;
 import org.hibernate.annotations.OnDeleteAction;
@@ -6,44 +6,44 @@ import org.hibernate.annotations.OnDeleteAction;
 import javax.persistence.*;
 
 @Entity
-@Table(name="PUZZLE_DETAIL")
-public class PuzzleDetailVO {
+@Table(name = "PUZZLE_DETAIL")
+public class PuzzleDetailDto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
 
-    @Column(name="EXT_ID")
+    @Column(name = "EXT_ID")
     private Integer extId;
 
-    @Column(name="COLOR_LEFT_SIDE")
+    @Column(name = "COLOR_LEFT_SIDE")
     private String colorLeftSide;
 
-    @Column(name="PART_LEFT_SIDE")
+    @Column(name = "PART_LEFT_SIDE")
     private String partLeftSide;
 
-    @Column(name="COLOR_UPPER_SIDE")
+    @Column(name = "COLOR_UPPER_SIDE")
     private String colorUpperSide;
 
-    @Column(name="PART_UPPER_SIDE")
+    @Column(name = "PART_UPPER_SIDE")
     private String partUpperSide;
 
-    @Column(name="COLOR_RIGHT_SIDE")
+    @Column(name = "COLOR_RIGHT_SIDE")
     private String colorRightSide;
 
-    @Column(name="PART_RIGHT_SIDE")
+    @Column(name = "PART_RIGHT_SIDE")
     private String partRightSide;
 
-    @Column(name="COLOR_LOWER_SIDE")
+    @Column(name = "COLOR_LOWER_SIDE")
     private String colorLowerSide;
 
-    @Column(name="PART_LOWER_SIDE")
+    @Column(name = "PART_LOWER_SIDE")
     private String partLowerSide;
 
     @ManyToOne(fetch = FetchType.EAGER, optional = false)
-    @JoinColumn(name="PUZZLE_CONFIG_ID", nullable = false)
+    @JoinColumn(name = "PUZZLE_CONFIG_ID", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
-    private PuzzleConfigVO puzzleConfigVO;
+    private PuzzleConfigDto puzzleConfigDto;
 
     public String getColorLeftSide() {
         return colorLeftSide;
@@ -109,12 +109,12 @@ public class PuzzleDetailVO {
         this.partLowerSide = partLowerSide;
     }
 
-    public PuzzleConfigVO getPuzzleConfigVO() {
-        return puzzleConfigVO;
+    public PuzzleConfigDto getPuzzleConfigDto() {
+        return puzzleConfigDto;
     }
 
-    public void setPuzzleConfigVO(PuzzleConfigVO puzzleConfigVO) {
-        this.puzzleConfigVO = puzzleConfigVO;
+    public void setPuzzleConfigDto(PuzzleConfigDto puzzleConfigDto) {
+        this.puzzleConfigDto = puzzleConfigDto;
     }
 
     public Integer getId() {
