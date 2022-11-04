@@ -12,6 +12,7 @@ class PuzzleGeneratorApplication
 fun main(args: Array<String>) {
     runApplication<PuzzleGeneratorApplication>(*args)
 }
+
 @Configuration
 class ModuleBeans {
     @Bean

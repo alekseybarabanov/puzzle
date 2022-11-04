@@ -80,7 +80,7 @@ class PuzzleAssemblerImpl : PuzzleAssembler {
     }
 
     private fun isCompleted(puzzleState: PuzzleState, puzzleMap: PuzzleMap): Boolean =
-         puzzleMap.puzzleFields.size == puzzleState.positionedDetails.size
+        puzzleMap.puzzleFields.size == puzzleState.positionedDetails.size
 
 }
 

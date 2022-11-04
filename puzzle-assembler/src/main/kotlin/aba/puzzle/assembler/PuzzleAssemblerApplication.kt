@@ -10,12 +10,12 @@ import org.springframework.context.annotation.Configuration
 class PuzzleAssemblerApplication
 
 fun main(args: Array<String>) {
-	runApplication<PuzzleAssemblerApplication>(*args)
+    runApplication<PuzzleAssemblerApplication>(*args)
 }
 
 @Configuration
 class ModuleBeans {
-	@Bean
-	fun getDomainMapper(): MapStructMapper = MapStructMapper.INSTANCE
+    @Bean
+    fun getDomainMapper(): MapStructMapper = MapStructMapper.INSTANCE
 }
 

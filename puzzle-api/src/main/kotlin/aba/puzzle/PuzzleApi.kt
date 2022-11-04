@@ -10,11 +10,11 @@ import org.springframework.context.annotation.Configuration
 class PuzzleApi
 
 fun main(args: Array<String>) {
-	runApplication<PuzzleApi>(*args)
+    runApplication<PuzzleApi>(*args)
 }
 
 @Configuration
 class ModuleBeans {
-	@Bean
-	fun getDomainMapper(): MapStructMapper = MapStructMapper.INSTANCE
+    @Bean
+    fun getDomainMapper(): MapStructMapper = MapStructMapper.INSTANCE
 }

@@ -139,6 +139,7 @@ class TestPuzzleAssembler {
         assertTrue(check(2))
         assertFalse(check(3))
     }
+
     @Test
     fun testCheckPuzzleState2() {
         val checkPuzzleStateMethod: Method = PuzzleAssemblerImpl::class.java.getDeclaredMethod(
@@ -193,7 +194,8 @@ class TestPuzzleAssembler {
                 PuzzleField(1, 0) to detail10
             )
         )
-        val check = checkPuzzleStateMethod.invoke(PuzzleAssemblerImpl(), candidate1, PuzzleField(1, 0), detail10) as Boolean
+        val check =
+            checkPuzzleStateMethod.invoke(PuzzleAssemblerImpl(), candidate1, PuzzleField(1, 0), detail10) as Boolean
 
         assertFalse(check)
     }
@@ -252,10 +254,12 @@ class TestPuzzleAssembler {
                 PuzzleField(1, 0) to detail10
             )
         )
-        val check = checkPuzzleStateMethod.invoke(PuzzleAssemblerImpl(), candidate1, PuzzleField(0, 1), detail01) as Boolean
+        val check =
+            checkPuzzleStateMethod.invoke(PuzzleAssemblerImpl(), candidate1, PuzzleField(0, 1), detail01) as Boolean
 
         assertFalse(check)
     }
+
     @Test
     fun testAddDetailToPuzzle() {
         val addDetailToPuzzleMethod: Method = PuzzleAssemblerImpl::class.java.getDeclaredMethod(
@@ -299,9 +303,10 @@ class TestPuzzleAssembler {
                 PuzzleField(0, 1) to detail01
             )
         )
-        val candidate = addDetailToPuzzleMethod.invoke(PuzzleAssemblerImpl(), curState, PuzzleField(1, 1), detail11) as PuzzleState
+        val candidate =
+            addDetailToPuzzleMethod.invoke(PuzzleAssemblerImpl(), curState, PuzzleField(1, 1), detail11) as PuzzleState
         assertEquals(candidate.positionedDetails.size, 3)
-        assertEquals(candidate.positionedDetails[PuzzleField(1,1)]!!.detail.id, 1)
+        assertEquals(candidate.positionedDetails[PuzzleField(1, 1)]!!.detail.id, 1)
     }
 
     private fun getIsCompletedMethod(): Method {

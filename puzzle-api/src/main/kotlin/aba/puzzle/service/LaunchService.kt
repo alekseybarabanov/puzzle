@@ -4,7 +4,6 @@ import aba.puzzle.domain.DetailWithRotation
 import aba.puzzle.domain.PuzzleConfig
 import aba.puzzle.domain.PuzzleState
 import aba.puzzle.domain.rest.mapstruct.dto.NewTaskDto
-import aba.puzzle.domain.rest.mapstruct.dto.PuzzleConfigDto
 import aba.puzzle.domain.rest.mapstruct.dto.PuzzleStateDto
 import aba.puzzle.domain.rest.mapstruct.mapper.MapStructMapper
 import mu.KotlinLogging
@@ -59,7 +58,8 @@ class LaunchServiceImpl(
         }
 
         //take the most diverse detail and fix it
-        val mostDiverseDetail = puzzleConfig.puzzleDetails.stream().max { d1, d2 -> max(d1.detailDiversity, d2.detailDiversity) }.get()
+        val mostDiverseDetail =
+            puzzleConfig.puzzleDetails.stream().max { d1, d2 -> max(d1.detailDiversity, d2.detailDiversity) }.get()
         mostDiverseDetail.allowedRotations = Collections.singletonList(0)
     }
 

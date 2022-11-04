@@ -37,6 +37,7 @@ private class PuzzleStateListener(
         puzzleProcessor.process(topic, puzzleState, puzzleConfig)
     }
 }
+
 @Component
 class CustomKafkaListenerRegistrar {
     private val log = KotlinLogging.logger {}

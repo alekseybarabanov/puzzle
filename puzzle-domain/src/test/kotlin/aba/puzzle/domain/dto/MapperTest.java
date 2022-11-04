@@ -66,7 +66,7 @@ public class MapperTest {
                 Color.green, BallPart.two_thirds,
                 Color.red, BallPart.one_third,
                 Color.yellow, BallPart.two_thirds);
-        detail.setAllowedRotations(Arrays.asList(0,1,2,3));
+        detail.setAllowedRotations(Arrays.asList(0, 1, 2, 3));
         PuzzleDetailDto puzzleDetailDto = mapper.detailToPuzzleDetailDto(detail);
         assertEquals("white", puzzleDetailDto.getLeft().getColor().getColor());
         assertEquals("two_thirds", puzzleDetailDto.getLeft().getSide().getSide());
@@ -87,7 +87,7 @@ public class MapperTest {
                 "yellow", "two_thirds",
                 "green", "one_third",
                 "white", "two_thirds");
-        puzzleDetailDto.setAllowedRotations(Arrays.asList(1,2));
+        puzzleDetailDto.setAllowedRotations(Arrays.asList(1, 2));
         Detail detail = mapper.puzzleDetailDtoToDetail(puzzleDetailDto);
         assertEquals(3, detail.getId());
         assertEquals("red", detail.getBallSide(DetailSide.left).getColor().name());

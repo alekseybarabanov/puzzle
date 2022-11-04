@@ -20,9 +20,12 @@ class Controller(
 ) {
 
     @PostMapping("/run", consumes = [MediaType.APPLICATION_JSON_VALUE], produces = [MediaType.APPLICATION_JSON_VALUE])
-    fun run(@RequestBody launchRequest: LaunchRequest, @RequestHeader("Idempotency-Key") idempotenceKey: String): LaunchResponse {
+    fun run(
+        @RequestBody launchRequest: LaunchRequest,
+        @RequestHeader("Idempotency-Key") idempotenceKey: String
+    ): LaunchResponse {
         val topicName = "puzzle-$idempotenceKey"
-        val puzzleConfig = launchRequest.puzzleConfig!!.let { mapper.puzzleConfigDtoToPuzzleConfig(it)}
+        val puzzleConfig = launchRequest.puzzleConfig!!.let { mapper.puzzleConfigDtoToPuzzleConfig(it) }
         if (launchService.launch(topicName, puzzleConfig)) {
             return LaunchResponse(launched = true, topicName = topicName)
         } else {

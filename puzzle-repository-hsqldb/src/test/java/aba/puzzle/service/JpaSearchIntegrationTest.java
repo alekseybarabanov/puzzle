@@ -2,11 +2,9 @@ package aba.puzzle.service;
 
 
 import aba.puzzle.domain.*;
-import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -66,7 +64,7 @@ public class JpaSearchIntegrationTest {
                 new BallSide(Color.green, BallPart.one_third),
                 new BallSide(Color.green, BallPart.one_third)
         );
-        detail.setAllowedRotations(Arrays.asList(0,1,2));
+        detail.setAllowedRotations(Arrays.asList(0, 1, 2));
         puzzleDetail.add(detail);
         return new PuzzleConfig(
                 null,

@@ -2,7 +2,6 @@ package aba.puzzle.assembler.kafka
 
 
 import aba.puzzle.domain.rest.mapstruct.dto.NewTaskDto
-import aba.puzzle.domain.rest.mapstruct.dto.PuzzleConfigDto
 import aba.puzzle.domain.rest.mapstruct.mapper.MapStructMapper
 import com.fasterxml.jackson.databind.ObjectMapper
 import mu.KotlinLogging
@@ -34,7 +33,11 @@ class NewTopicListener(
 ) {
     private val log = KotlinLogging.logger {}
 
-    @KafkaListener(id = "#{ systemProperties['POD_NAME'] }", topics = ["\${app.kafka.newTaskTopic}"], clientIdPrefix = "topicsClient")
+    @KafkaListener(
+        id = "#{ systemProperties['POD_NAME'] }",
+        topics = ["\${app.kafka.newTaskTopic}"],
+        clientIdPrefix = "topicsClient"
+    )
     fun listen(data: ConsumerRecord<String, NewTaskDto>) {
         log.info { "Read from new topic: $data" }
         val (topic, puzzleConfigVO) = data.value()
@@ -88,7 +91,7 @@ class CustomNewTopicDeserializer : Deserializer<NewTaskDto?> {
                 log.warn { "Null received at deserializing" }
                 return null
             }
-            log.debug {"Deserializing..."}
+            log.debug { "Deserializing..." }
             objectMapper.readValue(String(data), NewTaskDto::class.java)
         } catch (e: Exception) {
             throw SerializationException("Error when deserializing byte[] to NewTaskVO")

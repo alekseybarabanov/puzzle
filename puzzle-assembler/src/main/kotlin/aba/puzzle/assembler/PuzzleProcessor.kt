@@ -32,7 +32,7 @@ class PuzzleProcessorImpl(
                     this.incompleted.forEach { puzzleState ->
                         sendPuzzles(topic, puzzleState)
                     }
-                    this.completed.forEach {puzzleState->
+                    this.completed.forEach { puzzleState ->
                         sendCompletedPuzzle("$topic-assembled", puzzleState, puzzleConfig)
                         log.info { "Completed puzzle: $it" }
                     }
@@ -44,18 +44,23 @@ class PuzzleProcessorImpl(
     private fun sendPuzzles(topic: String, puzzleState: PuzzleState) {
         val puzzleFuture = kafkaProducer.send(topic, mapper.puzzleStateToPuzzleStateDto(puzzleState))
         puzzleFuture.addCallback({
-            log.info {"message sent to $topic"}
+            log.info { "message sent to $topic" }
         }, {
-            log.info {"Exception in sending to kafka $it"}
+            log.info { "Exception in sending to kafka $it" }
         })
     }
+
     private fun sendCompletedPuzzle(topic: String, puzzleState: PuzzleState, config: PuzzleConfig) {
-        val puzzleFuture = kafkaProducer.send(topic, PuzzleCompleted(puzzleState = mapper.puzzleStateToPuzzleStateDto(puzzleState),
-            puzzleConfigDto = mapper.puzzleConfigToPuzzleConfigDto(config)))
+        val puzzleFuture = kafkaProducer.send(
+            topic, PuzzleCompleted(
+                puzzleState = mapper.puzzleStateToPuzzleStateDto(puzzleState),
+                puzzleConfigDto = mapper.puzzleConfigToPuzzleConfigDto(config)
+            )
+        )
         puzzleFuture.addCallback({
-            log.info {"message sent to $topic"}
+            log.info { "message sent to $topic" }
         }, {
-            log.info {"Exception in sending to kafka $it"}
+            log.info { "Exception in sending to kafka $it" }
         })
     }
 }

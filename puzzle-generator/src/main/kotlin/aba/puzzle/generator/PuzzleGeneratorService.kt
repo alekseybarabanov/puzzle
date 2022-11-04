@@ -53,7 +53,7 @@ class PuzzleGeneratorServiceImpl : PuzzleGeneratorService {
 
     private fun createDraft(puzzleMap: PuzzleMap): PuzzleState {
         val maxDimension =
-            puzzleMap.puzzleFields.stream().map { max(it.shiftX, it.shiftX)+1 }.max(Integer::compare).orElse(0)
+            puzzleMap.puzzleFields.stream().map { max(it.shiftX, it.shiftX) + 1 }.max(Integer::compare).orElse(0)
         return puzzleMap.puzzleFields.stream().map { puzzleField ->
             puzzleField to Detail.newDraftDetail(puzzleField.shiftX * maxDimension + puzzleField.shiftY).also {
                 log.info { "PuzzleField: $puzzleField, id: ${it.id}" }
@@ -66,7 +66,8 @@ class PuzzleGeneratorServiceImpl : PuzzleGeneratorService {
             state.positionedDetails[pair.first] = DetailWithRotation(pair.second, 0)
         }, { state1, state2 ->
             (state1.puzzleConfig.puzzleDetails as ArrayList<Detail>).addAll(
-                state2.puzzleConfig.puzzleDetails)
+                state2.puzzleConfig.puzzleDetails
+            )
             state1.positionedDetails.putAll(state2.positionedDetails)
         })
     }
