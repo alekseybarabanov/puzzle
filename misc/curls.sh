@@ -10,3 +10,6 @@ curl localhost:9000/puzzleConfig/puzzle-1
 curl -XPOST localhost:9500/run -vs -u user:password -d @tmp.json \
 -H "Content-Type: application/json" \
 -H "Idempotency-Key: 9"
+
+curl -XPOST localhost:8400/generate -d @puzzleGen2x2.json -H "Content-Type: application/json"
+
