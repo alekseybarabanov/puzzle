@@ -8,50 +8,53 @@ import java.util.Map;
  */
 public class PuzzleState {
 
-	private Integer id = null;
+    private Integer id = null;
 
-	private PuzzleConfig puzzleConfig = null;
+    private PuzzleConfig puzzleConfig = null;
 
-	private Map<PuzzleField, DetailWithRotation> positionedDetails = new HashMap<PuzzleField, DetailWithRotation>();
+    private Map<PuzzleField, DetailWithRotation> positionedDetails = new HashMap<PuzzleField, DetailWithRotation>();
 
 
-	public PuzzleState(PuzzleConfig puzzleConfig) {
-		this.puzzleConfig = puzzleConfig;
-	}
-	public PuzzleState(PuzzleConfig puzzleConfig, Map<PuzzleField, DetailWithRotation> positionedDetails) {
-		this.puzzleConfig = puzzleConfig;
-		this.positionedDetails.putAll(positionedDetails);
-	}
-	public PuzzleState(Integer id, PuzzleConfig puzzleConfig, PuzzleState puzzleState, PuzzleField position, DetailWithRotation detail) {
-		this.id = id;
-		this.puzzleConfig = puzzleConfig;
-		this.positionedDetails.putAll(puzzleState.getPositionedDetails());
-		this.positionedDetails.put(position, detail);
-	}
+    public PuzzleState(PuzzleConfig puzzleConfig) {
+        this.puzzleConfig = puzzleConfig;
+    }
+
+    public PuzzleState(PuzzleConfig puzzleConfig, Map<PuzzleField, DetailWithRotation> positionedDetails) {
+        this.puzzleConfig = puzzleConfig;
+        this.positionedDetails.putAll(positionedDetails);
+    }
+
+    public PuzzleState(Integer id, PuzzleConfig puzzleConfig, PuzzleState puzzleState, PuzzleField position, DetailWithRotation detail) {
+        this.id = id;
+        this.puzzleConfig = puzzleConfig;
+        this.positionedDetails.putAll(puzzleState.getPositionedDetails());
+        this.positionedDetails.put(position, detail);
+    }
+
     public Map<PuzzleField, DetailWithRotation> getPositionedDetails() {
-		return positionedDetails;
-	}
+        return positionedDetails;
+    }
 
-	public void setPositionedDetails(Map<PuzzleField, DetailWithRotation> positionedDetails) {
-		this.positionedDetails = positionedDetails;
-	}
+    public void setPositionedDetails(Map<PuzzleField, DetailWithRotation> positionedDetails) {
+        this.positionedDetails = positionedDetails;
+    }
 
-	@Override
-	public String toString() {
-		return "PuzzleState{" +
-				"positionedDetails=" + positionedDetails +
-				'}';
-	}
+    @Override
+    public String toString() {
+        return "PuzzleState{" +
+                "positionedDetails=" + positionedDetails +
+                '}';
+    }
 
-	public Integer getId() {
-		return id;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public PuzzleConfig getPuzzleConfig() {
-		return puzzleConfig;
-	}
+    public PuzzleConfig getPuzzleConfig() {
+        return puzzleConfig;
+    }
 }

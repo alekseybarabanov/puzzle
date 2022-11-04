@@ -7,7 +7,6 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
-
 import java.util.Arrays;
 import java.util.Iterator;
 
@@ -67,6 +66,7 @@ public class MapperTest {
                 Color.green, BallPart.two_thirds,
                 Color.red, BallPart.one_third,
                 Color.yellow, BallPart.two_thirds);
+        detail.setAllowedRotations(Arrays.asList(0,1,2,3));
         PuzzleDetailDto puzzleDetailDto = mapper.detailToPuzzleDetailDto(detail);
         assertEquals("white", puzzleDetailDto.getLeft().getColor().getColor());
         assertEquals("two_thirds", puzzleDetailDto.getLeft().getSide().getSide());
@@ -76,7 +76,8 @@ public class MapperTest {
         assertEquals("one_third", puzzleDetailDto.getRight().getSide().getSide());
         assertEquals("yellow", puzzleDetailDto.getLower().getColor().getColor());
         assertEquals("two_thirds", puzzleDetailDto.getLower().getSide().getSide());
-        assertEquals(2, puzzleDetailDto.getId());
+        assertEquals(2, puzzleDetailDto.getExtId());
+        assertEquals(4, puzzleDetailDto.getAllowedRotations().size());
     }
 
     @Test
@@ -86,6 +87,7 @@ public class MapperTest {
                 "yellow", "two_thirds",
                 "green", "one_third",
                 "white", "two_thirds");
+        puzzleDetailDto.setAllowedRotations(Arrays.asList(1,2));
         Detail detail = mapper.puzzleDetailDtoToDetail(puzzleDetailDto);
         assertEquals(3, detail.getId());
         assertEquals("red", detail.getBallSide(DetailSide.left).getColor().name());
@@ -96,6 +98,7 @@ public class MapperTest {
         assertEquals("one_third", detail.getBallSide(DetailSide.right).getBallPart().name());
         assertEquals("white", detail.getBallSide(DetailSide.down).getColor().name());
         assertEquals("two_thirds", detail.getBallSide(DetailSide.down).getBallPart().name());
+        assertEquals(2, detail.getAllowedRotations().size());
     }
 
     @Test
@@ -116,12 +119,12 @@ public class MapperTest {
         assertEquals("one_third", puzzleDetailDto.getRight().getSide().getSide());
         assertEquals("yellow", puzzleDetailDto.getLower().getColor().getColor());
         assertEquals("two_thirds", puzzleDetailDto.getLower().getSide().getSide());
-        assertEquals(2, puzzleDetailDto.getId());
+        assertEquals(2, puzzleDetailDto.getExtId());
     }
 
     @Test
     public void testPuzzleDetailWithRotationDtoToDetailWithRotation() {
-        PuzzleDetailWithRotationDto puzzleDetailDto = getPuzzleDetailWithRotationDto(2,3,
+        PuzzleDetailWithRotationDto puzzleDetailDto = getPuzzleDetailWithRotationDto(2, 3,
                 "red", "two_thirds",
                 "yellow", "two_thirds",
                 "green", "one_third",
@@ -143,8 +146,8 @@ public class MapperTest {
     @Test
     public void testPuzzleMapToPuzzleMapDto() {
         PuzzleMap puzzleMap = new PuzzleMap(Arrays.asList(
-                new PuzzleField(null, 0,0),
-                new PuzzleField(null, 0,1),
+                new PuzzleField(null, 0, 0),
+                new PuzzleField(null, 0, 1),
                 new PuzzleField(2, 1, 0)));
         PuzzleMapDto puzzleMapDto = mapper.puzzleMapToPuzzleMapDto(puzzleMap);
         assertEquals(0, puzzleMapDto.getPuzzleFields().get(0).getShiftX());
@@ -176,7 +179,7 @@ public class MapperTest {
     public void testPuzzleConfigDtoToPuzzleConfig() {
         PuzzleMapDto puzzleMapDto = new PuzzleMapDto();
         puzzleMapDto.getPuzzleFields().addAll(Arrays.asList(
-                new PuzzleFieldDto(null,0, 0),
+                new PuzzleFieldDto(null, 0, 0),
                 new PuzzleFieldDto(null, 0, 1),
                 new PuzzleFieldDto(2, 1, 0)
         ));
@@ -242,8 +245,8 @@ public class MapperTest {
 
         PuzzleConfig puzzleConfig = new PuzzleConfig(null, "test",
                 new PuzzleMap(Arrays.asList(
-                        new PuzzleField(null, 0,0),
-                        new PuzzleField(null, 0,1),
+                        new PuzzleField(null, 0, 0),
+                        new PuzzleField(null, 0, 1),
                         new PuzzleField(1, 1, 0))),
                 Arrays.asList(
                         getDetail(null, 0,
@@ -266,7 +269,7 @@ public class MapperTest {
         PuzzleConfigDto puzzleConfigDto = mapper.puzzleConfigToPuzzleConfigDto(puzzleConfig);
         Iterator<PuzzleDetailDto> iterator = puzzleConfigDto.getPuzzleDetails().iterator();
         PuzzleDetailDto detail1 = iterator.next();
-        assertEquals(0, detail1.getId());
+        assertEquals(0, detail1.getExtId());
         assertEquals("white", detail1.getLeft().getColor().getColor());
         assertEquals("two_thirds", detail1.getLeft().getSide().getSide());
         assertEquals("green", detail1.getUpper().getColor().getColor());
@@ -276,7 +279,7 @@ public class MapperTest {
         assertEquals("yellow", detail1.getLower().getColor().getColor());
         assertEquals("two_thirds", detail1.getLower().getSide().getSide());
         PuzzleDetailDto detail2 = iterator.next();
-        assertEquals(1, detail2.getId());
+        assertEquals(1, detail2.getExtId());
         assertEquals("green", detail2.getLeft().getColor().getColor());
         assertEquals("two_thirds", detail2.getLeft().getSide().getSide());
         assertEquals("yellow", detail2.getUpper().getColor().getColor());
@@ -286,7 +289,8 @@ public class MapperTest {
         assertEquals("red", detail2.getLower().getColor().getColor());
         assertEquals("two_thirds", detail2.getLower().getSide().getSide());
         PuzzleDetailDto detail3 = iterator.next();
-        assertEquals(2, detail3.getId());
+        assertEquals(22, detail3.getId());
+        assertEquals(2, detail3.getExtId());
         assertEquals("white", detail3.getLeft().getColor().getColor());
         assertEquals("two_thirds", detail3.getLeft().getSide().getSide());
         assertEquals("red", detail3.getUpper().getColor().getColor());
@@ -299,10 +303,10 @@ public class MapperTest {
 
     @NotNull
     private PuzzleDetailWithRotationDto getPuzzleDetailWithRotationDto(int rotation, int id,
-                                               String color1, String ballPart1,
-                                               String color2, String ballPart2,
-                                               String color3, String ballPart3,
-                                               String color4, String ballPart4) {
+                                                                       String color1, String ballPart1,
+                                                                       String color2, String ballPart2,
+                                                                       String color3, String ballPart3,
+                                                                       String color4, String ballPart4) {
         PuzzleDetailWithRotationDto result = new PuzzleDetailWithRotationDto();
         result.setDetail(getPuzzleDetailDto(id,
                 color1, ballPart1,

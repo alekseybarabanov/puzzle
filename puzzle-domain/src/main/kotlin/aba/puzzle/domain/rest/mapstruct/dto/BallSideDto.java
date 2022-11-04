@@ -1,27 +1,25 @@
 package aba.puzzle.domain.rest.mapstruct.dto;
 
 
-import aba.puzzle.domain.BallSide;
-
 public class BallSideDto {
-	
-	private ColorDto color;
-	private BallPartDto side;
 
-	public ColorDto getColor() {
-		return color;
-	}
+    private ColorDto color;
+    private BallPartDto side;
 
-	public void setColor(ColorDto color) {
-		this.color = color;
-	}
+    public ColorDto getColor() {
+        return color;
+    }
 
-	public BallPartDto getSide() {
-		return side;
-	}
+    public void setColor(ColorDto color) {
+        this.color = color;
+    }
 
-	public void setSide(BallPartDto side) {
-		this.side = side;
-	}
-	
+    public BallPartDto getSide() {
+        return side;
+    }
+
+    public void setSide(BallPartDto side) {
+        this.side = side;
+    }
+
 }

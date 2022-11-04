@@ -1,10 +1,7 @@
 package aba.puzzle.domain;
 
-import org.jetbrains.annotations.NotNull;
-
 import java.util.Arrays;
 import java.util.Objects;
-import java.util.stream.Collectors;
 
 /**
  * Created by alekseybarabanov on 13.08.16.

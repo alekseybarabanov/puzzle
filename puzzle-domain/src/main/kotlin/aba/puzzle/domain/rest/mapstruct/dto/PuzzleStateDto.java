@@ -7,32 +7,32 @@ import java.util.List;
 
 @JsonAutoDetect(fieldVisibility = JsonAutoDetect.Visibility.ANY)
 public class PuzzleStateDto {
-	private Integer id = null;
+    private Integer id = null;
 
-	private PuzzleConfigDto puzzleConfigDto = null;
-	private List<PuzzleStateEntryDto> coverage = new ArrayList<>();
+    private PuzzleConfigDto puzzleConfigDto = null;
+    private List<PuzzleStateEntryDto> coverage = new ArrayList<>();
 
-	public List<PuzzleStateEntryDto> getCoverage() {
-		return coverage;
-	}
+    public List<PuzzleStateEntryDto> getCoverage() {
+        return coverage;
+    }
 
-	public void setCoverage(List<PuzzleStateEntryDto> coverage) {
-		this.coverage = coverage;
-	}
+    public void setCoverage(List<PuzzleStateEntryDto> coverage) {
+        this.coverage = coverage;
+    }
 
-	public Integer getId() {
-		return id;
-	}
+    public Integer getId() {
+        return id;
+    }
 
-	public void setId(Integer id) {
-		this.id = id;
-	}
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
-	public PuzzleConfigDto getPuzzleConfigDto() {
-		return puzzleConfigDto;
-	}
+    public PuzzleConfigDto getPuzzleConfigDto() {
+        return puzzleConfigDto;
+    }
 
-	public void setPuzzleConfigDto(PuzzleConfigDto puzzleConfigDto) {
-		this.puzzleConfigDto = puzzleConfigDto;
-	}
+    public void setPuzzleConfigDto(PuzzleConfigDto puzzleConfigDto) {
+        this.puzzleConfigDto = puzzleConfigDto;
+    }
 }
