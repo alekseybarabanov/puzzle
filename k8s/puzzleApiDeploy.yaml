@@ -4,6 +4,7 @@ metadata:
   creationTimestamp: null
   labels:
     app: puzzle-api
+    factory: puzzle
   name: puzzle-api
   namespace: default
 spec:
@@ -16,6 +17,7 @@ spec:
       creationTimestamp: null
       labels:
         app: puzzle-api
+        factory: puzzle
     spec:
       containers:
       - image: puzzle-api:1.0-SNAPSHOT
@@ -45,6 +47,8 @@ apiVersion: v1
 kind: Service
 metadata:
   name: puzzle-api
+  labels:
+    factory: puzzle
 spec:
   type: LoadBalancer
   selector:
