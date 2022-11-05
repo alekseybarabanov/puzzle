@@ -6,7 +6,8 @@ import aba.puzzle.domain.PuzzleState
 import aba.puzzle.domain.rest.mapstruct.dto.NewTaskDto
 import aba.puzzle.domain.rest.mapstruct.dto.PuzzleStateDto
 import aba.puzzle.domain.rest.mapstruct.mapper.MapStructMapper
-import mu.KotlinLogging
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
 import org.apache.kafka.clients.admin.AdminClient
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
@@ -30,7 +31,7 @@ class LaunchServiceImpl(
     @Autowired val kafkaAdmin: KafkaAdmin,
     @Autowired private val mapper: MapStructMapper
 ) : LaunchService {
-    private val log = KotlinLogging.logger {}
+    private val log: Log = LogFactory.getLog(LaunchServiceImpl::class.java)
 
     override fun launch(topic: String, puzzleConfig: PuzzleConfig): Boolean {
         //check that the task is not already running. Make call to repository for the answer

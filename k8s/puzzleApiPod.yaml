@@ -3,13 +3,13 @@ kind: Pod
 metadata:
   creationTimestamp: null
   labels:
-    run: puzzle-api
-  name: puzzle-api
+    run: puzzle-api-pod
+  name: puzzle-api-pod
   namespace: default
 spec:
   containers:
   - image: puzzle-api:1.0-SNAPSHOT
-    name: puzzle-api
+    name: puzzle-api-pod
     resources: 
       limits:
         cpu: "200m"
