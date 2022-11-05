@@ -1,0 +1,55 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: puzzle-api
+  name: puzzle-api
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: puzzle-api
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: puzzle-api
+    spec:
+      containers:
+      - image: puzzle-api:1.0-SNAPSHOT
+        imagePullPolicy: Never
+        name: puzzle-api
+        resources:
+          limits:
+            cpu: "1000m"
+            memory: "700Mi"
+        ports:
+          - containerPort: 9500
+        livenessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 9500
+          initialDelaySeconds: 100
+          periodSeconds: 3
+        readinessProbe:
+          httpGet:
+            path: /actuator/health
+            port: 9500
+          initialDelaySeconds: 100
+          periodSeconds: 3
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: puzzle-api
+spec:
+  type: LoadBalancer
+  selector:
+    app: puzzle-api
+  ports:
+    - protocol: TCP
+      port: 9500
+      targetPort: 9500
