@@ -5,7 +5,8 @@ import aba.puzzle.domain.PuzzleConfig
 import aba.puzzle.domain.rest.mapstruct.dto.PuzzleStateDto
 import aba.puzzle.domain.rest.mapstruct.mapper.MapStructMapper
 import com.fasterxml.jackson.databind.ObjectMapper
-import mu.KotlinLogging
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.common.errors.SerializationException
@@ -30,7 +31,7 @@ private class PuzzleStateListener(
     private val mapper: MapStructMapper
 ) :
     MessageListener<String, PuzzleStateDto> {
-    private val log = KotlinLogging.logger {}
+    private val log: Log = LogFactory.getLog(PuzzleStateListener::class.java)
     override fun onMessage(record: ConsumerRecord<String, PuzzleStateDto>) {
         log.debug { "read ${record.value()} record, launch new task" }
         val puzzleState = mapper.puzzleStateDtoToPuzzleState(record.value())
@@ -40,7 +41,7 @@ private class PuzzleStateListener(
 
 @Component
 class CustomKafkaListenerRegistrar {
-    private val log = KotlinLogging.logger {}
+    private val log: Log = LogFactory.getLog(CustomKafkaListenerRegistrar::class.java)
 
     @Autowired
     private lateinit var beanFactory: BeanFactory
@@ -79,7 +80,7 @@ class CustomKafkaListenerRegistrar {
                 kafkaListenerContainerFactory, startImmediately
             )
         }.onFailure {
-            log.error(it) { "Exception in bean creation" }
+            log.error("Exception in bean creation", it)
         }
     }
 }
@@ -140,7 +141,7 @@ class PuzzleTopicListener(
 
 class CustomPuzzleStateDeserializer : Deserializer<PuzzleStateDto?> {
     private val objectMapper = ObjectMapper()
-    private val log = KotlinLogging.logger {}
+    private val log: Log = LogFactory.getLog(CustomPuzzleStateDeserializer::class.java)
 
     override fun configure(configs: Map<String?, *>?, isKey: Boolean) {}
     override fun deserialize(topic: String?, data: ByteArray?): PuzzleStateDto? {

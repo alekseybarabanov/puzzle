@@ -93,9 +93,6 @@
                 <configuration>
                     <fork>true</fork>
                     <skip>false</skip>
-                    <systemPropertyVariables>
-                        <POD_NAME>local-generator</POD_NAME>
-                    </systemPropertyVariables>
                 </configuration>
             </plugin>
             <plugin>

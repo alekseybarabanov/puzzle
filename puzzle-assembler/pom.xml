@@ -10,6 +10,7 @@
     <modelVersion>4.0.0</modelVersion>
     <artifactId>puzzle-assembler</artifactId>
     <groupId>aba.puzzle</groupId>
+    <version>1.1-SNAPSHOT</version>
     <name>Puzzle Assembler</name>
     <description>Puzzle Assembler</description>
 
@@ -34,6 +35,15 @@
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.codehaus.janino</groupId>
+            <artifactId>janino</artifactId>
+            <version>3.1.6</version>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-logging</artifactId>
         </dependency>
         <dependency>
             <groupId>org.jetbrains.kotlin</groupId>
@@ -77,20 +87,6 @@
             <version>7.2.1</version>
         </dependency>
         <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-classic</artifactId>
-        </dependency>
-        <dependency>
-            <groupId>ch.qos.logback</groupId>
-            <artifactId>logback-core</artifactId>
-        </dependency>
-        <!--https://www.baeldung.com/kotlin/kotlin-logging-library-->
-        <dependency>
-            <groupId>io.github.microutils</groupId>
-            <artifactId>kotlin-logging-jvm</artifactId>
-            <version>2.0.2</version>
-        </dependency>
-        <dependency>
             <groupId>org.slf4j</groupId>
             <artifactId>slf4j-api</artifactId>
         </dependency>
@@ -112,9 +108,9 @@
                 <configuration>
                     <fork>true</fork>
                     <skip>false</skip>
-                    <systemPropertyVariables>
+                    <environmentVariables>
                         <POD_NAME>local-assembler</POD_NAME>
-                    </systemPropertyVariables>
+                    </environmentVariables>
                 </configuration>
             </plugin>
             <plugin>
@@ -163,5 +159,74 @@
             <url>https://packages.confluent.io/maven/</url>
         </repository>
     </repositories>
+
+    <profiles>
+        <profile>
+            <id>build-image</id>
+            <dependencies>
+                <dependency>
+                    <groupId>org.springframework.experimental</groupId>
+                    <artifactId>spring-native</artifactId>
+                    <version>0.12.1</version>
+                </dependency>
+            </dependencies>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.springframework.experimental</groupId>
+                        <artifactId>spring-aot-maven-plugin</artifactId>
+                        <version>0.12.1</version>
+                        <configuration>
+                            <removeXmlSupport>false</removeXmlSupport>
+                            <removeSpelSupport>true</removeSpelSupport>
+                            <removeYamlSupport>true</removeYamlSupport>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>generate</id>
+                                <goals>
+                                    <goal>generate</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.springframework.boot</groupId>
+                        <artifactId>spring-boot-maven-plugin</artifactId>
+                        <executions>
+                            <execution>
+                                <id>build-image</id>
+                                <goals>
+                                    <goal>build-image</goal>
+                                </goals>
+                                <configuration>
+                                    <image>
+                                        <builder>paketobuildpacks/builder:tiny</builder>
+                                        <env>
+                                            <BP_NATIVE_IMAGE>true</BP_NATIVE_IMAGE>
+                                        </env>
+                                    </image>
+                                </configuration>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <repositories>
+                <repository>
+                    <id>spring-release</id>
+                    <name>Spring release</name>
+                    <url>https://repo.spring.io/release</url>
+                </repository>
+            </repositories>
+            <pluginRepositories>
+                <pluginRepository>
+                    <id>spring-release</id>
+                    <name>Spring release</name>
+                    <url>https://repo.spring.io/release</url>
+                </pluginRepository>
+            </pluginRepositories>
+        </profile>
+    </profiles>
 
 </project>

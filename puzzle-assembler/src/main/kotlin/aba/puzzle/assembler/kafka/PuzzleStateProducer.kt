@@ -1,7 +1,8 @@
 package aba.puzzle.assembler.kafka
 
 import io.confluent.kafka.serializers.KafkaJsonSerializer
-import mu.KotlinLogging
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.serialization.StringSerializer
 import org.springframework.beans.factory.annotation.Autowired
@@ -14,7 +15,7 @@ import org.springframework.kafka.core.ProducerFactory
 
 @Configuration
 class KafkaConfiguration {
-    private val log = KotlinLogging.logger {}
+    private val log: Log = LogFactory.getLog(KafkaConfiguration::class.java)
 
     @Value("\${app.kafka.bootstrap}")
     lateinit var bootstrapAddress: String

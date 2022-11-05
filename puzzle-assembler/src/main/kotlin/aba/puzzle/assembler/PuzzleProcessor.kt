@@ -5,7 +5,8 @@ import aba.puzzle.domain.PuzzleState
 import aba.puzzle.domain.rest.mapstruct.dto.PuzzleConfigDto
 import aba.puzzle.domain.rest.mapstruct.dto.PuzzleStateDto
 import aba.puzzle.domain.rest.mapstruct.mapper.MapStructMapper
-import mu.KotlinLogging
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.stereotype.Component
@@ -20,7 +21,7 @@ class PuzzleProcessorImpl(
     @Autowired val kafkaProducer: KafkaTemplate<String, Any>,
     @Autowired private val mapper: MapStructMapper
 ) : PuzzleProcessor {
-    private val log = KotlinLogging.logger {}
+    private val log: Log = LogFactory.getLog(PuzzleProcessorImpl::class.java)
 
     override fun process(topic: String, currentPuzzleState: PuzzleState, puzzleConfig: PuzzleConfig) {
         puzzleConfig.puzzleMap.puzzleFields.find {

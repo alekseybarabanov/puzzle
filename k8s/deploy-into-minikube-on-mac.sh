@@ -11,8 +11,10 @@ sleep 10
 export ns=default
 
 # Apply deployments and services
+kubectl -n=$ns apply -f puzzleAssemblerDeploy.yaml
 kubectl -n=$ns apply -f puzzleApiDeploy.yaml
 sleep 5
+
 until [ $(kubectl -n=$ns get deploy puzzle-api -o jsonpath='{.status.conditions[?(.type=="Available")].status}') == "True" ];
 do
   echo "Waiting for pods to deploy"

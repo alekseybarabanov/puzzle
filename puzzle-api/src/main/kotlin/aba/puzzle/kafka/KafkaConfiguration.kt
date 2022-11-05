@@ -20,7 +20,7 @@ import org.apache.commons.logging.LogFactory;
 
 @Configuration
 class KafkaConfiguration {
-    val log: Log = LogFactory.getLog(KafkaConfiguration::class.java)
+    private val log: Log = LogFactory.getLog(KafkaConfiguration::class.java)
 
     @Value("\${app.kafka.bootstrap}")
     lateinit var bootstrapAddress: String

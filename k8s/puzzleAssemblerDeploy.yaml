@@ -1,0 +1,51 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: puzzle-assembler
+    factory: puzzle
+  name: puzzle-assembler
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: puzzle-assembler
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: puzzle-assembler
+        factory: puzzle
+    spec:
+      containers:
+        - image: puzzle-assembler:1.1-SNAPSHOT
+          imagePullPolicy: Never
+          name: puzzle-assembler
+          resources:
+            limits:
+              cpu: "200m"
+              memory: "700Mi"
+          ports:
+            - containerPort: 9300
+          env:
+            - name: POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 9300
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            failureThreshold: 10
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 9300
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            failureThreshold: 10
+

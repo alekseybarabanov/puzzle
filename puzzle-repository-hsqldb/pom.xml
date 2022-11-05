@@ -67,9 +67,6 @@
                 <configuration>
                     <fork>true</fork>
                     <skip>false</skip>
-                    <systemPropertyVariables>
-                        <POD_NAME>local-repository</POD_NAME>
-                    </systemPropertyVariables>
                 </configuration>
             </plugin>
             <plugin>

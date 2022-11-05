@@ -4,7 +4,8 @@ package aba.puzzle.assembler.kafka
 import aba.puzzle.domain.rest.mapstruct.dto.NewTaskDto
 import aba.puzzle.domain.rest.mapstruct.mapper.MapStructMapper
 import com.fasterxml.jackson.databind.ObjectMapper
-import mu.KotlinLogging
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
 import org.apache.kafka.clients.consumer.ConsumerConfig
 import org.apache.kafka.clients.consumer.ConsumerRecord
 import org.apache.kafka.common.errors.SerializationException
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.context.annotation.Bean
 import org.springframework.context.annotation.Configuration
+import org.springframework.context.annotation.Lazy
 import org.springframework.context.annotation.PropertySource
 import org.springframework.kafka.annotation.EnableKafka
 import org.springframework.kafka.annotation.KafkaListener
@@ -31,10 +33,10 @@ class NewTopicListener(
     @Autowired val listenerRegistrar: CustomKafkaListenerRegistrar,
     @Autowired private val mapper: MapStructMapper
 ) {
-    private val log = KotlinLogging.logger {}
+    private val log: Log = LogFactory.getLog(NewTopicListener::class.java)
 
     @KafkaListener(
-        id = "#{ systemProperties['POD_NAME'] }",
+        id = "#{ systemEnvironment['POD_NAME'] }",
         topics = ["\${app.kafka.newTaskTopic}"],
         clientIdPrefix = "topicsClient"
     )
@@ -49,7 +51,7 @@ class NewTopicListener(
 @Configuration
 @EnableKafka
 class KafkaConfig {
-    private val log = KotlinLogging.logger {}
+    private val log: Log = LogFactory.getLog(KafkaConfig::class.java)
 
     @Value("\${app.kafka.bootstrap}")
     lateinit var bootstrapAddress: String
@@ -82,7 +84,7 @@ class KafkaConfig {
 
 class CustomNewTopicDeserializer : Deserializer<NewTaskDto?> {
     private val objectMapper = ObjectMapper()
-    private val log = KotlinLogging.logger {}
+    private val log: Log = LogFactory.getLog(CustomNewTopicDeserializer::class.java)
 
     override fun configure(configs: Map<String?, *>?, isKey: Boolean) {}
     override fun deserialize(topic: String?, data: ByteArray?): NewTaskDto? {
