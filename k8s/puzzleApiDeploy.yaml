@@ -25,7 +25,7 @@ spec:
         name: puzzle-api
         resources:
           limits:
-            cpu: "1000m"
+            cpu: "200m"
             memory: "700Mi"
         ports:
           - containerPort: 9500
@@ -34,13 +34,15 @@ spec:
             path: /actuator/health
             port: 9500
           initialDelaySeconds: 15
-          periodSeconds: 10
+          periodSeconds: 20
+          failureThreshold: 10
         readinessProbe:
           httpGet:
             path: /actuator/health
             port: 9500
           initialDelaySeconds: 15
-          periodSeconds: 10
+          periodSeconds: 20
+          failureThreshold: 10
 
 ---
 apiVersion: v1
