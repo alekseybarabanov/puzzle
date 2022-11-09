@@ -48,3 +48,5 @@ spec:
             limits:
               cpu: "500m"
               memory: "500Mi"
+# kubectl port-forward <broker pod name> 9092
+# minikube service zookeeper-service --url  (use this url to connect to zookeeper from host machine)
