@@ -1,11 +1,7 @@
 #!/bin/bash
 
-# Run minikube
-minikube start
-
-# Create tunnel from localhost to minikube
-minikube tunnel &
-sleep 10
+#sh startMinikube.sh
+#sleep 10
 
 # Set current namespace (it is 'default' here)
 export ns=default

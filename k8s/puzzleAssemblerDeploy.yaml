@@ -25,10 +25,12 @@ spec:
           name: puzzle-assembler
           resources:
             limits:
-              cpu: "200m"
+              cpu: "1000m"
               memory: "700Mi"
           ports:
-            - containerPort: 9300
+            - containerPort: 8080
+          args:
+            - --spring.config.location=/config/application.yaml
           env:
             - name: POD_NAME
               valueFrom:
@@ -37,15 +39,35 @@ spec:
           livenessProbe:
             httpGet:
               path: /actuator/health
-              port: 9300
+              port: 8080
             initialDelaySeconds: 15
             periodSeconds: 20
             failureThreshold: 10
           readinessProbe:
             httpGet:
               path: /actuator/health
-              port: 9300
+              port: 8080
             initialDelaySeconds: 15
             periodSeconds: 20
             failureThreshold: 10
-
+          volumeMounts:
+            - name: app-config
+              mountPath: /config
+      volumes:
+        - name: app-config
+          configMap:
+            name: puzzle-assembler-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: puzzle-assembler-config
+  namespace: default
+data:
+  application.yaml: |
+    server.port: 8080
+    app:
+      kafka:
+        bootstrap: kafka-service-internal:9092
+        newTaskTopic: puzzleTopics

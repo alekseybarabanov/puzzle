@@ -25,25 +25,55 @@ spec:
         name: puzzle-api
         resources:
           limits:
-            cpu: "200m"
+            cpu: "1000m"
             memory: "700Mi"
         ports:
-          - containerPort: 9500
+          - containerPort: 8080
+        args:
+          - --spring.config.location=/config/application.properties
         livenessProbe:
           httpGet:
             path: /actuator/health
-            port: 9500
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 20
-          failureThreshold: 10
+          failureThreshold: 20
         readinessProbe:
           httpGet:
             path: /actuator/health
-            port: 9500
+            port: 8080
           initialDelaySeconds: 15
           periodSeconds: 20
-          failureThreshold: 10
-
+          failureThreshold: 20
+        volumeMounts:
+          - name: app-config
+            mountPath: /config
+      volumes:
+        - name: app-config
+          configMap:
+            name: puzzle-api-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: puzzle-api-config
+  namespace: default
+data:
+  application.properties: |
+    server.port=8080
+    spring.security.user.name=user
+    spring.security.user.password=password
+    management.endpoints.web.exposure.include=health,info,metrics
+    management.endpoint.metrics.enabled=true
+    management.endpoint.prometheus.enabled=true
+    management.metrics.export.prometheus.enabled=true
+    management.endpoint.health.show-details=always
+    management.endpoint.beans.enabled=true
+    app.repositoryUrl=http://localhost:9000
+    app.kafka.bootstrap=kafka-broker:9092
+    app.taskTopicsTopic=puzzleTopics
+    app.puzzleGeneratorUrl=http://localhost:8400
 ---
 apiVersion: v1
 kind: Service
@@ -57,5 +87,5 @@ spec:
     app: puzzle-api
   ports:
     - protocol: TCP
-      port: 9500
-      targetPort: 9500
+      port: 8080
+      targetPort: 8080
