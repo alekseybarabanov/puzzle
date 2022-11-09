@@ -96,14 +96,14 @@ public interface MapStructMapper {
     default PuzzleStateEntryDto entryToPuzzleStateEntryDto(Map.Entry<PuzzleField, DetailWithRotation> entry) {
         final PuzzleStateEntryDto puzzleStateEntryDto = new PuzzleStateEntryDto();
         puzzleStateEntryDto.setPuzzleFieldDto(puzzleFieldToPuzzleFieldDto(entry.getKey()));
-        puzzleStateEntryDto.setDetailWithRotationVO(detailWithRotationToPuzzleDetailWithRotationDto(entry.getValue()));
+        puzzleStateEntryDto.setPuzzleDetailWithRotationDto(detailWithRotationToPuzzleDetailWithRotationDto(entry.getValue()));
         return puzzleStateEntryDto;
     }
 
     default Map.Entry<PuzzleField, DetailWithRotation> puzzleStateEntryDtoToEntry(PuzzleStateEntryDto puzzleStateEntryDto) {
         Map<PuzzleField, DetailWithRotation> map = new HashMap<>();
         map.put(puzzleFieldDtoToPuzzleField(puzzleStateEntryDto.getPuzzleFieldDto()),
-                puzzleDetailWithRotationDtoToDetailWithRotation(puzzleStateEntryDto.getDetailWithRotationDto()));
+                puzzleDetailWithRotationDtoToDetailWithRotation(puzzleStateEntryDto.getPuzzleDetailWithRotationDto()));
         return map.entrySet().iterator().next();
     }
 

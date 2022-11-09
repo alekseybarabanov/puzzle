@@ -16,11 +16,11 @@ public class PuzzleStateEntryDto {
         this.puzzleFieldDto = puzzleFieldDto;
     }
 
-    public PuzzleDetailWithRotationDto getDetailWithRotationDto() {
+    public PuzzleDetailWithRotationDto getPuzzleDetailWithRotationDto() {
         return puzzleDetailWithRotationDto;
     }
 
-    public void setDetailWithRotationVO(PuzzleDetailWithRotationDto puzzleDetailWithRotationDto) {
+    public void setPuzzleDetailWithRotationDto(PuzzleDetailWithRotationDto puzzleDetailWithRotationDto) {
         this.puzzleDetailWithRotationDto = puzzleDetailWithRotationDto;
     }
 }

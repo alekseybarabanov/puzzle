@@ -69,5 +69,5 @@ data:
     server.port: 8080
     app:
       kafka:
-        bootstrap: kafka-service-internal:9092
+        bootstrap: kafka-broker:9092
         newTaskTopic: puzzleTopics
