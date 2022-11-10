@@ -1,0 +1,85 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  creationTimestamp: null
+  labels:
+    app: puzzle-repository
+    factory: puzzle
+  name: puzzle-repository
+  namespace: default
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: puzzle-repository
+  template:
+    metadata:
+      creationTimestamp: null
+      labels:
+        app: puzzle-repository
+        factory: puzzle
+    spec:
+      containers:
+        - image: puzzle-repository:1.0-SNAPSHOT
+          imagePullPolicy: Never
+          name: puzzle-repository
+          resources:
+            limits:
+              cpu: "1000m"
+              memory: "700Mi"
+          ports:
+            - containerPort: 8080
+          args:
+            - --spring.config.location=/config/application.properties
+          livenessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            failureThreshold: 20
+          readinessProbe:
+            httpGet:
+              path: /actuator/health
+              port: 8080
+            initialDelaySeconds: 15
+            periodSeconds: 20
+            failureThreshold: 20
+          volumeMounts:
+            - name: app-config
+              mountPath: /config
+      volumes:
+        - name: app-config
+          configMap:
+            name: puzzle-repository-config
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: puzzle-repository-config
+  namespace: default
+data:
+  application.properties: |
+    spring.jpa.hibernate.naming-strategy=org.hibernate.cfg.DefaultNamingStrategy
+    spring.jpa.hibernate.ddl-auto=validate
+    spring.jpa.properties.hibernate.show_sql=false
+    spring.jpa.properties.hibernate.use_sql_comments=false
+    spring.jpa.properties.hibernate.format_sql=false
+    spring.jpa.properties.hibernate.type=trace
+    server.port=8080
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: puzzle-repository
+  labels:
+    factory: puzzle
+spec:
+  type: LoadBalancer
+  selector:
+    app: puzzle-repository
+  ports:
+    - protocol: TCP
+      port: 8080
+      targetPort: 8080
