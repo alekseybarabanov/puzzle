@@ -7,8 +7,9 @@ import org.jetbrains.annotations.NotNull;
 import org.junit.jupiter.api.Test;
 import org.mapstruct.factory.Mappers;
 
-import java.util.Arrays;
-import java.util.Iterator;
+import java.util.*;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
@@ -299,6 +300,53 @@ public class MapperTest {
         assertEquals("one_third", detail3.getRight().getSide().getSide());
         assertEquals("yellow", detail3.getLower().getColor().getColor());
         assertEquals("two_thirds", detail3.getLower().getSide().getSide());
+    }
+
+    @Test
+    public void testPuzzleStateToPuzzleStateDto() {
+        PuzzleConfig puzzleConfig = new PuzzleConfig(null, "test",
+                new PuzzleMap(Arrays.asList(
+                        new PuzzleField(null, 0, 0),
+                        new PuzzleField(null, 0, 1),
+                        new PuzzleField(1, 1, 0))),
+                Arrays.asList(
+                        getDetail(null, 0,
+                                Color.white, BallPart.two_thirds,
+                                Color.green, BallPart.two_thirds,
+                                Color.red, BallPart.one_third,
+                                Color.yellow, BallPart.two_thirds),
+                        getDetail(null, 1,
+                                Color.green, BallPart.two_thirds,
+                                Color.yellow, BallPart.two_thirds,
+                                Color.red, BallPart.one_third,
+                                Color.red, BallPart.two_thirds),
+                        getDetail(22, 2,
+                                Color.white, BallPart.two_thirds,
+                                Color.red, BallPart.two_thirds,
+                                Color.white, BallPart.one_third,
+                                Color.yellow, BallPart.two_thirds)
+                )
+        );
+        PuzzleState puzzleState = new PuzzleState(puzzleConfig);
+        puzzleState.setPositionedDetails(IntStream.range(0, 3).mapToObj(i ->
+                        new AbstractMap.SimpleEntry<PuzzleField, DetailWithRotation>(puzzleConfig.getPuzzleMap().getPuzzleFields().get(i),
+                                new DetailWithRotation(((List<Detail>) puzzleConfig.getPuzzleDetails()).get(i), i)))
+                .collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue)));
+        PuzzleStateDto puzzleStateDto = mapper.puzzleStateToPuzzleStateDto(puzzleState);
+        Iterator<PuzzleDetailDto> iterator = puzzleStateDto.getPuzzleConfigDto().getPuzzleDetails().iterator();
+        PuzzleDetailDto detail1 = iterator.next();
+        assertEquals(0, detail1.getExtId());
+        PuzzleDetailDto detail2 = iterator.next();
+        assertEquals(1, detail2.getExtId());
+        PuzzleDetailDto detail3 = iterator.next();
+        assertEquals(2, detail3.getExtId());
+        Iterator<PuzzleStateEntryDto> iterator2 = puzzleStateDto.getCoverage().iterator();
+        PuzzleStateEntryDto sdetail1 = iterator2.next();
+        assertEquals(sdetail1.getPuzzleDetailWithRotationDto().getRotation(), sdetail1.getPuzzleDetailWithRotationDto().getDetail().getExtId());
+        PuzzleStateEntryDto sdetail2 = iterator2.next();
+        assertEquals(sdetail2.getPuzzleDetailWithRotationDto().getRotation(), sdetail2.getPuzzleDetailWithRotationDto().getDetail().getExtId());
+        PuzzleStateEntryDto sdetail3 = iterator2.next();
+        assertEquals(sdetail3.getPuzzleDetailWithRotationDto().getRotation(), sdetail3.getPuzzleDetailWithRotationDto().getDetail().getExtId());
     }
 
     @NotNull

@@ -15,6 +15,6 @@ curl -XPOST localhost:8400/generate -d @puzzleGen2x2.json -H "Content-Type: appl
 
 ########## Minikube
 # Launch new task
-curl -XPOST 10.105.249.48:8080/run -vs -u user:password -d @puzzle3x3.json \
+curl -XPOST 10.102.39.220:8080/run -vs -u user:password -d @puzzle3x3.json \
 -H "Content-Type: application/json" \
--H "Idempotency-Key: 7"
+-H "Idempotency-Key: 1"

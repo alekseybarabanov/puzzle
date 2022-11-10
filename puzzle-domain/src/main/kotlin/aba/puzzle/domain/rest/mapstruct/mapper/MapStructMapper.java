@@ -109,6 +109,7 @@ public interface MapStructMapper {
 
     default PuzzleStateDto puzzleStateToPuzzleStateDto(PuzzleState puzzleState) {
         final PuzzleStateDto result = new PuzzleStateDto();
+        result.setPuzzleConfigDto(puzzleConfigToPuzzleConfigDto(puzzleState.getPuzzleConfig()));
         for (Map.Entry<PuzzleField, DetailWithRotation> entry : puzzleState.getPositionedDetails().entrySet()) {
             result.getCoverage().add(entryToPuzzleStateEntryDto(entry));
         }
