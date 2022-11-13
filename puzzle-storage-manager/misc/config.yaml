@@ -1,0 +1,5 @@
+kafkaConsumer:
+  topic: puzzleTopics
+  properties:
+    group.id: testGroup
+    bootstrap.servers: kafka-broker:9092
