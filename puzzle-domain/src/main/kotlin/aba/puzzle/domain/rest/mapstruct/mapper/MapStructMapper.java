@@ -113,6 +113,7 @@ public interface MapStructMapper {
         for (Map.Entry<PuzzleField, DetailWithRotation> entry : puzzleState.getPositionedDetails().entrySet()) {
             result.getCoverage().add(entryToPuzzleStateEntryDto(entry));
         }
+        result.setCompleted(puzzleState.isCompleted());
         return result;
     }
 

@@ -2,7 +2,6 @@ package aba.puzzle.domain.rest.mapstruct.dto;
 
 
 import aba.puzzle.domain.DetailSide;
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
 
 import java.util.List;
 

@@ -3,4 +3,5 @@ server.port: ${port:9300}
 app:
   kafka:
     bootstrap: localhost:9092
-    newTaskTopic: puzzleTopics
+    puzzleStateTopic: state
+    puzzleStateGroup: default

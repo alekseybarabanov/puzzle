@@ -10,6 +10,8 @@ public class PuzzleState {
 
     private Integer id = null;
 
+    private boolean isCompleted = false;
+
     private PuzzleConfig puzzleConfig = null;
 
     private Map<PuzzleField, DetailWithRotation> positionedDetails = new HashMap<PuzzleField, DetailWithRotation>();
@@ -56,5 +58,13 @@ public class PuzzleState {
 
     public PuzzleConfig getPuzzleConfig() {
         return puzzleConfig;
+    }
+
+    public boolean isCompleted() {
+        return isCompleted;
+    }
+
+    public void setCompleted(boolean completed) {
+        isCompleted = completed;
     }
 }

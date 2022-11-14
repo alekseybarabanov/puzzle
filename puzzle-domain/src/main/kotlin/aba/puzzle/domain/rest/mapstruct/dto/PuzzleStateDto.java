@@ -1,12 +1,12 @@
 package aba.puzzle.domain.rest.mapstruct.dto;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-
 import java.util.ArrayList;
 import java.util.List;
 
 public class PuzzleStateDto {
     private Integer id = null;
+
+    private boolean isCompleted = false;
 
     private PuzzleConfigDto puzzleConfigDto = null;
     private List<PuzzleStateEntryDto> coverage = new ArrayList<>();
@@ -33,5 +33,13 @@ public class PuzzleStateDto {
 
     public void setPuzzleConfigDto(PuzzleConfigDto puzzleConfigDto) {
         this.puzzleConfigDto = puzzleConfigDto;
+    }
+
+    public boolean isCompleted() {
+        return isCompleted;
+    }
+
+    public void setCompleted(boolean completed) {
+        isCompleted = completed;
     }
 }

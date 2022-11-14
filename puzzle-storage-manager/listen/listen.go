@@ -1,9 +1,11 @@
 package listen
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"puzzle-storage-manager/config"
+	"puzzle-storage-manager/domain"
 
 	"github.com/confluentinc/confluent-kafka-go/kafka"
 	"github.com/spf13/viper"
@@ -70,22 +72,23 @@ func (l *KafkaListener) readLoop() {
 
 			switch e := ev.(type) {
 			case *kafka.Message:
-				fmt.Printf("%% Message on %s:\n%s\n",
-					e.TopicPartition, string(e.Value))
-				if e.Headers != nil {
-					fmt.Printf("%% Headers: %v\n", e.Headers)
+				if e.TopicPartition.Offset > 15442 {
+					fmt.Println("Offset: ", e.TopicPartition.Offset)
 				}
-				_, err := l.consumer.StoreMessage(e)
+				msg, err := l.deserializeMessage(e)
 				if err != nil {
-					fmt.Fprintf(os.Stderr, "%% Error storing offset after message %s:\n",
-						e.TopicPartition)
+					fmt.Printf("Cannot deserialize message %s", err.Error())
+					continue
 				}
+				if msg.IsCompleted {
+					fmt.Printf("Solution found: %s\n", string(e.Value))
+				}
+				// fmt.Printf("Received message: %t\n", msg.IsCompleted)
+				// _, err = l.consumer.StoreMessage(e)
+				// if err != nil {
+				// 	fmt.Printf("Failed to store message: %s", err.Error())
+				// }
 			case kafka.Error:
-				// Errors should generally be considered
-				// informational, the client will try to
-				// automatically recover.
-				// But in this example we choose to terminate
-				// the application if all brokers are down.
 				fmt.Fprintf(os.Stderr, "%% Error: %v: %v\n", e.Code(), e)
 				if e.Code() == kafka.ErrAllBrokersDown {
 					run = false
@@ -95,4 +98,14 @@ func (l *KafkaListener) readLoop() {
 			}
 		}
 	}
+}
+
+func (l *KafkaListener) deserializeMessage(msg *kafka.Message) (*domain.PuzzleState, error) {
+	var puzzleState domain.PuzzleState
+	err := json.Unmarshal(msg.Value, &puzzleState)
+	if err != nil {
+		return nil, err
+	}
+	return &puzzleState, nil
+
 }

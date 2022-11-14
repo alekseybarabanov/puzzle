@@ -1,8 +1,9 @@
 package aba.puzzle.kafka
 
-import aba.puzzle.domain.rest.mapstruct.dto.NewTaskDto
 import aba.puzzle.domain.rest.mapstruct.dto.PuzzleStateDto
 import io.confluent.kafka.serializers.KafkaJsonSerializer
+import org.apache.commons.logging.Log
+import org.apache.commons.logging.LogFactory
 import org.apache.kafka.clients.admin.AdminClientConfig
 import org.apache.kafka.clients.producer.ProducerConfig
 import org.apache.kafka.common.serialization.StringSerializer
@@ -15,8 +16,6 @@ import org.springframework.kafka.core.DefaultKafkaProducerFactory
 import org.springframework.kafka.core.KafkaAdmin
 import org.springframework.kafka.core.KafkaTemplate
 import org.springframework.kafka.core.ProducerFactory
-import org.apache.commons.logging.Log;
-import org.apache.commons.logging.LogFactory;
 
 @Configuration
 class KafkaConfiguration {
@@ -43,18 +42,4 @@ class KafkaConfiguration {
         return KafkaTemplate(factory)
     }
 
-    @Bean("producerFactoryNewTopic")
-    fun producerFactoryNewTopic(): ProducerFactory<String, NewTaskDto> {
-        log.info { "kafka bootstrap $bootstrapAddress" }
-        val configProps: MutableMap<String, Any> = HashMap()
-        configProps[ProducerConfig.BOOTSTRAP_SERVERS_CONFIG] = bootstrapAddress
-        configProps[ProducerConfig.KEY_SERIALIZER_CLASS_CONFIG] = StringSerializer::class.java
-        configProps[ProducerConfig.VALUE_SERIALIZER_CLASS_CONFIG] = KafkaJsonSerializer::class.java
-        return DefaultKafkaProducerFactory(configProps)
-    }
-
-    @Bean
-    fun kafkaTemplateNewTopic(@Autowired @Qualifier("producerFactoryNewTopic") factory: ProducerFactory<String, NewTaskDto>): KafkaTemplate<String, NewTaskDto> {
-        return KafkaTemplate(factory)
-    }
 }

@@ -1,5 +1,5 @@
 kafkaConsumer:
-  topic: puzzleTopics
+  topic: state
   properties:
-    group.id: testGroup
+    group.id: storage
     bootstrap.servers: kafka-broker:9092

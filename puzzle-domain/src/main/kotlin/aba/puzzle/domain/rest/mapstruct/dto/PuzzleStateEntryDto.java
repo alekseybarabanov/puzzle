@@ -1,7 +1,5 @@
 package aba.puzzle.domain.rest.mapstruct.dto;
 
-import com.fasterxml.jackson.annotation.JsonAutoDetect;
-
 public class PuzzleStateEntryDto {
     private PuzzleFieldDto puzzleFieldDto;
 

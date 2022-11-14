@@ -8,15 +8,15 @@ metadata:
   namespace: default
 spec:
   containers:
-  - image: puzzle-api:1.0-SNAPSHOT
-    name: puzzle-api-pod
-    resources: 
-      limits:
-        cpu: "200m"
-        memory: "1G"
-    imagePullPolicy: Never
-    ports:
-      - containerPort: 9500
+    - image: puzzle-api:1.0-SNAPSHOT
+      name: puzzle-api-pod
+      resources:
+        limits:
+          cpu: "200m"
+          memory: "1G"
+      imagePullPolicy: Never
+      ports:
+        - containerPort: 9500
   dnsPolicy: ClusterFirst
   restartPolicy: Always
-status: {}
+status: { }

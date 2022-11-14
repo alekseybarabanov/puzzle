@@ -9,7 +9,7 @@ interface PuzzleAssembler {
         detail: Detail,
         puzzleField: PuzzleField,
         puzzleConfig: PuzzleConfig
-    ): PuzzleStatus
+    ): List<PuzzleState>
 }
 
 @Component
@@ -19,21 +19,17 @@ class PuzzleAssemblerImpl : PuzzleAssembler {
         detail: Detail,
         puzzleField: PuzzleField,
         puzzleConfig: PuzzleConfig
-    ): PuzzleStatus {
-        val completed = mutableListOf<PuzzleState>()
-        val incomplete = mutableListOf<PuzzleState>()
+    ): List<PuzzleState> {
+        val result = mutableListOf<PuzzleState>()
         for (rotation in detail.allowedRotations) {
             val detailWithRotation = DetailWithRotation(detail, rotation)
             val candidateState = addDetailToPuzzle(currentState, puzzleField, detailWithRotation)
             if (checkPuzzleState(candidateState, puzzleField, detailWithRotation)) {
-                if (isCompleted(candidateState, puzzleConfig.puzzleMap)) {
-                    completed.add(candidateState)
-                } else {
-                    incomplete.add(candidateState)
-                }
+                candidateState.isCompleted = isCompleted(candidateState, puzzleConfig.puzzleMap)
+                result.add(candidateState)
             }
         }
-        return PuzzleStatus(completed, incomplete)
+        return result
     }
 
     private fun addDetailToPuzzle(
@@ -83,8 +79,3 @@ class PuzzleAssemblerImpl : PuzzleAssembler {
         puzzleMap.puzzleFields.size == puzzleState.positionedDetails.size
 
 }
-
-data class PuzzleStatus(
-    val completed: List<PuzzleState>,
-    val incompleted: List<PuzzleState>
-)

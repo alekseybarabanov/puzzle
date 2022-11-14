@@ -24,13 +24,9 @@ class Controller(
         @RequestBody launchRequest: LaunchRequest,
         @RequestHeader("Idempotency-Key") idempotenceKey: String
     ): LaunchResponse {
-        val topicName = "puzzle-$idempotenceKey"
         val puzzleConfig = launchRequest.puzzleConfig!!.let { mapper.puzzleConfigDtoToPuzzleConfig(it) }
-        if (launchService.launch(topicName, puzzleConfig)) {
-            return LaunchResponse(launched = true, topicName = topicName)
-        } else {
-            throw AlreadyRunningException(topicName = topicName)
-        }
+        launchService.launch(puzzleConfig)
+        return LaunchResponse(launched = true)
     }
 
     @GetMapping("/generate", produces = [MediaType.APPLICATION_JSON_VALUE])
@@ -47,7 +43,7 @@ class AlreadyRunningExceptionController {
     @ExceptionHandler(value = [AlreadyRunningException::class])
     fun exception(exception: AlreadyRunningException): ResponseEntity<LaunchResponse> {
         return ResponseEntity(
-            LaunchResponse(launched = false, topicName = exception.topicName),
+            LaunchResponse(launched = false),
             HttpStatus.INTERNAL_SERVER_ERROR
         )
     }
@@ -58,6 +54,5 @@ class LaunchRequest {
 }
 
 data class LaunchResponse(
-    val launched: Boolean,
-    val topicName: String
+    val launched: Boolean
 )
