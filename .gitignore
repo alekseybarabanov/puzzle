@@ -3,3 +3,7 @@
 .idea/**
 **/target/**
 tmp*
+build-artifacts/*
+dependencies.*
+**DS_Store*
+__debug*
